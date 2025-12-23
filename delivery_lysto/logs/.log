@@ -1,0 +1,6 @@
+2025-12-08 14:49:05,477 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:49:05,480 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:49:05,503 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:49:05,503 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:49:40,286 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/delivery_lysto_api/configuracion.py', reloading
+2025-12-08 14:49:40,330 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/delivery_lysto_api/configuracion.py', reloading

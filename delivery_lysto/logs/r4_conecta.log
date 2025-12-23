@@ -1,0 +1,200 @@
+2025-12-08 14:44:23,470 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:23,477 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:24,437 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:44:24,636 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:44:24,638 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:44:24,662 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:44:24,663 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:44:30,811 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:30,813 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:30,846 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:31,184 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:44:31,383 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:44:31,385 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:44:31,411 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:44:31,412 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:44:34,426 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:34,427 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:34,464 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:34,976 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:44:35,186 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:44:35,188 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:44:35,214 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:44:35,214 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:44:37,239 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:37,242 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:37,277 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:37,719 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:44:37,922 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:44:37,924 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:44:37,949 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:44:37,949 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:44:46,384 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:46,386 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:46,504 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:44:46,747 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:44:46,749 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:44:46,772 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:44:46,772 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:44:59,520 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:59,521 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:44:59,528 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:00,288 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:45:00,472 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:45:00,474 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:45:00,496 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:45:00,496 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:45:02,506 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:02,532 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:03,004 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:45:03,208 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:45:03,211 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:45:03,234 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:45:03,234 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:45:13,181 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:13,186 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:13,760 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:45:13,964 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:45:13,966 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:45:13,988 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:45:13,988 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:45:16,845 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:16,882 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:17,485 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:45:17,684 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:45:17,686 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:45:17,709 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:45:17,710 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:45:31,282 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:31,285 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:31,328 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:32,227 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:45:32,444 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:45:32,447 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:45:32,471 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:45:32,472 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:45:34,456 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:34,458 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:34,460 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:34,949 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:45:35,149 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:45:35,151 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:45:35,173 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:45:35,173 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:45:38,475 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:38,519 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:38,710 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:45:38,922 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:45:38,925 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:45:38,949 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:45:38,949 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:45:49,236 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:49,242 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/test_endpoints.py', reloading
+2025-12-08 14:45:49,499 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:45:49,685 INFO root - Aplicación iniciada en modo DEBUG
+2025-12-08 14:45:49,687 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:45:49,709 WARNING werkzeug -  * Debugger is active!
+2025-12-08 14:45:49,709 INFO werkzeug -  * Debugger PIN: 104-690-436
+2025-12-08 14:46:26,080 INFO delivery_lysto_api.db.conexion - Conexión exitosa a la base de datos 'LystoLocal' en localhost:3306 como usuario 'root'.
+2025-12-08 14:46:26,081 INFO werkzeug - 127.0.0.1 - - [08/Dec/2025 14:46:26] "GET /health HTTP/1.1" 200 -
+2025-12-08 14:46:26,084 INFO werkzeug - 127.0.0.1 - - [08/Dec/2025 14:46:26] "[33mPOST /crear_envio_zoom_central HTTP/1.1[0m" 404 -
+2025-12-08 14:49:04,976 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/delivery_lysto_api/configuracion.py', reloading
+2025-12-08 14:49:04,981 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/delivery_lysto_api/configuracion.py', reloading
+2025-12-08 14:49:04,984 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto/delivery_lysto_api/configuracion.py', reloading
+2025-12-08 14:49:05,266 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:49:41,207 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:49:43,754 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:49:44,510 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:52:56,336 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:53:24,276 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:54:11,402 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:54:13,130 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:55:07,341 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 14:55:59,482 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:07:57,153 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:08:16,010 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:08:17,763 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:09:16,978 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:09:19,712 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:09:30,529 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:09:33,210 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:09:34,989 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:09:38,679 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:09:43,519 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:09:46,265 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:09:47,904 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:09:59,766 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:10:01,391 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:10:23,368 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:10:31,135 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:10:34,902 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:10:38,679 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:11:55,000 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:11:58,737 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:13:20,270 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:13:24,048 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:13:27,731 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:13:29,489 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:14:52,905 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:14:56,666 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:14:58,446 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:15:03,208 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:15:09,025 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:16:44,651 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:16:47,371 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:16:50,021 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:18:52,856 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:18:56,684 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:19:00,301 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:20:31,771 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:20:33,495 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:21:05,506 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:21:08,337 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:21:17,138 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:21:20,987 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:21:24,755 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:23:26,537 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:23:29,361 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-08 15:23:32,128 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 11:55:32,052 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 11:55:38,901 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 11:57:00,311 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 11:57:20,149 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:03:14,431 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:03:22,413 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:16,223 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:17,920 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:20,671 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:23,450 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:25,190 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:27,920 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:30,735 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:32,492 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:35,094 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:37,822 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:05:43,607 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:43:43,260 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:44:57,571 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:47:32,647 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:52:31,852 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:52:35,522 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:52:46,260 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:52:48,052 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:52:52,816 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:52:55,528 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:52:57,250 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:53:00,058 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:53:02,007 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:53:07,865 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:53:56,028 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:54:00,772 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:54:37,915 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 12:54:39,685 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 14:12:59,256 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 14:13:01,330 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 14:13:05,103 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 14:13:06,893 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 14:13:07,397 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 14:13:10,142 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 14:13:14,801 INFO werkzeug -  * Restarting with watchdog (inotify)
+2025-12-09 14:13:16,528 INFO werkzeug -  * Restarting with watchdog (inotify)
