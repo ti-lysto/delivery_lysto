@@ -12,3 +12,8 @@ venv.bak/
 .vscode/settings.json
 logs/
 *.log
+*.pdf
+*.docx
+test_endpoints.py
+etiquetas/
+
