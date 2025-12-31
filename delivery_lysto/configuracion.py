@@ -34,16 +34,16 @@ class Configuracion:
     ZOOM_DB_PASSWORD = os.getenv("ZOOM_DB_PASSWORD")
     ZOOM_IMPRESION_ETIQUETA = True
     ZOOM_GUARDA_PDF_ETIQUETA = True
-    ZOOM_DIR_ETIQUETAS = "/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/etiquetas"
+    ZOOM_DIR_ETIQUETAS ="/home/alirubio/Documentos/programacion/python/delivery_lysto_api/etiquetas" #"/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/etiquetas"
       
     # Credenciales (para endpoints privados)
-    ZOOM_API_KEY = os.getenv("ZOOM_API_KEY", "")
-    ZOOM_FRASE_SECRETA = os.getenv("ZOOM_FRASE_SECRETA", "")
-    ARMI_API_KEY = os.getenv("ARMI_API_KEY", "")
+    ZOOM_API_KEY = os.getenv("ZOOM_API_KEY")
+    ZOOM_FRASE_SECRETA = os.getenv("ZOOM_FRASE_SECRETA")
+    ARMI_API_KEY = os.getenv("ARMI_API_KEY")
 
     # Timeout y reintentos
-    ZOOM_TIMEOUT = float(os.getenv("ZOOM_TIMEOUT", "15"))
-    ZOOM_REINTENTOS = int(os.getenv("ZOOM_REINTENTOS", "3"))
+    ZOOM_TIMEOUT = float(os.getenv("ZOOM_TIMEOUT"))
+    ZOOM_REINTENTOS = int(os.getenv("ZOOM_REINTENTOS"))
 
     ARMI_BASE_URL = "https://localhost:8001" if DEBUG else os.getenv("ARMI_BASE_URL")
     #(os.getenv("ARMI_BASE_URL", "https://api.armi.example").rstrip("/"))

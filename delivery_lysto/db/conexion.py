@@ -11,11 +11,11 @@ from ..configuracion import Configuracion
 logger = logging.getLogger(__name__)
 
 # Variables de entorno con defaults solicitados
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = int(os.getenv("DB_PORT", "3306"))
-DB_NAME = os.getenv("DB_NAME", "LystoLocal")
-DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "root")
+DB_HOST = os.getenv("ZOOM_DB_HOST")
+DB_PORT = int(os.getenv("ZOOM_DB_PORT"))
+DB_NAME = os.getenv("ZOOM_DB_NAME")
+DB_USER = os.getenv("ZOOM_DB_USER")
+DB_PASSWORD = os.getenv("ZOOM_DB_PASSWORD")
 
 
 def get_connection(db: Optional[str] = None) -> pymysql.connections.Connection:
@@ -45,7 +45,7 @@ def probar_conexion() -> bool:
         if Configuracion.DEBUG:
             logger.info(f"Conexión exitosa a la base de datos '{DB_NAME}' en {DB_HOST}:{DB_PORT} como usuario '{DB_USER}'.")
         return True
-    except Exception as e:
+    except Exception as e:        
         print(f"Error al conectar a la base de datos: {e}")
         if Configuracion.DEBUG:
             logger.error(f"Error al conectar a la base de datos: {e}")
@@ -88,14 +88,58 @@ def ejecutar_sp_void(sp_name: str, *args) -> None:
         if 'conn' in locals():
             conn.close()
 
-def ejecutar_sp_resultados(sp_name: str, *args) -> list[dict]:
-    """Ejecuta un procedimiento almacenado y devuelve los resultados."""
-    resultados = []
+def ejecutar_sp_resultados(sp_name: str, *args, arg_out: Optional[list[str]] = None) -> list[dict]:
+    """Ejecuta un procedimiento almacenado y devuelve resultados y OUT params.
+
+    Compatibilidad:
+    - Si el SP retorna filas (SELECT dentro del SP), se agregan primero.
+    - Los parámetros OUT se leen de forma genérica usando variables de sesión
+      `@_sp_name_idx`. Si `arg_out` está definido, se asignan alias en ese orden
+      a los últimos índices; si no, se intenta aliasar los dos últimos como
+      `p_exito` y `p_mensaje`.
+    - Se retorna una lista de dicts (filas + OUTs) para no romper consumidores.
+    """
+    resultados: list[dict] = []
     try:
         conn = get_connection(db=DB_NAME)
         with conn.cursor() as cur:
+            # Ejecutar SP
             cur.callproc(sp_name, args)
-            resultados = cur.fetchall()
+
+            # Intentar obtener filas devueltas por el SP (si hay)
+            try:
+                filas = cur.fetchall()
+                if filas:
+                    resultados.extend(filas)
+            except Exception:
+                # Algunos SP no devuelven result set
+                pass
+
+            # Lectura genérica de OUT params vía variables de sesión
+            total_params = len(args)
+            if total_params > 0:
+                if arg_out and len(arg_out) > 0:
+                    # Mapear los últimos N índices a los alias proporcionados
+                    start_idx = max(0, total_params - len(arg_out))
+                    for offset, nombre in enumerate(arg_out):
+                        idx = start_idx + offset
+                        cur.execute(f"SELECT @_" + sp_name + f"_{idx} AS {nombre};")
+                        out_row = cur.fetchone()
+                        if out_row is not None:
+                            resultados.append(out_row)
+                else:
+                    # Alias por defecto: últimos dos como p_exito y p_mensaje
+                    if total_params >= 2:
+                        # p_exito
+                        cur.execute(f"SELECT @_" + sp_name + f"_{total_params-2} AS p_exito;")
+                        exito_row = cur.fetchone()
+                        if exito_row is not None:
+                            resultados.append(exito_row)
+                        # p_mensaje
+                        cur.execute(f"SELECT @_" + sp_name + f"_{total_params-1} AS p_mensaje;")
+                        mensaje_row = cur.fetchone()
+                        if mensaje_row is not None:
+                            resultados.append(mensaje_row)
         if Configuracion.DEBUG:
             logger.info(f"Procedimiento almacenado '{sp_name}' ejecutado con éxito. Resultados obtenidos.")
         return resultados

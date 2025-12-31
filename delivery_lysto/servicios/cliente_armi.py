@@ -1,5 +1,5 @@
 """
-Cliente HTTP para APIs de ARMI – Español
+
 ----------------------------------------
 Centraliza las llamadas HTTP (públicas y privadas), autenticación y manejo de errores.
 """
@@ -45,14 +45,13 @@ class ClienteArmi:
         for intento in range(self.reintentos + 1):
             try:
                 with httpx.Client(timeout=self.timeout) as client:
-                    if metodo.upper() == "GET":
-                        resp = client.get(url, headers=self._headers(), params=parametros)
-                    elif metodo.upper() == "POST":
-                        resp = client.post(url, headers=self._headers(), json=cuerpo)
-                    elif metodo.upper() == "DELETE":
-                        resp = client.delete(url, headers=self._headers(), params=parametros)
-                    else:
-                        raise ValueError(f"Método HTTP no soportado: {metodo}")
+                    resp = client.request(
+                        metodo.upper(),
+                        url,
+                        headers=self._headers(),
+                        params=parametros,
+                        json=cuerpo,
+                    )
                 resp.raise_for_status()
                 logger.info(f"ARMI {metodo} {url} OK: {resp.status_code}")
                 return resp.json()
@@ -86,4 +85,37 @@ class ClienteArmi:
     def eliminar_negocio(self, negocio_id: int) -> Dict[str, Any]:
         return self.solicitar(f"monitor/business/{negocio_id}", metodo="DELETE")
 
-    # Puedes agregar más métodos según la documentación de ARMI
+    # Negocios adicionales
+    def negocios_del_usuario(self, user_id: int) -> Dict[str, Any]:
+        return self.solicitar(f"monitor/business/all/{user_id}", metodo="GET")
+
+    def actualizar_negocio(self, negocio_id: int, datos: Dict[str, Any]) -> Dict[str, Any]:
+        return self.solicitar(f"monitor/business/update/{negocio_id}", metodo="POST", cuerpo=datos)
+
+    # Sucursales
+    def crear_sucursal(self, datos: Dict[str, Any]) -> Dict[str, Any]:
+        return self.solicitar("monitor/branchOffice/create", metodo="POST", cuerpo=datos)
+
+    def sucursales_del_negocio(self, business_id: int) -> Dict[str, Any]:
+        return self.solicitar(f"monitor/branchOffice/all/{business_id}", metodo="GET")
+
+    def eliminar_sucursal(self, branch_office_id: int, business_id: int) -> Dict[str, Any]:
+        body = {"branchOfficeId": branch_office_id, "businessId": business_id}
+        return self.solicitar("monitor/branchOffice/delete", metodo="DELETE", cuerpo=body)
+
+    # Órdenes
+    def crear_orden(self, datos: Dict[str, Any]) -> Dict[str, Any]:
+        return self.solicitar("monitor/order/create", metodo="POST", cuerpo=datos)
+
+    def cancelar_orden(self, datos: Dict[str, Any]) -> Dict[str, Any]:
+        return self.solicitar("monitor/order/cancel", metodo="POST", cuerpo=datos)
+
+    def estado_orden(self, order_id: int) -> Dict[str, Any]:
+        return self.solicitar(f"monitor/order/status/{order_id}", metodo="GET")
+
+    # Ciudades y costo de envío
+    def codigo_ciudad(self, city: str) -> Dict[str, Any]:
+        return self.solicitar(f"monitor/city/{city}", metodo="GET")
+
+    def costo_envio(self, datos: Dict[str, Any]) -> Dict[str, Any]:
+        return self.solicitar("monitor/order/delivery-cost", metodo="POST", cuerpo=datos)

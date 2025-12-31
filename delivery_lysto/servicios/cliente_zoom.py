@@ -72,7 +72,7 @@ class ClienteZoom:
         
     ) -> Any:
         url = f"{Configuracion.ZOOM_BASE_URL_qa2}/{ruta.lstrip('/')}" if url_alternativa else f"{self.base_url}/{ruta.lstrip('/')}" if privado else f"{Configuracion.ZOOM_BASE_URL}/{ruta.lstrip('/')}"
-        print(f"URL solicitada: {url} cuerpo: {cuerpo}")
+        #print(f"URL solicitada: {url} cuerpo: {cuerpo}")
         if not (url.startswith("http://") or url.startswith("https://")):
             raise ErrorZoom("ZOOM_BASE_URL inválida: falta esquema http/https")
         backoff = 0.5
@@ -633,10 +633,25 @@ class ClienteZoom:
         params["tipoEntrega"] = tipoEntrega
         return self._solicitar(Configuracion.RUTA_ZOOM_CIUDADESWS, "GET", parametros=params if params else None)
 
+    def reimprimir_guia(self, payload: dict) -> dict:
+        """Reimprime etiqueta desde Zoom a partir de la guía."""
+        try:
+            guia = payload.get("guia") or payload.get("guia_zoom")
+            if not guia:
+                logger.error("No se proporcionó número de guía para reimpresión")
+                return {"error": "No se proporcionó número de guía"}
+
+            respuesta = self.etiqueta_termica({"guia": guia, "termicaPdf": "1"})
+            if not respuesta or respuesta.get("error"):
+                return {"error": respuesta.get("error") if respuesta else "Sin respuesta de Zoom"}
+            return {"ok": True, "guia": guia, "respuesta_zoom": respuesta}
+        except Exception as e:
+            logger.exception(f"Error en reimprimir_guia: {str(e)}")
+            return {"error": str(e)}
 
 # ================== PROCEDIMIENTOS POST (ORDEN DOCUMENTACIÓN) ==================
     def zoom_cert(self, datos: dict):
-        return self._solicitar(Configuracion.RUTA_ZOOM_ZOOMCERT, "POST", cuerpo=datos, privado=True)
+        return self._solicitar(Configuracion.RUTA_ZOOM_ZOOMCERT, "POST", cuerpo=datos, privado=True, url_alternativa=True)
 
     def servicios_clientes(self, datos: dict):
         return self._solicitar(Configuracion.RUTA_ZOOM_SERVICIOSCLIENTES, "POST", cuerpo=datos, privado=True)

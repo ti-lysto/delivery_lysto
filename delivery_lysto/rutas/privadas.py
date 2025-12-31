@@ -94,22 +94,22 @@ def _guardar_cliente_zoom(payload: dict) -> int:
             tipo_documento = tipo_documento[0]  # Solo primer caracter
         
         # Obtener número de documento (VARCHAR(10) en BD)
-        num_documento = datos_personales.get("numero_documento")
+        num_documento = datos_personales.get("numero_documento") or ""
         if len(num_documento) > 10:
             num_documento = num_documento[:10]  # Truncar si es muy largo
         
         # Obtener teléfono (VARCHAR(14) en BD)
-        telefono = datos_personales.get("telefono_movil") or datos_personales.get("telefono_fijo")
+        telefono = (datos_personales.get("telefono_movil") or datos_personales.get("telefono_fijo") or "")
         if len(telefono) > 14:
             telefono = telefono[:14]
         
         # Obtener email (VARCHAR(50) en BD)
-        mail = datos_personales.get("email")
+        mail = datos_personales.get("email") or ""
         if len(mail) > 50:
             mail = mail[:50]
         
         # Obtener dirección (VARCHAR(200) en BD)
-        direccion_completa = direccion.get("direccion_completa")
+        direccion_completa = direccion.get("direccion_completa") or ""
         if len(direccion_completa) > 200:
             direccion_completa = direccion_completa[:200]
         
@@ -132,7 +132,7 @@ def _guardar_cliente_zoom(payload: dict) -> int:
         # Ejecutar stored procedure
         print (f"Args para sp_guarda_cliente_zoom: {args_cliente}")
         res = ejecutar_sp_resultados("sp_guarda_cliente_zoom", *args_cliente)
-        print (f"Respuesta sp_guarda_cliente_zoom: {res}")
+        #print (f"Respuesta sp_guarda_cliente_zoom: {res}")
         if not res:
             logger.error("No se obtuvo respuesta de sp_guarda_cliente_zoom")
             raise Exception("No se pudo guardar/obtener id_cliente")
@@ -161,15 +161,11 @@ def _guardar_cliente_zoom(payload: dict) -> int:
         raise Exception(f"Error guardando cliente en BD: {str(e)}")
 
 
-def _persistir_envio_zoom(payload: dict):
-    """Mapea el payload completo del proceso orquestado al SP sp_crear_envio_zoom."""
+def _persistir_envio_zoom(payload: dict, extras: dict, id_cliente_db: int):
+    """Persiste el envío con el payload original y extras mínimos (guia/token/certificado/etiqueta), usando el id_cliente real de BD."""
     
     try:
-        # Extraer datos del payload
-        resultados_previos = payload.get("resultados_previos", {})
-        token_data = resultados_previos.get("token", {})
-        envio_data = resultados_previos.get("envio", {})
-        tarifas = resultados_previos.get("tarifas", {})
+        # Extraer datos del payload (sin depender de mutaciones)
         
         # Datos básicos
         metadata = payload.get("metadata", {})
@@ -182,32 +178,24 @@ def _persistir_envio_zoom(payload: dict):
         destinatario = payload.get("destinatario", {})
         paquete = payload.get("paquete", {})
         
-        # Obtener guía Zoom de la respuesta del envío
-        entidad_respuesta = envio_data.get("entidadRespuesta", [{}])
-        if isinstance(entidad_respuesta, list) and len(entidad_respuesta) > 0:
-            id_guia_zoom = entidad_respuesta[0].get("numguia")
-        else:
-            id_guia_zoom = envio_data.get("entidadRespuesta", {}).get("numguia")
-        
-        # Si no hay guía en la respuesta, intentar del payload
-        if not id_guia_zoom:
-            id_guia_zoom = payload.get("_guia_zoom")
+        # Usar guía proveniente de extras
+        id_guia_zoom = extras.get("guia_zoom")
         
         # Obtener datos del destinatario guardado
-        destinatario_guardado = resultados_previos.get("destinatario", {})
-        remitente_id = resultados_previos.get("remitente")
+        destinatario_guardado = {}
+        remitente_id = None
         
         # Preparar argumentos para el stored procedure
         args = (
             # Cliente y empresa (asumimos valores por defecto si no están)
-            _to_int(autenticacion.get("cliente_id"), 1),  # p_id_cliente
-            1,  # p_id_empresa_envio (asumimos ZOOM=1)
+            _to_int(id_cliente_db),  # p_id_cliente (ID real en tb_delivery_cliente)
+            _to_int(3),  # p_id_empresa_envio (ZOOM=3 por defecto)
             
             # Referencias
             metadata.get("solicitud_id"),  # p_referencia_interna
-            payload.get("_token"),  # p_token_zoom
-            payload.get("_certificado"),  # p_certificado_zoom
-            _to_int(autenticacion.get("codigo_cliente"), 407940),  # p_codigo_cliente_zoom
+            extras.get("token"),  # p_token_zoom
+            extras.get("certificado"),  # p_certificado_zoom
+            _to_int(autenticacion.get("codigo_cliente")),  # p_codigo_cliente_zoom
             
             # Remitente
             remitente.get("datos_personales", {}).get("nombre_completo"),
@@ -238,7 +226,7 @@ def _persistir_envio_zoom(payload: dict):
             _to_int(servicio.get("modalidad_cod")),
             
             # Paquete
-            _to_int(paquete.get("numero_piezas"), 1),
+            _to_int(paquete.get("numero_piezas")),
             _to_float(paquete.get("peso_total"), 0.0),
             _to_float(paquete.get("dimensiones", {}).get("alto")),
             _to_float(paquete.get("dimensiones", {}).get("ancho")),
@@ -253,11 +241,10 @@ def _persistir_envio_zoom(payload: dict):
             1,  # p_cod_estatus_envio (CREADO por defecto)
             payload.get("informacion_adicional", {}).get("observaciones"),
             metadata.get("solicitud_id"),  # p_referencia_zoom
-            str(id_guia_zoom) if id_guia_zoom else "",  # p_id_guia_zoom
+            str(id_guia_zoom or ""),  # p_id_guia_zoom
             
             # Backups (payload completo)
-            json.dumps(payload, ensure_ascii=False, indent=2),  # p_payload_cab
-            json.dumps(resultados_previos, ensure_ascii=False, indent=2),  # p_payload_track
+            json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")),  # p_payload_cab
             
             # Out params
             None,  # p_exito (OUT)
@@ -265,27 +252,28 @@ def _persistir_envio_zoom(payload: dict):
         )
         
         # Ejecutar stored procedure
-        print (f"Args para sp_crear_envio_zoom: {args}")
-        resultados = ejecutar_sp_resultados("sp_crear_envio_zoom", *args)
-        print (f"Respuesta sp_crear_envio_zoom: {resultados}")
+        #print (f"Args para sp_crear_envio_zoom: {args}")
+        resultados = ejecutar_sp_resultados("sp_crear_envio_zoom", *args, arg_out=["p_exito", "p_mensaje"])        
+        #print (f"Respuesta sp_crear_envio_zoom: {resultados}")
         
         # Si el stored procedure devuelve los out params, procesarlos
         if resultados and len(resultados) > 0:
             resultado_dict = resultados[0]
             p_exito = resultado_dict.get("p_exito", resultado_dict.get("P_EXITO"))
             p_mensaje = resultado_dict.get("p_mensaje", resultado_dict.get("P_MENSAJE"))
-            
+            if debug: logger.info(f"Sp ejecutado OK en BD con resultado: {resultados}")
             return {
                 "p_exito": p_exito if p_exito is not None else True,
                 "p_mensaje": p_mensaje or "Envío guardado exitosamente",
                 "resultado": resultados,
                 "id_envio_cab": resultado_dict.get("id_envio_cab", resultado_dict.get("ID_ENVIO_CAB")),
                 "id_guia_zoom": id_guia_zoom
-            }
+            }            
         else:
+            logger.error("No se obtuvo respuesta del procedimiento almacenado sp_crear_envio_zoom")
             return {
-                "p_exito": True,
-                "p_mensaje": "Envío procesado pero no se obtuvo confirmación de BD",
+                "p_exito": False,
+                "p_mensaje": "Error: No se obtuvo respuesta del procedimiento almacenado",
                 "resultado": [],
                 "id_guia_zoom": id_guia_zoom
             }
@@ -298,6 +286,75 @@ def _persistir_envio_zoom(payload: dict):
             "error": str(e)
         }
 
+def reimprimir_guia(_cliente: ClienteZoom, guia: str) -> dict:
+    """Reimprime usando la etiqueta ya guardada en BD (sin solicitar nueva)."""
+    try:
+        if not guia:
+            logger.error("No se proporcionó número de guía para reimpresión")
+            return {"error": "No se proporcionó número de guía"}
+        
+        # Ejecutar SP de búsqueda por guía
+        resultados = ejecutar_sp_resultados("sp_busqueda_zoom", guia, None, None)
+        #print(f"Resultados sp_busqueda_zoom para guía {guia}: {resultados}")
+        
+        if not resultados:
+            return {"error": "No se encontró la guía en BD"}
+
+        # Tomar el primer resultado (debería ser solo uno)
+        fila = resultados[0]
+        
+        # Buscar etiqueta en payload_solicitud -> datos_devueltos -> etiqueta_pdf
+        etiqueta_pdf = None
+        
+        # 1. Buscar directamente en payload_solicitud
+        payload_solicitud = fila.get('payload_solicitud')
+        if payload_solicitud:
+            try:
+                # Convertir string JSON a dict si es necesario
+                if isinstance(payload_solicitud, str):
+                    payload_data = json.loads(payload_solicitud)
+                else:
+                    payload_data = payload_solicitud
+                
+                # Buscar en datos_devueltos -> etiqueta_pdf
+                datos_devueltos = payload_data.get('datos_devueltos', {})
+                if isinstance(datos_devueltos, str):
+                    try:
+                        datos_devueltos = json.loads(datos_devueltos)
+                    except:
+                        datos_devueltos = {}
+                
+                etiqueta_pdf = datos_devueltos.get('etiqueta_pdf')
+                
+            except Exception as e:
+                logger.error(f"Error procesando payload_solicitud: {str(e)}")
+                
+        if not etiqueta_pdf:
+            logger.error("No se encontró etiqueta en ningún campo")
+            return {"error": "La guía existe pero no tiene etiqueta almacenada"}
+        
+        # Verificar que la etiqueta sea base64 válido
+        if not etiqueta_pdf or len(etiqueta_pdf.strip()) < 100:
+            logger.error(f"Etiqueta encontrada pero parece inválida (longitud: {len(etiqueta_pdf) if etiqueta_pdf else 0})")
+            return {"error": "Etiqueta almacenada en formato inválido"}
+        
+        # Generar el PDF
+        respuesta = crear_pdf_etiqueta_zoom(_cliente, etiqueta_pdf, guia)
+        if respuesta.get("error"):
+            logger.error(f"Error generando PDF: {respuesta.get('error')}")
+            return {"error": respuesta.get("error")}
+        
+        return {
+            "ok": True,
+            "guia": guia,
+            "etiqueta_pdf_encontrada": True,
+            "fuente": "bd",
+            "ruta_pdf": respuesta.get("ruta")
+        }
+        
+    except Exception as e:
+        logger.exception(f"Error en reimprimir_guia: {str(e)}")
+        return {"error": str(e)}
 
 # --- Clientes ---
 @bp_privadas.post("/informeCliente")
@@ -394,12 +451,9 @@ def crear_envio_zoom_orquestado():
             #return jsonify({"ok": False, "error": token_data["error"]}), 401
         elif debug: logger.info("Token y certificado obtenidos correctamente")
         
-        # # Guardar token para uso posterior
+        # Guardar token/certificado solo en variables locales (no mutar payload)
         token = token_data.get("token")
-        #print (f"Token obtenido: {token}")
         certificado = token_data.get("certificado")
-        payload["_token"] = token
-        payload["_certificado"] = certificado
         
         resultado["datos_intermedios"]["autenticacion"] = {
             "token_obtenido": bool(token),
@@ -479,7 +533,7 @@ def crear_envio_zoom_orquestado():
         
         tipo_envio = payload["configuracion_envio"]["tipo_envio"]   
         if tipo_envio in ["nacional", "internacional", "casillero_aereo", "casillero_maritimo"]:
-            envio_creado = crear_envio_segun_tipo(cliente_zoom, payload, tipo_envio,token)
+            envio_creado = crear_envio_segun_tipo(cliente_zoom, payload, tipo_envio, token, certificado)
             guia_zoom = envio_creado.get("entidadRespuesta", [{}])[0].get("numguia")
             if not guia_zoom and (envio_creado.get("codrespuesta") != "CODE_001"):
                 logger.error(f"Error creando envío: {envio_creado.get('error', 'Respuesta inesperada')}")   
@@ -546,22 +600,20 @@ def crear_envio_zoom_orquestado():
         
         # # ===== PASO 10: GUARDAR EN BASE DE DATOS LOCAL =====
         try:
-            # agergamos todas lasresultados previos al payload para guardarlo todo junto
-            payload["resultados_previos"] = {
-               "token": token_data,
-               "servicios_cliente": servicios_disponibles,
-               "tarifas": tarifa_calculada,
-               "remitente": remitente_id,
-               "destinatario": destinatario,
-               "guia": guia_zoom,
-               "tracking": tracking,
-               "etiqueta": etiqueta
+            # Extras mínimos para persistencia y respuesta (sin mutar payload)
+            extras = {
+                "errores_zoom":resultado["errores"],
+                "guia_zoom": guia_zoom,
+                "token": token,
+                "certificado": certificado,
+                "etiqueta_pdf": (etiqueta or {}).get("entidadRespuesta", {}).get("guiaPDF")
             }
-            #print (f"Payload final para BD: {payload}")
-            db_cliente= _guardar_cliente_zoom(payload)
+            payload["datos_devueltos"] = extras  # Solo para referencia en BD
+            print (f"Payload para persistencia: {payload}")
+            db_cliente = _guardar_cliente_zoom(payload)
             if db_cliente:
                 if debug: logger.info(f"Cliente guardado en BD con ID: {db_cliente}")
-                db_envio = _persistir_envio_zoom(payload)
+                db_envio = _persistir_envio_zoom(payload, extras, db_cliente)
                 if debug: logger.info(f"Envío guardado en BD con resultado: {db_envio}")
             #db_resultado = guardar_envio_en_bd(payload, resultado)
                 resultado["respuesta_final"]["db"] = db_envio
@@ -727,32 +779,62 @@ def obtener_autenticacion_zoom(cliente: ClienteZoom, payload: dict) -> dict:
             "clave": clave
         })
         
-        #token = token_resp["entidadRespuesta"].get("token")        
-        if isinstance(token_resp, dict) and token_resp["entidadRespuesta"].get("token"):
-            token = token_resp["entidadRespuesta"].get("token")
+        entidad_token = token_resp.get("entidadRespuesta")
+        token = None
+        
+        if entidad_token:
+            # if isinstance(entidad_token, list) and len(entidad_token) > 0:
+            #     token = entidad_token[0].get("token")
+            # elif isinstance(entidad_token, dict):
+            token = entidad_token.get("token")
+        
+        if token:
             resultado["token"] = token
-            if debug: logger.info(f"Token obtenido exitosamente para login: {login}, clave: {clave}")
+            if debug: 
+                logger.info(f"Token obtenido exitosamente para login: {login}, clave: {clave}")
         else:
             resultado["error"] = token_resp
             logger.error(f"Error obteniendo token: {token_resp}, no se procede. login: {login}, clave: {clave}")
             return resultado
     
-        
-        # 2. Obtener certificado (para envios internacionales o si se requiere)
-        # no siempre es necesario y aun no existe en el payload requerido campo "requerir_certificado"
-        if token and payload.get("configuracion_envio", {}).get("requerir_certificado", False):
+        # 2. Obtener certificado
+        if token and payload.get("configuracion_envio", {}).get("requerir_certificado", False):            
             cert_resp = cliente.zoom_cert({
                 "login": login,
                 "password": clave,
                 "token": token,
                 "frase_privada": auth.get("frase_secreta", "")
             })
-            if isinstance(cert_resp, dict) and "certificado" in cert_resp:
-                resultado["certificado"] = cert_resp["certificado"]
+            
+            if debug: 
+                logger.info(f"Certificado obtenido para los datos de login: {login} y clave: {clave}")
+            
+            entidad_cert = cert_resp.get("entidadRespuesta")
+            certificado = None
+            
+            if entidad_cert:
+                if isinstance(entidad_cert, list):
+                    # Buscar certificado en la lista
+                    for item in entidad_cert:
+                        if isinstance(item, dict) and "certificado" in item:
+                            certificado = item["certificado"]
+                            break
+                elif isinstance(entidad_cert, dict):
+                    certificado = entidad_cert.get("certificado")
+            
+            if certificado:
+                resultado["certificado"] = certificado
+                if debug: 
+                    logger.info(f"Certificado obtenido exitosamente para login: {login}, clave: {clave}")
             else:
-                resultado["certificado"] = cert_resp
+                resultado["error"] = cert_resp
+                logger.error(f"Error obteniendo certificado: {cert_resp}, login: {login}, clave: {clave}")
+                return resultado
+            
             logger.info(f"Certificado obtenido para los datos de login: {login} y clave: {clave}")
-    
+        
+        return resultado
+        
     except Exception as e:
         logger.error(f"Error en autenticación: {str(e)}")
         resultado["error"] = f"Error de autenticación: {str(e)}"
@@ -922,13 +1004,17 @@ def guardar_destinatario_zoom(cliente: ClienteZoom, payload: dict) -> Optional[s
         return None
 
 
-def crear_envio_segun_tipo(cliente: ClienteZoom, payload: dict, tipo_envio: str, token: str) -> dict:
+def crear_envio_segun_tipo(cliente: ClienteZoom, payload: dict, tipo_envio: str, token: str, certificado: Optional[str] = None) -> dict:
     """Crea el envío según el tipo"""
     
     if tipo_envio == "nacional":
         return crear_envio_nacional(cliente, payload, token)
     elif tipo_envio in ["internacional", "casillero_aereo", "casillero_maritimo"]:
-        return crear_envio_internacional(cliente, payload, tipo_envio)
+        # Pasar certificado en una copia para no mutar el payload original
+        payload_int = {**payload}
+        if certificado is not None:
+            payload_int["_certificado"] = certificado
+        return crear_envio_internacional(cliente, payload_int, tipo_envio)
     else:
         return {"error": f"Tipo de envío no soportado: {tipo_envio}"}
 
@@ -991,15 +1077,13 @@ def crear_envio_nacional(cliente: ClienteZoom, payload: dict, token: str) -> dic
         "web_services": 1
     }
     #try:
-    print (f"Datos para crear envío nacional: {envio_data}")
+    #print (f"Datos para crear envío nacional: {envio_data}")
     #agergar el token con append
     
     return cliente.create_shipment(envio_data , token)         
     # except Exception as e:
     #        logger.error(f"Error creando envío nacional: {str(e)}")
     #        return {"error": f"Error creando envío nacional: {str(e)}"}
-
-    
 
 
 def crear_envio_internacional(cliente: ClienteZoom, payload: dict, tipo_envio: str) -> dict:
@@ -1057,7 +1141,17 @@ def crear_envio_internacional(cliente: ClienteZoom, payload: dict, tipo_envio: s
     return cliente.create_shipment_internacional(envio_data)
 
 #-------------------------------------------------fin endpoint orquestador propio------------------------------------------------------
-
+# ===== Reimpresion de etiquetas =====
+@bp_privadas.post("/delivery/zoom/ReimprimirEtiqueta")
+@requerir_api_key(Delivery_Empresa="ZOOM")
+def reimprimir_etiqueta():
+    payload = request.get_json(silent=True) or {}
+    cliente = _cliente_Zoom()
+    guia = payload.get("guia_zoom")
+    data = reimprimir_guia(cliente, guia)
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
 
 
 @bp_privadas.post("/GuardarRemitenteWs")
@@ -1123,7 +1217,7 @@ def crear_cliente_ws():
     return jsonify({"ok": True, "data": data})
 
 
-# -- ARMI
+# ------------------------ ARMI ---------------------------------------
 @bp_privadas.post("/armi/monitor/business/create")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def crear_negocio_armi():
@@ -1148,6 +1242,106 @@ def consultar_negocio_armi(negocio_id: int):
 def eliminar_negocio_armi(negocio_id: int):
     cliente = _cliente_Armi()
     data = cliente.eliminar_negocio(negocio_id)
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
+
+@bp_privadas.get("/armi/monitor/business/all/<int:user_id>")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def listar_negocios_usuario_armi(user_id: int):
+    cliente = _cliente_Armi()
+    data = cliente.negocios_del_usuario(user_id)
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
+
+@bp_privadas.post("/armi/monitor/business/update/<int:negocio_id>")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def actualizar_negocio_armi(negocio_id: int):
+    payload = request.get_json(silent=True) or {}
+    cliente = _cliente_Armi()
+    data = cliente.actualizar_negocio(negocio_id, payload)
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
+
+@bp_privadas.post("/armi/monitor/branchOffice/create")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def crear_sucursal_armi():
+    payload = request.get_json(silent=True) or {}
+    cliente = _cliente_Armi()
+    data = cliente.crear_sucursal(payload)
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
+
+@bp_privadas.get("/armi/monitor/branchOffice/all/<int:business_id>")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def listar_sucursales_armi(business_id: int):
+    cliente = _cliente_Armi()
+    data = cliente.sucursales_del_negocio(business_id)
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
+
+@bp_privadas.delete("/armi/monitor/branchOffice/delete")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def eliminar_sucursal_armi():
+    payload = request.get_json(silent=True) or {}
+    branch_office_id = payload.get("branchOfficeId")
+    business_id = payload.get("businessId")
+    if not branch_office_id or not business_id:
+        return jsonify({"ok": False, "error": "branchOfficeId y businessId son requeridos"}), 400
+    cliente = _cliente_Armi()
+    data = cliente.eliminar_sucursal(int(branch_office_id), int(business_id))
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
+
+@bp_privadas.post("/armi/monitor/order/create")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def crear_orden_armi():
+    payload = request.get_json(silent=True) or {}
+    cliente = _cliente_Armi()
+    data = cliente.crear_orden(payload)
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data}), 201
+
+@bp_privadas.post("/armi/monitor/order/cancel")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def cancelar_orden_armi():
+    payload = request.get_json(silent=True) or {}
+    cliente = _cliente_Armi()
+    data = cliente.cancelar_orden(payload)
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
+
+@bp_privadas.get("/armi/monitor/order/status/<int:order_id>")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def estado_orden_armi(order_id: int):
+    cliente = _cliente_Armi()
+    data = cliente.estado_orden(order_id)
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
+
+@bp_privadas.get("/armi/monitor/city/<string:city>")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def codigo_ciudad_armi(city: str):
+    cliente = _cliente_Armi()
+    data = cliente.codigo_ciudad(city)
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
+
+@bp_privadas.post("/armi/monitor/order/delivery-cost")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def costo_envio_armi():
+    payload = request.get_json(silent=True) or {}
+    cliente = _cliente_Armi()
+    data = cliente.costo_envio(payload)
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify({"ok": True, "data": data})

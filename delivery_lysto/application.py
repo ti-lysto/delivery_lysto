@@ -53,9 +53,12 @@ def crear_aplicacion() -> Flask:
     def health():
         from .db.conexion import probar_conexion        
         try:
-            probar_conexion()
-            return jsonify({"status": "ok"})
-            logger.info("Health check exitoso")
+            cnn=probar_conexion()
+            if not cnn:
+                logger.error("Health check fallido: no se pudo conectar a la base de datos")
+                return jsonify({"status": "error", "message": "No se pudo conectar a la base de datos"}), 500
+            return jsonify({"status": "ok", "conexion a bd": cnn})
+            logger.info("Health check exitoso") 
         except Exception as e:
             logger.error(f"Health check fallido: {e}")
             return jsonify({"status": "error", "message": str(e)}), 500
