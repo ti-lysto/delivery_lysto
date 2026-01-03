@@ -46,16 +46,26 @@ def modalidad_tarifa():
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify({"ok": True, "data": data})
 
-@bp_publicas.get("/catalog/ciudades")
+@bp_publicas.get("/getCiudades")
 def listar_ciudades():
-    estado = request.args.get("estado")
-    codestado = request.args.get("codestado")
+    codestado_str = request.args.get("codestado")
+    filtro = request.args.get("filtro")
     idioma = request.args.get("idioma")
+
+    if not codestado_str or not codestado_str.isdigit():
+        return jsonify({"ok": False, "error": "codestado debe ser un número entero válido"}), 400
+
+    codestado = int(codestado_str)
     cliente = _cliente()
-    data = cliente.obtener_ciudades(estado=estado, codestado=codestado, idioma=idioma)
-    if data.get("error"):
-        return jsonify({"ok": False, "error": data.get("error")}), 400
-    return jsonify({"ok": True, "data": data, "params": {"estado": estado, "codestado": codestado,"idioma": idioma}})
+
+    try:
+        data = cliente.obtener_ciudades(codestado=codestado, filtro=filtro, idioma=int(idioma) if idioma and idioma.isdigit() else None)
+    except ValueError as e:
+        return jsonify({"ok": False, "error": str(e)}), 400
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+    return jsonify({"ciudades": data})
 
 @bp_publicas.get("/getOficinas")
 def obtener_oficinas():
@@ -224,11 +234,20 @@ def obtener_modalidad_cod():
 
 @bp_publicas.get("/getEstados")
 def listar_estados():
-    filtro = request.args.get("filtro")
+    filtro = request.args.get("filtro", "124")  # 124 es Venezuela
     cliente = _cliente()
     data = cliente.obtener_estados(filtro=filtro)
-    if data.get("error"):
-        return jsonify({"ok": False, "error": data.get("error")}), 400
+
+    # Si la respuesta es una lista, no tiene .get()
+    if isinstance(data, list):
+        # Asumimos que no hay error si es una lista válida
+        return jsonify({"ok": True, "data": data, "params": {"filtro": filtro}})
+
+    # Si es un diccionario, verifica si hay error
+    if isinstance(data, dict) and data.get("error"):
+        return jsonify({"ok": False, "error": data["error"]}), 400
+
+    # Si es un dict pero sin error, envíalo como data
     return jsonify({"ok": True, "data": data, "params": {"filtro": filtro}})
 
 @bp_publicas.get("/ConsultaPreciosWs")

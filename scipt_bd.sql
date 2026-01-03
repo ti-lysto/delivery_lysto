@@ -115,6 +115,25 @@
 --     └───────────────────┘ │ tb_armi_sucursales│
 --                           └───────────────────┘
 
+CREATE TABLE `tb_delivery_envio_track_zoom_historico` (
+  `id_track_zoom` int NOT NULL,
+  `id_envio_cab` int NOT NULL,
+  `id_guia_zoom` varchar(50) NOT NULL,
+  `tipo_busqueda` int DEFAULT NULL,
+  `web_track` tinyint(1) DEFAULT NULL,
+  `cod_estatus_track` int NOT NULL COMMENT 'FK a tb_estatus_general (módulo: ZOOM_TRACK)',
+  `track_nota` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Observaciones específicas de este evento',
+  `track_gps` varchar(50) DEFAULT NULL,
+  `track_fechora` datetime NOT NULL,
+  `fecha_registro` datetime DEFAULT NULL,
+  `fecha_entrega` datetime DEFAULT NULL COMMENT 'indica la fecha de entrega del envio',
+  KEY `id_track_zoom` (`id_track_zoom`),
+  KEY `idx_envio` (`id_envio_cab`),
+  KEY `idx_guia` (`id_guia_zoom`),
+  KEY `idx_fechora` (`track_fechora`),
+  KEY `idx_estatus_track` (`cod_estatus_track`),
+  KEY `idx_track_combinado` (`id_envio_cab`,`track_fechora` DESC)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='La tabla tb_delivery_envio_track_zoom almacena el historial de rastreo (tracking) de los envíos gestionados a través de Zoom.';
 
 CREATE TABLE `tb_delivery_cliente` (
   `id_cliente` int NOT NULL AUTO_INCREMENT,
@@ -278,26 +297,6 @@ CREATE TABLE `tb_delivery_envio_track_zoom` (
   CONSTRAINT `tb_delivery_envio_track_zoom_ibfk_1` FOREIGN KEY (`id_envio_cab`) REFERENCES `tb_delivery_envio_cab_zoom` (`id_envio_cab`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_delivery_envio_track_zoom_ibfk_2` FOREIGN KEY (`cod_estatus_track`) REFERENCES `tb_estatus_general` (`cod_estatus`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='La tabla tb_delivery_envio_track_zoom almacena el historial de rastreo (tracking) de los envíos gestionados a través de Zoom.';
-
-CREATE TABLE `tb_delivery_envio_track_zoom_historico` (
-  `id_track_zoom` int NOT NULL,
-  `id_envio_cab` int NOT NULL,
-  `id_guia_zoom` varchar(50) NOT NULL,
-  `tipo_busqueda` int DEFAULT NULL,
-  `web_track` tinyint(1) DEFAULT NULL,
-  `cod_estatus_track` int NOT NULL COMMENT 'FK a tb_estatus_general (módulo: ZOOM_TRACK)',
-  `track_nota` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Observaciones específicas de este evento',
-  `track_gps` varchar(50) DEFAULT NULL,
-  `track_fechora` datetime NOT NULL,
-  `fecha_registro` datetime DEFAULT NULL,
-  `fecha_entrega` datetime DEFAULT NULL COMMENT 'indica la fecha de entrega del envio',
-  KEY `id_track_zoom` (`id_track_zoom`),
-  KEY `idx_envio` (`id_envio_cab`),
-  KEY `idx_guia` (`id_guia_zoom`),
-  KEY `idx_fechora` (`track_fechora`),
-  KEY `idx_estatus_track` (`cod_estatus_track`),
-  KEY `idx_track_combinado` (`id_envio_cab`,`track_fechora` DESC)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='La tabla tb_delivery_envio_track_zoom almacena el historial de rastreo (tracking) de los envíos gestionados a través de Zoom.';
 
 CREATE TABLE `tb_estatus_general` (
   `id_estatus_general` int NOT NULL AUTO_INCREMENT,
@@ -636,7 +635,7 @@ BEGIN
         descripcion_contenido,
         web_services,
         notas,
-        fecha_envio,
+        fecha_creacion,
         payload_solicitud
       ) VALUES (
         p_id_cliente,

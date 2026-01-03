@@ -83,7 +83,7 @@ def main():
         # }
         # probar_get(c, "/api/getInfoTracking?tipo_busqueda=1&codigo=71090585&codigo_cliente=407940",params_info_tracking)
         # Rutas públicas correctas van bajo "/api" en tu app
-        probar_get(c, "/api/catalog/tipotarifa") 
+        #probar_get(c, "/api/catalog/tipotarifa") 
         # probar_get(c, "/api/getModalidadTarifa")
         # # Ciudades: admite estado o codestado (probamos ambos si se desea)
         # params = {"codestado": 25}
@@ -123,13 +123,15 @@ def main():
         # probar_get(c, "/api/getTipoRutaEnvio",params)
         # probar_get(c, "/api/getModalidadCod")
         # params={"filtro": "3"}
-        # probar_get(c, "/api/getEstados",params)
+        # probar_get(c, "/api/getEstados")
         # params={"codciudad_origen": "12", "codciudad_destino": "19", "peso": "0.5", "valor_declarado": "30373", "codigo_cliente": "100000817", "proteccion": "1", "codservicio": "1", "modalidad": "1", "codoficina": "46", "retirar_oficina": "1"}
         # probar_get(c, "/api/ConsultaPreciosWs",params)
         # params={"codestado": "8"}
         # probar_get(c, "/api/getOficinaEstadoWs",params)
         # params={"tipo_precio": "1","tipo_tarifa": "1","modalidad_tarifa": "1","ciudad_remitente": "19","ciudad_destinatario": "4","oficina_retirar": "136","cantidad_piezas": "1","peso": "1","valor_mercancia": "0","valor_declarado": "125","tipo_envio": "1"}
         # probar_get(c, "/api/getTipoPrecioWs")
+        params={"codestado": "0"}
+        probar_get(c, "/api/getCiudades", params)
         
         
         # params={"tipo_busqueda": "1", "numero": "1000242115", "web": "1"}
@@ -605,48 +607,48 @@ def main():
 
         #--- Envío orquestado propio ---
         # Payload mínimo válido según validar_payload_estructura del orquestador
-        params_envio = {
-            "metadata": {"solicitud_id": "TEST-001"},
-            "autenticacion_zoom": {
-                "login": "1",
-                "clave": "456789",
-                "codigo_cliente": 407940,
-                "cliente_id": 1
-            },
-            "configuracion_envio": {
-                "tipo_envio": "nacional"
-            },
-            "servicio": {
-                "codservicio": 1,
-                "tipo_tarifa": 1,
-                "modalidad_tarifa": 2
-            },
-            "ubicacion_origen": {
-                "ciudad": {"codciudad": 44, "nombre": "MARACAIBO"}
-            },
-            "ubicacion_destino": {
-                "ciudad": {"codciudad": 12, "nombre": "VALENCIA"}
-            },
-            "remitente": {
-                "datos_personales": {
-                    "nombre_completo": "HIRIBIN GIL",
-                    "numero_documento": "20152013"
-                },
-                "direccion": {"direccion_completa": "42 ENTRE 26 Y 27"}
-            },
-            "destinatario": {
-                "datos_personales": {
-                    "nombre_completo": "GABRIEL DIAZ",
-                    "numero_documento": "18769615"
-                },
-                "direccion": {"direccion_completa": "SECTOR LOS TRES PLATOS..."}
-            },
-            "paquete": {
-                "numero_piezas": 1,
-                "peso_total": 1.02
-            }
-        }
-        probar_post(c, "/privadas/delivery/zoom/envio", params_envio, key)
+        # params_envio = {
+        #     "metadata": {"solicitud_id": "TEST-001"},
+        #     "autenticacion_zoom": {
+        #         "login": "1",
+        #         "clave": "456789",
+        #         "codigo_cliente": 407940,
+        #         "cliente_id": 1
+        #     },
+        #     "configuracion_envio": {
+        #         "tipo_envio": "nacional"
+        #     },
+        #     "servicio": {
+        #         "codservicio": 1,
+        #         "tipo_tarifa": 1,
+        #         "modalidad_tarifa": 2
+        #     },
+        #     "ubicacion_origen": {
+        #         "ciudad": {"codciudad": 44, "nombre": "MARACAIBO"}
+        #     },
+        #     "ubicacion_destino": {
+        #         "ciudad": {"codciudad": 12, "nombre": "VALENCIA"}
+        #     },
+        #     "remitente": {
+        #         "datos_personales": {
+        #             "nombre_completo": "HIRIBIN GIL",
+        #             "numero_documento": "20152013"
+        #         },
+        #         "direccion": {"direccion_completa": "42 ENTRE 26 Y 27"}
+        #     },
+        #     "destinatario": {
+        #         "datos_personales": {
+        #             "nombre_completo": "GABRIEL DIAZ",
+        #             "numero_documento": "18769615"
+        #         },
+        #         "direccion": {"direccion_completa": "SECTOR LOS TRES PLATOS..."}
+        #     },
+        #     "paquete": {
+        #         "numero_piezas": 1,
+        #         "peso_total": 1.02
+        #     }
+        # }
+        # probar_post(c, "/privadas/delivery/zoom/envio", params_envio, key)
 
 if __name__ == "__main__":
     sys.exit(main())

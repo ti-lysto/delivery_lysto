@@ -72,15 +72,15 @@ class ClienteZoom:
         
     ) -> Any:
         url = f"{Configuracion.ZOOM_BASE_URL_qa2}/{ruta.lstrip('/')}" if url_alternativa else f"{self.base_url}/{ruta.lstrip('/')}" if privado else f"{Configuracion.ZOOM_BASE_URL}/{ruta.lstrip('/')}"
-        #print(f"URL solicitada: {url} cuerpo: {cuerpo}")
+        print(f"aquiiiiiiiiiiiiiiiii")
         if not (url.startswith("http://") or url.startswith("https://")):
             raise ErrorZoom("ZOOM_BASE_URL inválida: falta esquema http/https")
         backoff = 0.5
 
         for intento in range(1, self.reintentos + 2):
             try:
-                headers = self._headers_privados(cuerpo, usatoken=usatoken, token=token) if privado else self._headers_publicos()
-                with httpx.Client(timeout=self.timeout, follow_redirects=True) as cliente:
+                headers = self._headers_privados(cuerpo, usatoken=usatoken, token=token) if privado else self._headers_publicos()                
+                with httpx.Client(timeout=self.timeout, follow_redirects=True) as cliente:                    
                     resp = cliente.request(metodo.upper(), url, params=parametros, json=cuerpo, headers=headers)
                 logger.info(f"ZOOM {metodo.upper()} {url} -> {resp.status_code} (final URL: {str(resp.request.url)})")
                 # Intentar parsear JSON
@@ -126,17 +126,40 @@ class ClienteZoom:
     def obtener_modalidad_tarifa(self):
         return self._solicitar(Configuracion.RUTA_ZOOM_MODALIDADTARIFA, "GET")
 
-    def obtener_ciudades(self, codestado: int ,filtro:Optional[str]=None,idioma: Optional[int] = None):
-        """Obtiene ciudades. La API puede esperar `codestado` en lugar de `estado`.
-        Aceptamos ambos y enviamos el que corresponda.
-        """
+    def obtener_ciudades(self, codestado: int, filtro: Optional[str] = None, idioma: Optional[int] = None):
+        """Obtiene ciudades desde ZOOM y normaliza respuestas variadas."""
         if not self.validacion_campo_requerido(codestado=codestado):
             raise ValueError("codestado es un campo requerido")
-        params = {}        
-        params["codestado"] = codestado
-        params["filtro"] = filtro
-        params["idioma"] = idioma        
-        return self._solicitar(Configuracion.RUTA_ZOOM_CIUDADES, "GET", parametros=(params or None))
+
+        params: Dict[str, Any] = {"codestado": codestado}
+        if filtro is not None:
+            params["filtro"] = filtro
+        if idioma is not None:
+            params["idioma"] = idioma
+
+        try:
+            respuesta = self._solicitar(Configuracion.RUTA_ZOOM_CIUDADES, "GET", parametros=params)
+        except Exception as e:
+            raise ValueError(str(e))
+
+        if isinstance(respuesta, list):
+            return respuesta
+
+        if not isinstance(respuesta, dict):
+            raise ValueError("Respuesta inesperada del servicio de ciudades")
+
+        codigo = respuesta.get("codrespuesta") or respuesta.get("Codrespuesta")
+        if codigo == "COD_000" or "entidadRespuesta" in respuesta:
+            ciudades = []
+            for ciudad in respuesta.get("entidadRespuesta", []):
+                ciudades.append({
+                    "codciudad": ciudad.get("codciudad") or ciudad.get("CodCiudad") or ciudad.get("codigo_ciudad"),
+                    "nombre_ciudad": ciudad.get("nombre_ciudad") or ciudad.get("Nombre_ciudad") or ciudad.get("nombre"),
+                })
+            return ciudades
+
+        mensaje = respuesta.get("Mensaje") or respuesta.get("error") or "No se pudo obtener ciudades"
+        raise ValueError(str(mensaje))
 
     def obtener_oficinas(self, codciudad: str, codservicio: int, siglas: Optional[str] = None, codpais: int = 0):
         if not self.validacion_campo_requerido(codciudad=codciudad, codservicio=codservicio):
@@ -314,8 +337,17 @@ class ClienteZoom:
         """
         params = {}
         params["filtro"] = filtro
-        return self._solicitar(Configuracion.RUTA_ZOOM_ESTADOS, "GET", parametros=(params or None))
-
+        respuesta= self._solicitar(Configuracion.RUTA_ZOOM_ESTADOS, "GET", parametros=params)
+        # armar el json para respuesta
+        estados = []
+        if respuesta.get("codrespuesta") == "COD_000":
+            for estado in respuesta.get("entidadRespuesta", []):
+                estados.append({
+                    "codestado": estado.get("codestado"),
+                    "estado": estado.get("nombre")
+                })
+        return estados
+    
     def obtener_consulta_preciows(self, codciudad_origen:int,codciudad_destino:int,peso:float,
                                   valor_declarado:float,proteccion:bool,codigo_cliente:int,
                                   codservicio:int,modalidad:int,codoficina:int,
@@ -648,6 +680,118 @@ class ClienteZoom:
         except Exception as e:
             logger.exception(f"Error en reimprimir_guia: {str(e)}")
             return {"error": str(e)}
+
+    def consulta_tracking(self, payload: dict) -> dict:
+        #return self._solicitar(Configuracion.RUTA_ZOOM_CONSULTACLIENTEWS, "POST", cuerpo=payload, privado=True)
+        # tipo de consulta: 
+        # 1 por ULTIMO TRACKING (getLastTracking)
+        # 2 por HISTORIAL COMPLETO (getInfoTracking)
+        # 3 por GUIA/REFERENCIA (SIN AUTENTICACION) (consultaTrackingWs)
+        # 4 por DHL/CASILLERO INTERNACIONAL (getZoomTrackWs)
+        # 5 por ESPECIALISTA PARA WESTERN UNION (consultaTrackingWs tipo=2)
+        tipo_consulta = payload.get("tipo_consulta")
+        match tipo_consulta:
+            case 1:
+                # estructurar payload para ultimo tracking
+                tipo_busqueda = payload.get("tipo_busqueda")
+                match tipo_busqueda:
+                    case 1:
+                        codigo_valor = payload.get("guia_zoom")
+                    case 2:
+                        codigo_valor = payload.get("referencia")
+                    case _:
+                        return {"error": "Tipo de búsqueda no válido"}
+                json_payload = {
+                    # 1 para busqueda por número de guia , 2 para búsqueda por referencia
+                    "tipo_busqueda": tipo_busqueda,
+                    #Número de Guia o referencia del envío según lo especificado en tipo_busqueda.
+                    "codigo": codigo_valor,
+                    "codigo_cliente": payload.get("codigo_cliente")
+                }
+                respuesta = self._solicitar(Configuracion.RUTA_ZOOM_LASTTRACKING, "GET", cuerpo=json_payload, privado=False)
+                # se estructura la respuesta para que coincida con el formato de las otras consultas# 
+                if str(respuesta.get("codrespuesta"))=="COD_000":# and respuesta.get("mensaje")[:7]!="error:":
+                    json_respuesta = {
+                            "error": None,                       
+                            "codigo_estatus": respuesta["entidadRespuesta"].get("codigo_estatus"),
+                            "estado": respuesta["entidadRespuesta"].get("descripcion_estatus"),
+                            "fecha": respuesta["entidadRespuesta"].get("fecha"),
+                            "hora": respuesta["entidadRespuesta"].get("hora"),
+                            "receptor": respuesta["entidadRespuesta"].get("receptor"),
+                            "mensaje": respuesta["mensaje"]
+                    }                     
+                    return json_respuesta
+                elif str(respuesta.get("codrespuesta"))=="CODE_000":
+                    json_respuesta = {
+                        "error": "CODE_000",
+                        "mensaje": respuesta["mensaje"]
+                        #"entidadRespuesta": respuesta["entidadRespuesta"]
+                    }
+                    return json_respuesta
+                else:                                        
+                    json_respuesta = {
+                        "error": respuesta.get("mensaje")
+                    }
+                    return json_respuesta
+                    
+                
+            case 2:
+                #se estructura payload para historial completo
+                
+                tipo_busqueda = payload.get("tipo_busqueda")
+                match tipo_busqueda:
+                    case 1:
+                        codigo_valor = payload.get("guia_zoom")
+                    case 2:
+                        codigo_valor = payload.get("referencia")
+                    case _:
+                        return {"error": "Tipo de búsqueda no válido"}
+                    
+                json_payload = {
+                    "tipo_busqueda": tipo_busqueda,
+                    "codigo": codigo_valor,
+                    "codigo_cliente": payload.get("codigo_cliente")
+                }
+
+                respuesta = self._solicitar(Configuracion.RUTA_ZOOM_INFOTRACKING, "GET", 
+                                        cuerpo=json_payload, privado=False)
+                json_respuesta = {"historial": [],"error": None  }
+                if str(respuesta.get("codrespuesta")) == "COD_000":
+                    
+                    historial = respuesta.get("entidadRespuesta", [])                                          
+                    for evento in historial:
+                        evento_info = {
+                            "codigo_estatus": evento.get("codigo_estatus"),
+                            "descripcion_estatus": evento.get("descripcion_estatus"),
+                            "fecha": evento.get("fecha"),
+                            "hora": evento.get("hora"),
+                            "receptor": evento.get("receptor")
+                        }
+                        json_respuesta["historial"].append(evento_info)
+                elif str(respuesta.get("codrespuesta")) == "None":
+                    
+                    json_respuesta = {
+                        "error": respuesta.get("entidadRespuesta")
+                    }
+                else:
+                    json_respuesta["error"] = {
+                        "codigo": "ERROR_UNKNOWN",
+                        "mensaje": "Error desconocido"                    }
+                return json_respuesta
+            case 3:
+                #se estructura payload para historial completo
+                #return self._solicitar(Configuracion.RUTA_ZOOM_CONSULTATRACKINGWS, "POST", cuerpo=payload, privado=True)
+                return {"ok": True, "Ruta":"RUTA_ZOOM_CONSULTATRACKINGWS", "estado": "En desarrollo"}
+            case 4:
+                #return self._solicitar(Configuracion.RUTA_ZOOM_TRACKWS, "POST", cuerpo=payload, privado=True)
+                return {"ok": True, "Ruta":"RUTA_ZOOM_TRACKWS", "estado": "En desarrollo"}
+            case 5:
+                tipo=2
+                #return self._solicitar(Configuracion.RUTA_ZOOM_CONSULTATRACKINGWS, "POST", cuerpo=payload, privado=True)
+                return {"ok": True, "Ruta":"RUTA_ZOOM_CONSULTATRACKINGWS", "estado": "En desarrollo"}
+            case _:
+                return {"error": "Tipo de consulta no válido"}
+        return {"ok": True, "cliente_info": {"nombre": "Cliente Ejemplo", "codigo": payload.get("codigo_cliente")}}
 
 # ================== PROCEDIMIENTOS POST (ORDEN DOCUMENTACIÓN) ==================
     def zoom_cert(self, datos: dict):

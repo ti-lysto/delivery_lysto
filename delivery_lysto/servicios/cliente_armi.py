@@ -75,7 +75,9 @@ class ClienteArmi:
     
     # Ejemplo de método para crear negocio
     def crear_negocio(self, datos: Dict[str, Any]) -> Dict[str, Any]:
-        return self.solicitar(Configuracion.RUTA_ARMI_CREA_NEGOCIO, metodo="POST", cuerpo=datos)
+        respuesta= self.solicitar(Configuracion.RUTA_ARMI_CREA_NEGOCIO, metodo="POST", cuerpo=datos)
+        #print(f"Respuesta crear negocio ARMI: {respuesta}")
+        return respuesta
 
     # Ejemplo de método para consultar negocio
     def consultar_negocio(self, negocio_id: int) -> Dict[str, Any]:

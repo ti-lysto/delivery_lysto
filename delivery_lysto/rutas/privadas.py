@@ -266,7 +266,7 @@ def _persistir_envio_zoom(payload: dict, extras: dict, id_cliente_db: int):
                 "p_exito": p_exito if p_exito is not None else True,
                 "p_mensaje": p_mensaje or "Envío guardado exitosamente",
                 "resultado": resultados,
-                "id_envio_cab": resultado_dict.get("id_envio_cab", resultado_dict.get("ID_ENVIO_CAB")),
+                #"id_envio_cab": resultado_dict.get("id_envio_cab", resultado_dict.get("ID_ENVIO_CAB")),
                 "id_guia_zoom": id_guia_zoom
             }            
         else:
@@ -539,13 +539,13 @@ def crear_envio_zoom_orquestado():
                 logger.error(f"Error creando envío: {envio_creado.get('error', 'Respuesta inesperada')}")   
                 resultado["errores"].append(f"Error creando envío: {envio_creado['error']}")
                 resultado["respuesta_final"]["envio"] = "Envío no creado"
-                resultado["respuesta_final"]["guia_zoom"] = "Guía no generada"
+                #resultado["respuesta_final"]["guia_zoom"] = "Guía no generada"
                 resultado["ok"] = False
             else:
                 if debug: logger.info(f"Envío creado con éxito, guía Zoom: {guia_zoom}")
                 #guia_zoom = envio_creado.get("entidadRespuesta", {}).get("numguia") 
-                resultado["respuesta_final"]["envio"] = "Envío creado exitosamente"
-                resultado["respuesta_final"]["guia_zoom"] = guia_zoom
+                resultado["respuesta_final"]["envio"] = "Envío creado exitosamente"                
+                #resultado["respuesta_final"]["guia_zoom"] = guia_zoom
                 resultado["pasos_completados"].append("creacion_envio")
                 #resultado["respuesta_final"]["guia_zoom"] = guia_zoom
             
@@ -554,24 +554,24 @@ def crear_envio_zoom_orquestado():
             
         
         # # ===== PASO 8: OBTENER SEGUIMIENTO INMEDIATO =====
-        if guia_zoom:
-            try:
-                tracking = cliente_zoom.obtener_ultimotrack(
-                    codigo=guia_zoom,
-                    codigo_cliente=payload["autenticacion_zoom"]["codigo_cliente"],
-                    tipo_busqueda=1  # Por número de guía
-                )
-                #resultado["respuesta_final"]["tracking"] = tracking
-                if tracking.get("codrespuesta", []) == "COD_000":
-                    resultado["pasos_completados"].append("Tracking inicial")
-                    if debug: logger.info(f"Seguimiento inicial obtenido para guía {guia_zoom}")
-                else:
-                    resultado["errores"].append("No se pudo obtener tracking inicial")
-                    resultado["ok"] = False
-                    logger.warning(f"No se pudo obtener seguimiento inicial para guía {guia_zoom}")
-            except Exception as e:
-                logger.error(f"Error obteniendo seguimiento inicial: {str(e)}")
-                resultado["ok"] = False
+        # if guia_zoom:
+        #     try:
+        #         tracking = cliente_zoom.obtener_ultimotrack(
+        #             codigo=guia_zoom,
+        #             codigo_cliente=payload["autenticacion_zoom"]["codigo_cliente"],
+        #             tipo_busqueda=1  # Por número de guía
+        #         )
+        #         #resultado["respuesta_final"]["tracking"] = tracking
+        #         if tracking.get("codrespuesta", []) == "COD_000":
+        #             resultado["pasos_completados"].append("Tracking inicial")
+        #             if debug: logger.info(f"Seguimiento inicial obtenido para guía {guia_zoom}")
+        #         else:
+        #             resultado["errores"].append("No se pudo obtener tracking inicial")
+        #             resultado["ok"] = False
+        #             logger.warning(f"No se pudo obtener seguimiento inicial para guía {guia_zoom}")
+        #     except Exception as e:
+        #         logger.error(f"Error obteniendo seguimiento inicial: {str(e)}")
+        #         resultado["ok"] = False
         
         # # ===== PASO 9: GENERAR ETIQUETA TÉRMICA =====
         if (guia_zoom and 
@@ -608,8 +608,7 @@ def crear_envio_zoom_orquestado():
                 "certificado": certificado,
                 "etiqueta_pdf": (etiqueta or {}).get("entidadRespuesta", {}).get("guiaPDF")
             }
-            payload["datos_devueltos"] = extras  # Solo para referencia en BD
-            print (f"Payload para persistencia: {payload}")
+            payload["datos_devueltos"] = extras  # Solo para referencia en BD            
             db_cliente = _guardar_cliente_zoom(payload)
             if db_cliente:
                 if debug: logger.info(f"Cliente guardado en BD con ID: {db_cliente}")
@@ -1153,6 +1152,17 @@ def reimprimir_etiqueta():
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify({"ok": True, "data": data})
 
+@bp_privadas.post("/delivery/zoom/ConsultaTracking")
+@requerir_api_key(Delivery_Empresa="ZOOM")
+def consulta_tracking():
+    payload = request.get_json(silent=True) or {}
+    cliente = _cliente_Zoom()
+    #guia = payload.get("guia_zoom")
+    data = cliente.consulta_tracking(payload)
+    # if data.get("error"):
+    #     return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify(data)
+# ------------------------ ZOOM ---------------------------------------
 
 @bp_privadas.post("/GuardarRemitenteWs")
 @requerir_api_key(Delivery_Empresa="ZOOM")
@@ -1221,6 +1231,7 @@ def crear_cliente_ws():
 @bp_privadas.post("/armi/monitor/business/create")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def crear_negocio_armi():
+    #print("AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
     payload = request.get_json(silent=True) or {}
     cliente = _cliente_Armi()
     data = cliente.crear_negocio(payload)
