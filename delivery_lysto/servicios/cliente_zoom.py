@@ -72,7 +72,7 @@ class ClienteZoom:
         
     ) -> Any:
         url = f"{Configuracion.ZOOM_BASE_URL_qa2}/{ruta.lstrip('/')}" if url_alternativa else f"{self.base_url}/{ruta.lstrip('/')}" if privado else f"{Configuracion.ZOOM_BASE_URL}/{ruta.lstrip('/')}"
-        print(f"aquiiiiiiiiiiiiiiiii")
+        
         if not (url.startswith("http://") or url.startswith("https://")):
             raise ErrorZoom("ZOOM_BASE_URL inválida: falta esquema http/https")
         backoff = 0.5
@@ -80,6 +80,7 @@ class ClienteZoom:
         for intento in range(1, self.reintentos + 2):
             try:
                 headers = self._headers_privados(cuerpo, usatoken=usatoken, token=token) if privado else self._headers_publicos()                
+                
                 with httpx.Client(timeout=self.timeout, follow_redirects=True) as cliente:                    
                     resp = cliente.request(metodo.upper(), url, params=parametros, json=cuerpo, headers=headers)
                 logger.info(f"ZOOM {metodo.upper()} {url} -> {resp.status_code} (final URL: {str(resp.request.url)})")
@@ -436,10 +437,10 @@ class ClienteZoom:
         alto: float,
         ancho: float,
         largo: float,
-        zipcode_d: str = None,
-        suburb_d: str = None,
-        zipcode_o: str = None,
-        suburb_o: str = None
+        zipcode_d: str | None = None,
+        suburb_d: str | None = None,
+        zipcode_o: str | None = None,
+        suburb_o: str | None = None
     ):
         """Consulta precio Internacional (tipo_precio=3)."""
         if not self.validacion_campo_requerido(
@@ -507,7 +508,7 @@ class ClienteZoom:
         valor_mercancia: float = 0,
         codtipoenv: int = 1,
         codservicio: int = 0,
-        ciudad_destinatario: int = None,
+        ciudad_destinatario: int | None = None,
     ):
         """Consulta precio Casillero Internacional Áereo (tipo_precio=4)."""
         if not self.validacion_campo_requerido(
@@ -542,10 +543,10 @@ class ClienteZoom:
         valor_mercancia: float = 0,
         codtipoenv: int = 1,
         codservicio: int = 0,
-        ciudad_destinatario: int = None,
-        alto: float = None,
-        ancho: float = None,
-        largo: float = None,
+        ciudad_destinatario: int | None = None,
+        alto: float | None = None,
+        ancho: float | None = None,
+        largo: float | None = None,
     ):
         """Consulta precio Casillero Internacional Marítimo (tipo_precio=5)."""
         if not self.validacion_campo_requerido(

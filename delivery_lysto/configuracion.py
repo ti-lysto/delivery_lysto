@@ -45,9 +45,10 @@ class Configuracion:
     ZOOM_TIMEOUT = float(os.getenv("ZOOM_TIMEOUT"))
     ZOOM_REINTENTOS = int(os.getenv("ZOOM_REINTENTOS"))
 
-    ARMI_BASE_URL = "https://localhost:8001" if DEBUG else os.getenv("ARMI_BASE_URL")
+    ARMI_BASE_URL="https://armi-business-monitor-dot-armirene-369418.uc.r.appspot.com"
+    #ARMI_BASE_URL = "https://localhost:8001" if DEBUG else os.getenv("ARMI_BASE_URL")
     #(os.getenv("ARMI_BASE_URL", "https://api.armi.example").rstrip("/"))
-    ARMI_COUNTRY = os.getenv("ARMI_COUNTRY", "COL")
+    ARMI_COUNTRY = "COL"
 
    # Rutas ZOOM
    # Rutas públicas 

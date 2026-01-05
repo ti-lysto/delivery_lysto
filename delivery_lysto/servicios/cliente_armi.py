@@ -41,7 +41,9 @@ class ClienteArmi:
         parametros: Optional[Dict[str, Any]] = None,
         cuerpo: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        url = f"{self.base_url}/{ruta.lstrip('/')}"
+        url = f"{Configuracion.ARMI_BASE_URL}/{ruta.lstrip('/')}"
+        print ("configuracion.ARMI_BASE_URL:", Configuracion.ARMI_BASE_URL )
+        print("URL ARMI:", url) 
         for intento in range(self.reintentos + 1):
             try:
                 with httpx.Client(timeout=self.timeout) as client:
@@ -58,7 +60,7 @@ class ClienteArmi:
             except httpx.HTTPStatusError as e:
                 logger.error(f"ARMI error HTTP {e.response.status_code}: {e.response.text}")
                 if intento == self.reintentos:
-                    return {"error": str(e)}
+                    return {"error": str(e), "mensaje": e.response.json()}
             except Exception as e:
                 logger.error(f"ARMI error: {str(e)}")
                 if intento == self.reintentos:
@@ -76,9 +78,37 @@ class ClienteArmi:
     # Ejemplo de método para crear negocio
     def crear_negocio(self, datos: Dict[str, Any]) -> Dict[str, Any]:
         respuesta= self.solicitar(Configuracion.RUTA_ARMI_CREA_NEGOCIO, metodo="POST", cuerpo=datos)
-        #print(f"Respuesta crear negocio ARMI: {respuesta}")
-        return respuesta
-
+        print(f"Respuesta crear negocio ARMI: {respuesta}")
+        print(f"estatus: ", respuesta.get("status"))
+        print(respuesta.get("mensaje", {}).get("status"))
+        if respuesta.get("error") is None :
+            # respuesta_JSON= {
+            #     "status": True,
+            #     "message": "Success",
+            #     "id": respuesta.get("id"),
+            #     "name": respuesta.get("name"),
+            #     "type": respuesta.get("type"),
+            #     "ownerId": respuesta.get("ownerId"),
+            #     "deliveryPerWeek": respuesta.get("deliveryPerWeek"),
+            #     "branchOfficeList": None,
+            #     "imageUrl": respuesta.get("imageUrl")
+            #     }
+            respuesta_JSON= respuesta
+            logger.info(f"Negocio ARMI creado exitosamente: {respuesta_JSON}")
+        else:
+            respuesta_JSON= {                
+                "status": False,
+                "message": respuesta.get("mensaje",{}).get("message"),
+                "id": 0,
+                "name": None,
+                "type": None,
+                "ownerId": 0,
+                "deliveryPerWeek": 0,
+                "branchOfficeList": None,
+                "imageUrl": None
+                }
+            logger.error(f"Error al crear negocio ARMI: {respuesta.get('error')}, datos: {datos}, respuesta: {respuesta}")
+        return respuesta_JSON
     # Ejemplo de método para consultar negocio
     def consultar_negocio(self, negocio_id: int) -> Dict[str, Any]:
         return self.solicitar(f"monitor/business/{negocio_id}", metodo="GET")
@@ -117,7 +147,40 @@ class ClienteArmi:
 
     # Ciudades y costo de envío
     def codigo_ciudad(self, city: str) -> Dict[str, Any]:
-        return self.solicitar(f"monitor/city/{city}", metodo="GET")
+        respuesta = self.solicitar(f"monitor/city/{city}", metodo="GET")        
+        if respuesta.get("status")=="OK":
+            json_respuesta = {
+                "status": True,
+                "city": respuesta.get("data")
+            }
+        else:
+            error_msg = respuesta.get("data", {}).get("message", "Desconocido")
+            logger.error(f"Error al obtener código de ciudad ARMI: {error_msg}, datos: {city}, respuesta: {respuesta}")
+            json_respuesta = {
+                "status": False,
+                "city": None
+            }
+        return json_respuesta
 
     def costo_envio(self, datos: Dict[str, Any]) -> Dict[str, Any]:
-        return self.solicitar("monitor/order/delivery-cost", metodo="POST", cuerpo=datos)
+        respuesta=  self.solicitar("monitor/order/delivery-cost", metodo="POST", cuerpo=datos)
+        #print(f"Respuesta costo envío ARMI: {respuesta}")
+        if respuesta.get("status")=="OK":
+            json_respuesta = {
+                "status": True,
+                "deliveryCost": respuesta.get("data", {}).get("deliveryCost"), 
+                "distance": respuesta.get("data", {}).get("distance"),
+                "margin": respuesta.get("data", {}).get("margin"),
+                "totalCost": respuesta.get("data", {}).get("totalCost")
+            }
+        else:
+            error_msg = respuesta.get("data", {}).get("message", "Desconocido")
+            logger.error(f"Error al obtener costo de envío ARMI: {error_msg} datos: {datos}, respuesta: {respuesta}")
+            json_respuesta = {
+                "status": False,
+                "deliveryCost": None,
+                "distance": None,
+                "margin": None,
+                "totalCost": None
+            }
+        return json_respuesta

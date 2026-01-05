@@ -35,6 +35,7 @@ def _cliente_Armi() -> ClienteArmi:
         api_key=cfg.get("ARMI_API_KEY", ""),
         timeout=cfg.get("ZOOM_TIMEOUT", 10.0),
         reintentos=cfg.get("ZOOM_REINTENTOS", 3),
+        country=cfg.get("ARMI_COUNTRY")
     )
 
 
@@ -1230,14 +1231,15 @@ def crear_cliente_ws():
 # ------------------------ ARMI ---------------------------------------
 @bp_privadas.post("/armi/monitor/business/create")
 @requerir_api_key(Delivery_Empresa="ARMI")
-def crear_negocio_armi():
-    #print("AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
+def crear_negocio_armi():    
     payload = request.get_json(silent=True) or {}
     cliente = _cliente_Armi()
     data = cliente.crear_negocio(payload)
-    if data.get("error"):
-        return jsonify({"ok": False, "error": data.get("error")}), 400
-    return jsonify({"ok": True, "data": data})
+    # if data.get("error"):
+    #     return jsonify({"ok": False, "error": data.get("error")}), 400
+    # return jsonify({"ok": True, "data": data})
+    return jsonify(data)
+
 
 @bp_privadas.get("/armi/monitor/business/<int:negocio_id>")
 @requerir_api_key(Delivery_Empresa="ARMI")
@@ -1340,12 +1342,12 @@ def estado_orden_armi(order_id: int):
 
 @bp_privadas.get("/armi/monitor/city/<string:city>")
 @requerir_api_key(Delivery_Empresa="ARMI")
-def codigo_ciudad_armi(city: str):
-    cliente = _cliente_Armi()
+def codigo_ciudad_armi(city: str):    
+    cliente = _cliente_Armi()    
     data = cliente.codigo_ciudad(city)
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
-    return jsonify({"ok": True, "data": data})
+    return jsonify(data)
 
 @bp_privadas.post("/armi/monitor/order/delivery-cost")
 @requerir_api_key(Delivery_Empresa="ARMI")
@@ -1355,5 +1357,5 @@ def costo_envio_armi():
     data = cliente.costo_envio(payload)
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
-    return jsonify({"ok": True, "data": data})
+    return jsonify(data)
 
