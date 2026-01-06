@@ -1,7 +1,4 @@
-"""
-Rutas públicas (catálogos, tracking, precios) – Español
-------------------------------------------------------
-"""
+
 from flask import Blueprint, request, jsonify, current_app
 from ..servicios.cliente_zoom import ClienteZoom
 from ..configuracion import Configuracion

@@ -49,6 +49,7 @@ class ClienteZoom:
             cabeceras["Authorization"] = f"Bearer {self.api_key}"
         elif usatoken and token:
             cabeceras["Authorization"] = f"Bearer {token}"
+        
         # Si se requiere firma HMAC por parte de ZOOM, descomentar/ajustar:
         # if self.frase_secreta and cuerpo is not None:
         #     from zoom_api.core.autenticacion import generar_firma_hmac

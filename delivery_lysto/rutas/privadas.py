@@ -1229,6 +1229,7 @@ def crear_cliente_ws():
 
 
 # ------------------------ ARMI ---------------------------------------
+#-----Businesses (Negocios)-----
 @bp_privadas.post("/armi/monitor/business/create")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def crear_negocio_armi():    
@@ -1240,10 +1241,9 @@ def crear_negocio_armi():
     # return jsonify({"ok": True, "data": data})
     return jsonify(data)
 
-
 @bp_privadas.get("/armi/monitor/business/<int:negocio_id>")
 @requerir_api_key(Delivery_Empresa="ARMI")
-def consultar_negocio_armi(negocio_id: int):
+def consultar_negocio_armi(negocio_id: int):    
     cliente = _cliente_Armi()
     data = cliente.consultar_negocio(negocio_id)
     if data.get("error"):
@@ -1252,7 +1252,7 @@ def consultar_negocio_armi(negocio_id: int):
 
 @bp_privadas.delete("/armi/monitor/business/<int:negocio_id>")
 @requerir_api_key(Delivery_Empresa="ARMI")
-def eliminar_negocio_armi(negocio_id: int):
+def eliminar_negocio_armi(negocio_id: int):    
     cliente = _cliente_Armi()
     data = cliente.eliminar_negocio(negocio_id)
     if data.get("error"):
@@ -1278,6 +1278,7 @@ def actualizar_negocio_armi(negocio_id: int):
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify({"ok": True, "data": data})
 
+#-----Branch Offices (Sucursales)-----
 @bp_privadas.post("/armi/monitor/branchOffice/create")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def crear_sucursal_armi():
@@ -1296,7 +1297,7 @@ def listar_sucursales_armi(business_id: int):
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify({"ok": True, "data": data})
-
+#Error en el endpoint eliminar sucursal (pide código de la ciudad o de país???)
 @bp_privadas.delete("/armi/monitor/branchOffice/delete")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def eliminar_sucursal_armi():
@@ -1311,6 +1312,7 @@ def eliminar_sucursal_armi():
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify({"ok": True, "data": data})
 
+#-----Orders (Órdenes)-----
 @bp_privadas.post("/armi/monitor/order/create")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def crear_orden_armi():
@@ -1359,3 +1361,375 @@ def costo_envio_armi():
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify(data)
 
+# ------ INSTALEAP INTEGRATION ----------------
+
+@bp_privadas.post("/armi/monitor/instaleap/create")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def crear_orden_instaleap():
+    """
+    Endpoint para recibir órdenes desde Instaleap
+    Según documentación: POST {url_base_integrador_instaleap}/monitor/instaleap/create
+    """
+    payload = request.get_json(silent=True) or {}
+    
+    # DEBUG: Log del payload recibido
+    logger.info(f"Instaleap create - Payload recibido: {json.dumps(payload, indent=2)}")
+    
+    # Validar campos mínimos según documentación
+    campos_requeridos = ["task_id", "job_number", "client_id", "created_at"]
+    for campo in campos_requeridos:
+        if campo not in payload:
+            return jsonify({
+                "ok": False,
+                "error": f"Campo requerido faltante: {campo}",
+                "campos_recibidos": list(payload.keys())
+            }), 400
+    
+    cliente = _cliente_Armi()
+    
+    try:
+        # Llamar a ARMI
+        data = cliente.crear_orden_instaleap(payload)
+        
+        if data.get("error"):
+            logger.error(f"Error ARMI al crear orden Instaleap: {data.get('error')}")
+            return jsonify({
+                "ok": False,
+                "error": data.get("error"),
+                "task_id": payload.get("task_id"),
+                "job_number": payload.get("job_number")
+            }), 500
+            
+        logger.info(f"Orden Instaleap creada exitosamente: {payload.get('job_number')}")
+        return jsonify({
+            "ok": True,
+            "data": data,
+            "message": "Orden recibida y procesada exitosamente",
+            "task_id": payload.get("task_id")
+        })
+        
+    except Exception as e:
+        logger.exception(f"Error crítico procesando orden Instaleap: {str(e)}")
+        return jsonify({
+            "ok": False,
+            "error": f"Error procesando orden: {str(e)}",
+            "task_id": payload.get("task_id"),
+            "job_number": payload.get("job_number")
+        }), 500
+
+
+@bp_privadas.post("/armi/monitor/instaleap/update")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def actualizar_orden_instaleap():
+    """
+    Endpoint para actualizar órdenes desde Instaleap
+    Según documentación: POST {url_base_integrador_instaleap}/monitor/instaleap/update
+    """
+    payload = request.get_json(silent=True) or {}
+    
+    # DEBUG: Log del payload recibido
+    logger.info(f"Instaleap update - Payload recibido: {json.dumps(payload, indent=2)}")
+    
+    # Validar campos mínimos
+    if "task_id" not in payload:
+        return jsonify({
+            "ok": False,
+            "error": "Campo requerido faltante: task_id",
+            "campos_recibidos": list(payload.keys())
+        }), 400
+    
+    cliente = _cliente_Armi()
+    
+    try:
+        # Llamar a ARMI
+        data = cliente.actualizar_orden_instaleap(payload)
+        
+        if data.get("error"):
+            logger.error(f"Error ARMI al actualizar orden Instaleap: {data.get('error')}")
+            return jsonify({
+                "ok": False,
+                "error": data.get("error"),
+                "task_id": payload.get("task_id")
+            }), 500
+            
+        logger.info(f"Orden Instaleap actualizada exitosamente: {payload.get('task_id')}")
+        return jsonify({
+            "ok": True,
+            "data": data,
+            "message": "Orden actualizada exitosamente",
+            "task_id": payload.get("task_id")
+        })
+        
+    except Exception as e:
+        logger.exception(f"Error crítico actualizando orden Instaleap: {str(e)}")
+        return jsonify({
+            "ok": False,
+            "error": f"Error actualizando orden: {str(e)}",
+            "task_id": payload.get("task_id")
+        }), 500
+
+
+@bp_privadas.get("/armi/monitor/instaleap/tracking-order")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def tracking_orden_instaleap():
+    """
+    Endpoint para seguimiento de ubicación en tiempo real
+    Según documentación: GET {url_base_integrador_instaleap}/monitor/instaleap/tracking-order
+    """
+    # Obtener país del header (según documentación)
+    country = request.headers.get("country", "COL")
+    
+    logger.info(f"Instaleap tracking - Country: {country}")
+    
+    cliente = _cliente_Armi()
+    
+    try:
+        # Este endpoint es especial porque necesita country en header
+        data = cliente.tracking_orden_instaleap(country)
+        
+        if data.get("error"):
+            logger.error(f"Error ARMI tracking Instaleap: {data.get('error')}")
+            return jsonify({
+                "ok": False,
+                "error": data.get("error")
+            }), 500
+            
+        logger.info(f"Tracking Instaleap obtenido exitosamente")
+        return jsonify({
+            "ok": True,
+            "data": data,
+            "message": "Tracking obtenido exitosamente"
+        })
+        
+    except Exception as e:
+        logger.exception(f"Error crítico obteniendo tracking Instaleap: {str(e)}")
+        return jsonify({
+            "ok": False,
+            "error": f"Error obteniendo tracking: {str(e)}"
+        }), 500
+
+
+@bp_privadas.put("/armi/monitor/instaleap/cash/received")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def confirmar_cash_recibido_instaleap():
+    """
+    Endpoint para confirmar pago en efectivo recibido
+    Según documentación: PUT {url_base_integrador_instaleap}/monitor/instaleap/cash/received
+    """
+    payload = request.get_json(silent=True) or {}
+    
+    # DEBUG: Log del payload recibido
+    logger.info(f"Instaleap cash received - Payload recibido: {json.dumps(payload, indent=2)}")
+    
+    # Validar campos según documentación
+    if "id" not in payload or "type" not in payload:
+        return jsonify({
+            "ok": False,
+            "error": "Campos requeridos faltantes: id y type",
+            "campos_recibidos": list(payload.keys())
+        }), 400
+    
+    # Validar que sea evento CLIENT_RECEIVED
+    if payload.get("type") != "CLIENT_RECEIVED":
+        return jsonify({
+            "ok": False,
+            "error": f"Tipo de evento no válido: {payload.get('type')}. Se espera CLIENT_RECEIVED",
+            "warning": "Este endpoint solo procesa eventos CLIENT_RECEIVED"
+        }), 400
+    
+    cliente = _cliente_Armi()
+    
+    try:
+        # Llamar a ARMI
+        data = cliente.confirmar_cash_recibido(payload)
+        
+        if data.get("error"):
+            logger.error(f"Error ARMI confirmando cash: {data.get('error')}")
+            return jsonify({
+                "ok": False,
+                "error": data.get("error"),
+                "event_id": payload.get("id")
+            }), 500
+            
+        logger.info(f"Cash recibido confirmado exitosamente: {payload.get('id')}")
+        return jsonify({
+            "ok": True,
+            "data": data,
+            "message": "Pago en efectivo confirmado exitosamente",
+            "event_id": payload.get("id")
+        })
+        
+    except Exception as e:
+        logger.exception(f"Error crítico confirmando cash Instaleap: {str(e)}")
+        return jsonify({
+            "ok": False,
+            "error": f"Error confirmando pago: {str(e)}",
+            "event_id": payload.get("id")
+        }), 500
+
+# ---- Callback de Notificación de estados ----
+@bp_privadas.post("/armi/callback/update/status")
+def callback_estado_armi():
+    """
+    Callback que ARMI llama para notificar cambios de estado
+    Según documentación: POST {url_base_integrador}/update/status
+    """
+    payload = request.get_json(silent=True) or {}
+    
+    logger.info(f"Callback ARMI estado recibido: {json.dumps(payload, indent=2)}")
+    
+    # Validar campos mínimos
+    campos_requeridos = ["orderId", "status"]
+    for campo in campos_requeridos:
+        if campo not in payload:
+            logger.error(f"Campo requerido faltante en callback: {campo}")
+            return jsonify({
+                "ok": False,
+                "error": f"Campo requerido faltante: {campo}"
+            }), 400
+    
+    # Procesar el cambio de estado
+    try:
+        order_id = payload.get("orderId")
+        status_code = payload.get("status")
+        order_invoice = payload.get("orderInvoice")
+        created_at = payload.get("createdAt")
+        
+        # Aquí debes implementar tu lógica de negocio
+        # Ejemplo: Actualizar tu base de datos, notificar a otros sistemas, etc.
+        
+        logger.info(f"Procesando cambio de estado ARMI - Order: {order_id}, Status: {status_code}")
+        
+        # TODO: Implementar lógica de procesamiento aquí
+        # Por ejemplo:
+        # - Buscar orden en tu DB por orderId
+        # - Actualizar estado
+        # - Registrar histórico
+        # - Notificar a sistemas internos
+        
+        # Respuesta exitosa
+        return jsonify({
+            "ok": True,
+            "message": "Estado procesado exitosamente",
+            "orderId": order_id,
+            "statusReceived": status_code,
+            "processedAt": datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.exception(f"Error procesando callback ARMI: {str(e)}")
+        return jsonify({
+            "ok": False,
+            "error": f"Error procesando callback: {str(e)}",
+            "orderId": payload.get("orderId")
+        }), 500
+
+
+def traducir_estado_armi_a_instaleap(estado_armi_id: int) -> str:
+    """
+    Traduce el estado de ARMI al estado correspondiente de Instaleap
+    Basado en la documentación del PDF
+    """
+    # Mapeo basado en la documentación ARMI-Instaleap
+    mapeo_estados = {
+        0: "RECIBIDA",  # Recibida
+        1: "EMITIDA",   # Emitida
+        2: "ENVIADA",   # Enviada
+        3: "ASIGNADA",  # Asignada
+        4: "PICKING",   # Picking → Instaleap: Arrived to store
+        37: "PICKING_TERMINADO",  # Picking terminado → Instaleap: Going to destination
+        33: "EN_PUNTO_ENTREGA",   # En punto de entrega → Instaleap: Arrived to destination
+        7: "FINALIZADA",  # Finalizada → Instaleap: Delivered
+        14: "CANCELADA",  # Cancelada → Instaleap: Cancelled
+        6: "ENTREGADA",   # Entregada
+    }
+    
+    estado_nombre = mapeo_estados.get(estado_armi_id, f"DESCONOCIDO_{estado_armi_id}")
+    
+    # Traducción específica para Instaleap
+    if estado_armi_id == 4:  # Picking
+        return "Arrived to store"
+    elif estado_armi_id == 37:  # Picking terminado
+        return "Going to destination"
+    elif estado_armi_id == 33:  # En punto de entrega
+        return "Arrived to destination"
+    elif estado_armi_id == 7:  # Finalizada
+        return "Delivered"
+    elif estado_armi_id == 14:  # Cancelada
+        return "Cancelled"
+    else:
+        return estado_nombre
+    
+@bp_privadas.get("/armi/estados/catalogo")
+@requerir_api_key(Delivery_Empresa="ARMI")
+def catalogo_estados_armi():
+    """
+    Devuelve el catálogo completo de estados de ARMI
+    Útil para debug y para configurar integraciones
+    """
+    # Esto es según el PDF, páginas 33-40
+    catalogo = [
+        {"ID": 0, "NAME": "RECIBIDA", "DESCRIPTION": "ORDEN PARA LA LOGICA DE LAS COLAS DE ORACLE"},
+        {"ID": 1, "NAME": "EMITIDA", "DESCRIPTION": "PEDIDO EMITIDO EN EL SISTEMA"},
+        {"ID": 2, "NAME": "ENVIADA", "DESCRIPTION": "PEDIDO ENVIADO AL PROVEEDOR LOGISTICO"},
+        {"ID": 3, "NAME": "ASIGNADA", "DESCRIPTION": "PEDIDO ES ASIGNADO A UN DOMICILIARIO"},
+        {"ID": 4, "NAME": "PICKING", "DESCRIPTION": "DOMICILIARIO ESTA PREPARANDO EL PEDIDO"},
+        {"ID": 5, "NAME": "FACTURADA", "DESCRIPTION": "PEDIDO HA SIDO FACTURADO EN CAJA DE UNA TIENDA"},
+        {"ID": 6, "NAME": "ENTREGADA", "DESCRIPTION": "PEDIDO ENTREGADO AL CLIENTE"},
+        {"ID": 7, "NAME": "FINALIZADA", "DESCRIPTION": "PEDIDO FINALIZADO"},
+        {"ID": 8, "NAME": "OCULTA", "DESCRIPTION": "ESTATUS PARA OCULTAR UNA ORDEN EN EL MONITOR"},
+        {"ID": 9, "NAME": "PREPROCESADO", "DESCRIPTION": "PEDIDO FUE ENVIADO DESDE EL CALLCENTER DIRECTAMENTE A LOS MENSAJEROS"},
+        {"ID": 10, "NAME": "MODIFICADA", "DESCRIPTION": "ORDEN MODIFICADA POR EL CLIENTE"},
+        {"ID": 11, "NAME": "ENVIADA CON ERROR", "DESCRIPTION": "PEDIDO ENVIADO A LOS MENSAJEROS PERO CON ERROR AL ENVIAR A LAS TIENDAS"},
+        {"ID": 12, "NAME": "PAGADA", "DESCRIPTION": "ORDEN PAGADA POR EL CLIENTE"},
+        {"ID": 13, "NAME": "EN COLA POR PAGAR", "DESCRIPTION": "ORDEN ENVIADA A LA COLA DE PAGOS PENDIENTES POR PAGAR"},
+        {"ID": 14, "NAME": "CANCELADA", "DESCRIPTION": "ORDEN CANCELADA"},
+        {"ID": 15, "NAME": "ASIGNADO ENVIO NACIONAL", "DESCRIPTION": "ORDEN ENVIO NACIONAL"},
+        {"ID": 16, "NAME": "FINALIZADO ENVIO NACIONAL", "DESCRIPTION": "ORDEN FINALIZADO ENVIO NACIONAL"},
+        {"ID": 17, "NAME": "PEDIDO TIEMPO EXCEDIDO", "DESCRIPTION": "SE EXCEDIO EL TIEMPO LIMITE ESTABLECIDO EN EL PROCESO DE RUTA OPTIMA"},
+        {"ID": 18, "NAME": "TOKEN VERIFICADO", "DESCRIPTION": "TOKEN VERIFICADO POR PARTE DEL PICKER"},
+        {"ID": 19, "NAME": "ENTREGADA TIENDA", "DESCRIPTION": "INDICA QUE LA ORDEN YA SE ENCUENTRA EN LA TIENDA XSTORE"},
+        {"ID": 20, "NAME": "ACEPTADA TIENDA", "DESCRIPTION": "ORDEN ACEPTADA POR TIENDA XSTORE"},
+        {"ID": 21, "NAME": "RECHAZADA TIENDA", "DESCRIPTION": "ORDEN RECHAZADA POR TIENDA XSTORE"},
+        {"ID": 22, "NAME": "RESERVADA TIENDA", "DESCRIPTION": "ORDEN CREADA DESDE TIENDA XSTORE"},
+        {"ID": 23, "NAME": "REASIGNADA MANUAL", "DESCRIPTION": "ORDEN REASIGNADA POR EL CALL CENTER MANUALMENTE"},
+        {"ID": 24, "NAME": "PEDIDO ALISTADO", "DESCRIPTION": "PEDIDO ALISTADO EN EL CENDIS"},
+        {"ID": 25, "NAME": "PEDIDO ENVIADO", "DESCRIPTION": "PEDIDO ENVIADO AL CLIENTE DESDE EL CENDIS"},
+        {"ID": 26, "NAME": "PENDIENTE DEVOLUCION TIENDA", "DESCRIPTION": "ORDEN QUE SE DEBE ENVIAR NUEVAMENTE A XSTORE PARA REALIZAR LOS AJUSTES NECESARIOS"},
+        {"ID": 27, "NAME": "SIN PAGAR", "DESCRIPTION": "PEDIDO NACIONAL O MARKETPLACE CREADO PENDIENTE DE PAGO EFECTIVO O DATAFONO"},
+        {"ID": 28, "NAME": "PEDIDO INCOMPLETO", "DESCRIPTION": "PEDIDO QUE NO SE HA PODIDO COMPLETAR POR FALTA DE ARTICULOS"},
+        {"ID": 29, "NAME": "ENVIAR INCOMPLETO", "DESCRIPTION": "PEDIDO ENVIADO SIN COMPLETAR POR FALTA DE ARTICULOS"},
+        {"ID": 30, "NAME": "CLIENTE ESPERA", "DESCRIPTION": "PREVIO ACUERDO CON EL CLIENTE A QUE SE COMPLETEN EL PEDIDO CON LOS ARTICULOS FALTANTES"},
+        {"ID": 31, "NAME": "PAGO_PENDIENTE", "DESCRIPTION": "ORDEN QUE NO PUDO SER COBRADA AL MOMENTO DE LA CREACIÓN"},
+        {"ID": 32, "NAME": "EN CAMINO", "DESCRIPTION": "ORDEN EN CAMINO A DOMICILIO"},
+        {"ID": 33, "NAME": "EN PUNTO DE ENTREGA", "DESCRIPTION": "MENSAJERO EN DOMICILIO PARA ENTREGA"},
+        {"ID": 34, "NAME": "RECOGIENDO EN PUNTOS DE TRANSFERENCIA", "DESCRIPTION": "MENSAJERO ESTA RECOGIENDO EN TIENDAS DE TRANSFERENCIA"},
+        {"ID": 35, "NAME": "PICKING TRANSFERENCIA", "DESCRIPTION": "DOMICILIARIO RECOGIENDO PRODUCTOS EN TIENDA DE TRANSFERENCIA"},
+        {"ID": 36, "NAME": "PICKING EN TRANSFERENCIA TERMINADO", "DESCRIPTION": "MENSAJERO FINALIZA EL PICKING EN TIENDA DE TRANSFERENCIA"},
+        {"ID": 37, "NAME": "PICKING TERMINADO", "DESCRIPTION": "MENSAJERO FINALIZA EL PICKING EN TIENDA"},
+        {"ID": 38, "NAME": "ESCANEANDO DATAFONO", "DESCRIPTION": "MENSAJERO ESCANEA CODIGO DE BARRAS DEL DATAFONO"},
+        {"ID": 39, "NAME": "CAPTURA BOUCHER", "DESCRIPTION": "MENSAJERO CAPTURA FOTO DEL BOUCHER DE PAGO"},
+        {"ID": 40, "NAME": "COBRANDO EN LINEA", "DESCRIPTION": "MENSAJERO ESTA COBRANDO EN LINEA"},
+        {"ID": 41, "NAME": "CAMBIO METODO PAGO DATAFONO A EFECTIVO", "DESCRIPTION": "METODO DE PAGO CAMBIADO DE DATAFONO A EFECTIVO"},
+        {"ID": 42, "NAME": "CAMBIO METODO PAGO EN LINEA A EFECTIVO", "DESCRIPTION": "METODO DE PAGO CAMBIADO DE EN LINEA A EFECTIVO"},
+        {"ID": 43, "NAME": "CAMBIO METODO PAGO EN LINEA A DATAFONO", "DESCRIPTION": "METODO DE PAGO CAMBIADO DE EN LINEA A DATAFONO"},
+        {"ID": 44, "NAME": "PAGADO EN LINEA", "DESCRIPTION": "PEDIDO PAGADO EN LINEA"},
+        {"ID": 45, "NAME": "PAGADO EN EFECTIVO", "DESCRIPTION": "PEDIDO PAGADO EN EFECTIVO"},
+        {"ID": 46, "NAME": "PAGADO CON DATAFONO", "DESCRIPTION": "PEDIDO PAGADO CON DATAFONO"},
+        {"ID": 47, "NAME": "VALIDACION EFECTIVO RECIBIDO", "DESCRIPTION": "TOMA DE FOTO DEL DINERO RECIBIDO EN EFECTIVO"},
+        {"ID": 48, "NAME": "DEVOLUCIÓN", "DESCRIPTION": "ORDEN CANCELADA DESPUÉS DE HABER SIDO FACTURADA"},
+        {"ID": 49, "NAME": "DEVOLUCIÓN EXITOSA", "DESCRIPTION": "DEVOLUCIÓN DE LOS PRODUCTOS A LA TIENDA"},
+    ]
+    
+    return jsonify({
+        "ok": True,
+        "data": catalogo,
+        "count": len(catalogo),
+        "mapeo_instaleap": {
+            "PICKING (4)": "Arrived to store",
+            "PICKING TERMINADO (37)": "Going to destination",
+            "EN PUNTO DE ENTREGA (33)": "Arrived to destination",
+            "FINALIZADA (7)": "Delivered",
+            "CANCELADA (14)": "Cancelled"
+        }
+    })

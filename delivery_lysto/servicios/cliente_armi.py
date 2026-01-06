@@ -78,9 +78,9 @@ class ClienteArmi:
     # Ejemplo de método para crear negocio
     def crear_negocio(self, datos: Dict[str, Any]) -> Dict[str, Any]:
         respuesta= self.solicitar(Configuracion.RUTA_ARMI_CREA_NEGOCIO, metodo="POST", cuerpo=datos)
-        print(f"Respuesta crear negocio ARMI: {respuesta}")
-        print(f"estatus: ", respuesta.get("status"))
-        print(respuesta.get("mensaje", {}).get("status"))
+        # print(f"Respuesta crear negocio ARMI: {respuesta}")
+        # print(f"estatus: ", respuesta.get("status"))
+        # print(respuesta.get("mensaje", {}).get("status"))
         if respuesta.get("error") is None :
             # respuesta_JSON= {
             #     "status": True,
@@ -111,7 +111,9 @@ class ClienteArmi:
         return respuesta_JSON
     # Ejemplo de método para consultar negocio
     def consultar_negocio(self, negocio_id: int) -> Dict[str, Any]:
-        return self.solicitar(f"monitor/business/{negocio_id}", metodo="GET")
+        respuesta = self.solicitar(f"monitor/business/{negocio_id}", metodo="GET")
+        print(f"Respuesta consultar negocio ARMI: {respuesta}")
+        return respuesta
 
     # Ejemplo de método para eliminar negocio
     def eliminar_negocio(self, negocio_id: int) -> Dict[str, Any]:
@@ -184,3 +186,40 @@ class ClienteArmi:
                 "totalCost": None
             }
         return json_respuesta
+    
+    # ------ INTEGRACIÓN INSTALEAP ------
+    def crear_orden_instaleap(self, datos: Dict[str, Any]) -> Dict[str, Any]:
+        """Crea una orden desde Instaleap"""
+        return self.solicitar("monitor/instaleap/create", metodo="POST", cuerpo=datos)
+    
+    def actualizar_orden_instaleap(self, datos: Dict[str, Any]) -> Dict[str, Any]:
+        """Actualiza una orden desde Instaleap"""
+        return self.solicitar("monitor/instaleap/update", metodo="POST", cuerpo=datos)
+    
+    def tracking_orden_instaleap(self, country: str = "COL") -> Dict[str, Any]:
+        """Obtiene tracking de órdenes Instaleap"""
+        headers = {
+            "Content-Type": "application/json",
+            "armi-business-api-key": self.api_key,
+            "country": country  # Sobreescribir country si es necesario
+        }
+        # Este endpoint es GET sin body
+        url = f"{self.base_url}/monitor/instaleap/tracking-order"
+        
+        for intento in range(self.reintentos + 1):
+            try:
+                with httpx.Client(timeout=self.timeout) as client:
+                    resp = client.request("GET", url, headers=headers)
+                resp.raise_for_status()
+                logger.info(f"ARMI Instaleap tracking OK: {resp.status_code}")
+                return resp.json()
+            except Exception as e:
+                logger.error(f"ARMI Instaleap tracking error: {str(e)}")
+                if intento == self.reintentos:
+                    return {"error": str(e)}
+        return {"error": "No se pudo completar el tracking Instaleap"}
+    
+    def confirmar_cash_recibido(self, datos: Dict[str, Any]) -> Dict[str, Any]:
+        """Confirma pago en efectivo recibido"""
+        # Este endpoint usa PUT
+        return self.solicitar("monitor/instaleap/cash/received", metodo="PUT", cuerpo=datos)
