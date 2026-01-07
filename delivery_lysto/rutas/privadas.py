@@ -1389,6 +1389,7 @@ def crear_orden_instaleap():
     
     try:
         # Llamar a ARMI
+        # falta transformar el payload de instaleap al formato que espera ARMI **********************************************
         data = cliente.crear_orden_instaleap(payload)
         
         if data.get("error"):
@@ -1568,6 +1569,7 @@ def confirmar_cash_recibido_instaleap():
         }), 500
 
 # ---- Callback de Notificación de estados ----
+#propio
 @bp_privadas.post("/armi/callback/update/status")
 def callback_estado_armi():
     """

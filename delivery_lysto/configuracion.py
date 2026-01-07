@@ -23,7 +23,7 @@ class Configuracion:
     LOG_MAX_LINES = "200"
 
     # Base URL (usar siempre la provista en entorno, sin forzar /api ni localhost)
-    ZOOM_BASE_URL = os.getenv("ZOOM_BASE_URL", "http://sandbox.zoom.red/baaszoom/public/canguroazul").rstrip("/")
+    ZOOM_BASE_URL = os.getenv("ZOOM_BASE_URL")
     ZOOM_BASE_URL_qa = "https://miws-qa.zoom.red/api".rstrip("/")
     ZOOM_BASE_URL_qa2 = "https://sandbox.zoom.red/baaszoom/public/guiaelectronica".rstrip("/")
     
@@ -46,6 +46,7 @@ class Configuracion:
     ZOOM_REINTENTOS = int(os.getenv("ZOOM_REINTENTOS"))
 
     # Rutas  ARMI PRODUCCION
+    #ARMI_BASE_URL= os.getenv("ARMI_BASE_URL")
     #ARMI_BASE_URL="https://armi-business-monitor-dot-armirene-369418.uc.r.appspot.com"
     # Rutas  ARMI DESARROLLO    
     ARMI_BASE_URL="https://develop1-dot-armi-business-monitor-dev-dot-armirene-369418.uc.r.appspot.com"
