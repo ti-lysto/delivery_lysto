@@ -145,12 +145,29 @@ class ClienteArmi:
         return self.solicitar("monitor/order/cancel", metodo="POST", cuerpo=datos)
 
     def estado_orden(self, order_id: int) -> Dict[str, Any]:
-        return self.solicitar(f"monitor/order/status/{order_id}", metodo="GET")
+        respuesta= self.solicitar(f"monitor/order/status/{order_id}", metodo="GET")
+        print (f"Respuesta estado orden ARMI: {respuesta}")
+        if respuesta.get("status")=="OK":
+            json_respuesta = {
+                "OK": True,
+                "message": "Success",
+                "orderStatus": respuesta.get("data", {}).get("status")
+                #"orderStatusDescription": descripcion_estado
+                }
+        else:
+            json_respuesta = {
+                "OK": False,
+                "message": "Error al obtener estado de orden",
+                "orderStatus": None
+                #"orderStatusDescription": None
+            }
+        return json_respuesta
 
     # Ciudades y costo de envío
     def codigo_ciudad(self, city: str) -> Dict[str, Any]:
         respuesta = self.solicitar(f"monitor/city/{city}", metodo="GET")        
         if respuesta.get("status")=="OK":
+            
             json_respuesta = {
                 "status": True,
                 "city": respuesta.get("data")
@@ -190,6 +207,8 @@ class ClienteArmi:
     # ------ INTEGRACIÓN INSTALEAP ------
     def crear_orden_instaleap(self, datos: Dict[str, Any]) -> Dict[str, Any]:
         """Crea una orden desde Instaleap"""
+        # procesar la solicitud de instaleap
+        
         return self.solicitar("monitor/instaleap/create", metodo="POST", cuerpo=datos)
     
     def actualizar_orden_instaleap(self, datos: Dict[str, Any]) -> Dict[str, Any]:

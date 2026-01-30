@@ -27,6 +27,10 @@ def requerir_api_key(Delivery_Empresa=None):
                     api_key_config = Configuracion.ARMI_API_KEY
                     if not api_key_config:
                         return jsonify({"ok": False, "error": {"mensaje": "API Key no configurada"}}), 500
+                case "ARMI_INSTALEAP":
+                    api_key_config = Configuracion.ARMI_INSTALEAP_API_KEY
+                    if not api_key_config:
+                        return jsonify({"ok": False, "error": {"mensaje": "API Key no configurada"}}), 500
                 case _:
                     return jsonify({"ok": False, "error": {"mensaje": "Empresa no configurada"}}), 500
             

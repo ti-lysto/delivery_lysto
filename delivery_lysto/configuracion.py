@@ -40,6 +40,7 @@ class Configuracion:
     ZOOM_API_KEY = os.getenv("ZOOM_API_KEY")
     ZOOM_FRASE_SECRETA = os.getenv("ZOOM_FRASE_SECRETA")
     ARMI_API_KEY = os.getenv("ARMI_API_KEY")
+    ARMI_INSTALEAP_API_KEY = os.getenv("ARMI_INSTALEAP_API_KEY")
 
     # Timeout y reintentos
     ZOOM_TIMEOUT = float(os.getenv("ZOOM_TIMEOUT"))

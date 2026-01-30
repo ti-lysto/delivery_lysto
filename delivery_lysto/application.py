@@ -13,6 +13,7 @@ from .core.errores import registrar_manejadores_errores
 from .rutas.publicas import bp_publicas
 from .rutas.privadas import bp_privadas
 from .rutas.proxy import bp_proxy
+from .rutas.privadas import bp_callbacks
 from .db.conexion import probar_conexion
 import logging as logger
 
@@ -47,6 +48,7 @@ def crear_aplicacion() -> Flask:
     # Registro de blueprints (rutas)
     app.register_blueprint(bp_publicas, url_prefix="/api")
     app.register_blueprint(bp_privadas, url_prefix="/privadas")
+    app.register_blueprint(bp_callbacks, url_prefix="/update")
     app.register_blueprint(bp_proxy, url_prefix="/api")
 
     @app.get("/health")
@@ -70,7 +72,7 @@ def crear_aplicacion() -> Flask:
             "ZOOM_TIMEOUT",
             "ZOOM_REINTENTOS",
         ]}
-        return jsonify({"app": "zoom-api", "config": cfg})
+        return jsonify({"app": "Integracion-bancaria", "config": cfg})
 
     return app
 

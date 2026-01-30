@@ -6,7 +6,7 @@ import json
 import logging
 import base64, os
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict, Any, List
 
 from flask import Blueprint, request, jsonify, current_app
 from ..core.autenticacion import requerir_api_key
@@ -15,10 +15,63 @@ from ..servicios.cliente_armi import ClienteArmi
 from ..configuracion import Configuracion
 from ..db.conexion import ejecutar_sp_resultados
 
+
 bp_privadas = Blueprint("privadas", __name__)
+bp_callbacks = Blueprint("callbacks", __name__)
 logger = logging.getLogger(__name__)
 debug = Configuracion.DEBUG
-
+catalogo_dict = {
+    0: {"ID": 0, "NAME": "RECIBIDA", "DESCRIPTION": "ORDEN PARA LA LOGICA DE LAS COLAS DE ORACLE"},
+    1: {"ID": 1, "NAME": "EMITIDA", "DESCRIPTION": "PEDIDO EMITIDO EN EL SISTEMA"},
+    2: {"ID": 2, "NAME": "ENVIADA", "DESCRIPTION": "PEDIDO ENVIADO AL PROVEEDOR LOGISTICO"},
+    3: {"ID": 3, "NAME": "ASIGNADA", "DESCRIPTION": "PEDIDO ES ASIGNADO A UN DOMICILIARIO"},
+    4: {"ID": 4, "NAME": "PICKING", "DESCRIPTION": "DOMICILIARIO ESTA PREPARANDO EL PEDIDO"},
+    5: {"ID": 5, "NAME": "FACTURADA", "DESCRIPTION": "PEDIDO HA SIDO FACTURADO EN CAJA DE UNA TIENDA"},
+    6: {"ID": 6, "NAME": "ENTREGADA", "DESCRIPTION": "PEDIDO ENTREGADO AL CLIENTE"},
+    7: {"ID": 7, "NAME": "FINALIZADA", "DESCRIPTION": "PEDIDO FINALIZADO"},
+    8: {"ID": 8, "NAME": "OCULTA", "DESCRIPTION": "ESTATUS PARA OCULTAR UNA ORDEN EN EL MONITOR"},
+    9: {"ID": 9, "NAME": "PREPROCESADO", "DESCRIPTION": "PEDIDO FUE ENVIADO DESDE EL CALLCENTER DIRECTAMENTE A LOS MENSAJEROS"},
+    10: {"ID": 10, "NAME": "MODIFICADA", "DESCRIPTION": "ORDEN MODIFICADA POR EL CLIENTE"},
+    11: {"ID": 11, "NAME": "ENVIADA CON ERROR", "DESCRIPTION": "PEDIDO ENVIADO A LOS MENSAJEROS PERO CON ERROR AL ENVIAR A LAS TIENDAS"},
+    12: {"ID": 12, "NAME": "PAGADA", "DESCRIPTION": "ORDEN PAGADA POR EL CLIENTE"},
+    13: {"ID": 13, "NAME": "EN COLA POR PAGAR", "DESCRIPTION": "ORDEN ENVIADA A LA COLA DE PAGOS PENDIENTES POR PAGAR"},
+    14: {"ID": 14, "NAME": "CANCELADA", "DESCRIPTION": "ORDEN CANCELADA"},
+    15: {"ID": 15, "NAME": "ASIGNADO ENVIO NACIONAL", "DESCRIPTION": "ORDEN ENVIO NACIONAL"},
+    16: {"ID": 16, "NAME": "FINALIZADO ENVIO NACIONAL", "DESCRIPTION": "ORDEN FINALIZADO ENVIO NACIONAL"},
+    17: {"ID": 17, "NAME": "PEDIDO TIEMPO EXCEDIDO", "DESCRIPTION": "SE EXCEDIO EL TIEMPO LIMITE ESTABLECIDO EN EL PROCESO DE RUTA OPTIMA"},
+    18: {"ID": 18, "NAME": "TOKEN VERIFICADO", "DESCRIPTION": "TOKEN VERIFICADO POR PARTE DEL PICKER"},
+    19: {"ID": 19, "NAME": "ENTREGADA TIENDA", "DESCRIPTION": "INDICA QUE LA ORDEN YA SE ENCUENTRA EN LA TIENDA XSTORE"},
+    20: {"ID": 20, "NAME": "ACEPTADA TIENDA", "DESCRIPTION": "ORDEN ACEPTADA POR TIENDA XSTORE"},
+    21: {"ID": 21, "NAME": "RECHAZADA TIENDA", "DESCRIPTION": "ORDEN RECHAZADA POR TIENDA XSTORE"},
+    22: {"ID": 22, "NAME": "RESERVADA TIENDA", "DESCRIPTION": "ORDEN CREADA DESDE TIENDA XSTORE"},
+    23: {"ID": 23, "NAME": "REASIGNADA MANUAL", "DESCRIPTION": "ORDEN REASIGNADA POR EL CALL CENTER MANUALMENTE"},
+    24: {"ID": 24, "NAME": "PEDIDO ALISTADO", "DESCRIPTION": "PEDIDO ALISTADO EN EL CENDIS"},
+    25: {"ID": 25, "NAME": "PEDIDO ENVIADO", "DESCRIPTION": "PEDIDO ENVIADO AL CLIENTE DESDE EL CENDIS"},
+    26: {"ID": 26, "NAME": "PENDIENTE DEVOLUCION TIENDA", "DESCRIPTION": "ORDEN QUE SE DEBE ENVIAR NUEVAMENTE A XSTORE PARA REALIZAR LOS AJUSTES NECESARIOS"},
+    27: {"ID": 27, "NAME": "SIN PAGAR", "DESCRIPTION": "PEDIDO NACIONAL O MARKETPLACE CREADO PENDIENTE DE PAGO EFECTIVO O DATAFONO"},
+    28: {"ID": 28, "NAME": "PEDIDO INCOMPLETO", "DESCRIPTION": "PEDIDO QUE NO SE HA PODIDO COMPLETAR POR FALTA DE ARTICULOS"},
+    29: {"ID": 29, "NAME": "ENVIAR INCOMPLETO", "DESCRIPTION": "PEDIDO ENVIADO SIN COMPLETAR POR FALTA DE ARTICULOS"},
+    30: {"ID": 30, "NAME": "CLIENTE ESPERA", "DESCRIPTION": "PREVIO ACUERDO CON EL CLIENTE A QUE SE COMPLETEN EL PEDIDO CON LOS ARTICULOS FALTANTES"},
+    31: {"ID": 31, "NAME": "PAGO_PENDIENTE", "DESCRIPTION": "ORDEN QUE NO PUDO SER COBRADA AL MOMENTO DE LA CREACIÓN"},
+    32: {"ID": 32, "NAME": "EN CAMINO", "DESCRIPTION": "ORDEN EN CAMINO A DOMICILIO"},
+    33: {"ID": 33, "NAME": "EN PUNTO DE ENTREGA", "DESCRIPTION": "MENSAJERO EN DOMICILIO PARA ENTREGA"},
+    34: {"ID": 34, "NAME": "RECOGIENDO EN PUNTOS DE TRANSFERENCIA", "DESCRIPTION": "MENSAJERO ESTA RECOGIENDO EN TIENDAS DE TRANSFERENCIA"},
+    35: {"ID": 35, "NAME": "PICKING TRANSFERENCIA", "DESCRIPTION": "DOMICILIARIO RECOGIENDO PRODUCTOS EN TIENDA DE TRANSFERENCIA"},
+    36: {"ID": 36, "NAME": "PICKING EN TRANSFERENCIA TERMINADO", "DESCRIPTION": "MENSAJERO FINALIZA EL PICKING EN TIENDA DE TRANSFERENCIA"},
+    37: {"ID": 37, "NAME": "PICKING TERMINADO", "DESCRIPTION": "MENSAJERO FINALIZA EL PICKING EN TIENDA"},
+    38: {"ID": 38, "NAME": "ESCANEANDO DATAFONO", "DESCRIPTION": "MENSAJERO ESCANEA CODIGO DE BARRAS DEL DATAFONO"},
+    39: {"ID": 39, "NAME": "CAPTURA BOUCHER", "DESCRIPTION": "MENSAJERO CAPTURA FOTO DEL BOUCHER DE PAGO"},
+    40: {"ID": 40, "NAME": "COBRANDO EN LINEA", "DESCRIPTION": "MENSAJERO ESTA COBRANDO EN LINEA"},
+    41: {"ID": 41, "NAME": "CAMBIO METODO PAGO DATAFONO A EFECTIVO", "DESCRIPTION": "METODO DE PAGO CAMBIADO DE DATAFONO A EFECTIVO"},
+    42: {"ID": 42, "NAME": "CAMBIO METODO PAGO EN LINEA A EFECTIVO", "DESCRIPTION": "METODO DE PAGO CAMBIADO DE EN LINEA A EFECTIVO"},
+    43: {"ID": 43, "NAME": "CAMBIO METODO PAGO EN LINEA A DATAFONO", "DESCRIPTION": "METODO DE PAGO CAMBIADO DE EN LINEA A DATAFONO"},
+    44: {"ID": 44, "NAME": "PAGADO EN LINEA", "DESCRIPTION": "PEDIDO PAGADO EN LINEA"},
+    45: {"ID": 45, "NAME": "PAGADO EN EFECTIVO", "DESCRIPTION": "PEDIDO PAGADO EN EFECTIVO"},
+    46: {"ID": 46, "NAME": "PAGADO CON DATAFONO", "DESCRIPTION": "PEDIDO PAGADO CON DATAFONO"},
+    47: {"ID": 47, "NAME": "VALIDACION EFECTIVO RECIBIDO", "DESCRIPTION": "TOMA DE FOTO DEL DINERO RECIBIDO EN EFECTIVO"},
+    48: {"ID": 48, "NAME": "DEVOLUCIÓN", "DESCRIPTION": "ORDEN CANCELADA DESPUÉS DE HABER SIDO FACTURADA"},
+    49: {"ID": 49, "NAME": "DEVOLUCIÓN EXITOSA", "DESCRIPTION": "DEVOLUCIÓN DE LOS PRODUCTOS A LA TIENDA"},
+}
 def _cliente_Zoom() -> ClienteZoom:
     cfg = current_app.config
     return ClienteZoom(
@@ -71,7 +124,7 @@ def _to_float(val, default=None):
     except Exception:
         return default
 
-
+# ------ procediminetos ZOOM ----------------
 def _guardar_cliente_zoom(payload: dict) -> int:
     """Upsert de cliente local con sp_guarda_cliente_zoom usando la estructura del payload orquestado."""
     
@@ -356,6 +409,426 @@ def reimprimir_guia(_cliente: ClienteZoom, guia: str) -> dict:
     except Exception as e:
         logger.exception(f"Error en reimprimir_guia: {str(e)}")
         return {"error": str(e)}
+
+# --------- Procedimientos ARMI ----------------
+# ===== FUNCIONES DE TRANSFORMACIÓN INSTALEAP-ARMI =====
+def transformar_payload_instaleap_a_armi(payload_instaleap: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Transforma el payload de Instaleap al formato requerido por ARMI para crear órdenes.
+    """
+    try:
+        logger.info(f"Transformando payload Instaleap a ARMI. Task ID: {payload_instaleap.get('task_id')}")
+        
+        # Extraer datos básicos
+        task_id = payload_instaleap.get("task_id", "")
+        job_number = payload_instaleap.get("job_number", "")
+        client_id = payload_instaleap.get("client_id", "")
+        print ("cliente_id:", client_id)
+        
+        # Información de pago
+        payment_info = payload_instaleap.get("payment_info", {})
+        prices = payment_info.get("prices", {})
+        
+        # Información de destino/cliente
+        destination = payload_instaleap.get("destination", {})
+        recipient = payload_instaleap.get("recipient", {})
+        
+        # Productos
+        job_items = payload_instaleap.get("job_items", [])
+        #calcular peso de los items instaleap
+        peso_total = 0.0
+        for item in job_items:
+            peso = float(item.get("weight", 0))
+            cantidad = float(item.get("quantity", 1))
+            peso_total += peso * cantidad        
+        peso_total = round(peso_total, 2) if peso_total > 0 else len(job_items) * 0.5
+        
+        #obtener nombre y apellido
+        nombre_completo = recipient.get("name", "")
+        if not nombre_completo:
+            nombre = "Cliente"
+            apellido= "Instaleap"
+        else:    
+            partes = nombre_completo.strip().split()
+            nombre = partes[0] if partes else "Cliente"
+            apellido = partes[-1] if len(partes) > 1 else "Instaleap"
+        
+        import re
+        numeros = re.findall(r'\d+', nombre_completo)
+        dni= numeros[0] if numeros else ""
+        
+
+        # Determinar el método de pago
+        match payment_info.get("payment", {}).get("method", "PREPAID"):
+            case "CASH":
+                metodo_pago = 1
+            case "CARD" | "TERMINAL" | "DATAFONO":
+                metodo_pago = 2
+            case "PREPAID"|"ONLINE" | "DIGITAL":
+                metodo_pago = 3
+            case _:
+                metodo_pago = 1
+
+
+        # Construir payload ARMI
+        payload_armi = {
+            "business_id": client_id, #None,  # Se determinará luego mediante mapeo
+            "total_value": float(prices.get("order_value", 0)) / 100,  # Convertir centavos
+            "user_tip": 0.0,
+            "incentive_value": 0.0,
+            "delivery_value": float(prices.get("shipping_fee", 0)) / 100,
+            "vehicle_type": 2,  # Moto por defecto
+            #"payment_method": _determinar_metodo_pago_instaleap(payment_info.get("payment", {}).get("method", "PREPAID")),
+            "payment_method": metodo_pago,
+            #"weight": _calcular_peso_total_instaleap(job_items),
+            "weight": peso_total,
+            "city": _normalizar_nombre_ciudad(destination.get("city", "")),
+            "instructions": payload_instaleap.get("job_comment", "") or "",
+            "orderInvoice": job_number,
+            "products": _transformar_productos_instaleap(job_items),
+            "client_info": {
+                # "first_name": _extraer_nombre(recipient.get("name", "")),
+                # "last_name": _extraer_apellido(recipient.get("name", "")),
+                "first_name": nombre,
+                "last_name": apellido,
+                "phone": recipient.get("phone_number", ""),
+                "email": recipient.get("email", ""),
+                "address": destination.get("address", ""),
+                "lat": destination.get("latitude", 0.0),
+                "lng": destination.get("longitude", 0.0),
+                "dni": dni
+                #"dni": _extraer_dni_de_nombre(recipient.get("name", ""))
+            },
+            "country": _normalizar_codigo_pais_instaleap(destination.get("country", "")),
+            "token": task_id
+            # "metadata": {
+            #     "task_id": task_id,
+            #     "job_number": job_number,
+            #     "created_at": payload_instaleap.get("created_at", "")
+            # }
+        }
+        
+        logger.info(f"Payload ARMI transformado exitosamente")
+        return payload_armi
+        
+    except Exception as e:
+        logger.exception(f"Error transformando payload Instaleap a ARMI: {str(e)}")
+        raise
+
+
+# def _determinar_metodo_pago_instaleap(metodo_instaleap: str) -> int:
+#     """Convierte método de pago de Instaleap a código ARMI."""
+#     metodo = (metodo_instaleap or "").upper()
+    
+#     if metodo == "CASH":
+#         return 1  # efectivo
+#     elif metodo in ["CARD", "TERMINAL", "DATAFONO"]:
+#         return 2  # Datafono
+#     elif metodo in ["PREPAID", "ONLINE", "DIGITAL"]:
+#         return 3  # en línea
+#     else:
+#         logger.warning(f"Método de pago no reconocido: {metodo}. Usando efectivo por defecto.")
+#         return 1
+
+
+# def _calcular_peso_total_instaleap(job_items: List[Dict]) -> float:
+#     """Calcula el peso total de los items de Instaleap."""
+#     if not job_items:
+#         return 1.0  # Peso por defecto
+    
+#     peso_total = 0.0
+#     for item in job_items:
+#         peso = float(item.get("weight", 0))
+#         cantidad = float(item.get("quantity", 1))
+#         peso_total += peso * cantidad
+    
+#     return round(peso_total, 2) if peso_total > 0 else len(job_items) * 0.5
+
+
+def _transformar_productos_instaleap(job_items: List[Dict]) -> List[Dict]:
+    """Transforma productos de Instaleap a formato ARMI."""
+    productos = []
+    
+    for idx, item in enumerate(job_items):
+        producto = {
+            "product_id": item.get("id") or f"INSTALEAP_{idx + 1}",
+            "name": item.get("name", f"Producto {idx + 1}"),
+            "description": item.get("comment", "") or item.get("name", ""),
+            "quantity": int(item.get("quantity", 1)),
+            "image_url": item.get("image_url", ""),
+            "unit_price": float(item.get("price", 0)) / 100,  # Convertir centavos
+            "store_id": None  # Se llenará después con el mapeo
+        }
+        productos.append(producto)
+    
+    return productos
+
+
+def _normalizar_nombre_ciudad(ciudad: str) -> str:
+    """Normaliza nombre de ciudad para ARMI."""
+    if not ciudad:
+        return ""    
+    # Convertir a minúsculas y simplificar
+    ciudad = ciudad.lower().strip()    
+    # Reemplazar caracteres especiales
+    import unicodedata
+    ciudad = ''.join(
+        c for c in unicodedata.normalize('NFD', ciudad)
+        if unicodedata.category(c) != 'Mn'
+    )    
+    return ciudad
+
+
+def _normalizar_codigo_pais_instaleap(pais: str) -> str:
+    """Normaliza código de país para ARMI."""
+    if not pais:
+        return "VEN"    
+    pais = pais.upper()    
+    # Mapeo simple
+    mapeo = {
+        "COLOMBIA": "COL",
+        "COL": "COL",
+        "VEN": "VEN",
+        "VENZUELA": "VEN"
+    }    
+    # Buscar coincidencia exacta o parcial
+    for key, value in mapeo.items():
+        if key in pais or pais in key:
+            return value    
+    # Si no encuentra, usar primeras 3 letras
+    return pais[:3] if len(pais) >= 3 else "VEN"
+
+
+# def _extraer_nombre(nombre_completo: str) -> str:
+#     """Extrae primer nombre."""
+#     if not nombre_completo:
+#         return "Cliente"
+    
+#     partes = nombre_completo.strip().split()
+#     return partes[0] if partes else "Cliente"
+
+
+# def _extraer_apellido(nombre_completo: str) -> str:
+#     """Extrae apellido."""
+#     if not nombre_completo:
+#         return "Instaleap"
+    
+#     partes = nombre_completo.strip().split()
+#     return partes[-1] if len(partes) > 1 else "Instaleap"
+
+
+# def _extraer_dni_de_nombre(nombre_completo: str) -> str:
+#     """Intenta extraer DNI del nombre."""
+#     if not nombre_completo:
+#         return ""
+    
+#     import re
+#     numeros = re.findall(r'\d+', nombre_completo)
+#     return numeros[0] if numeros else ""
+
+
+# def buscar_mapa_tienda_instaleap(store_ref: str, client_id: str) -> tuple:
+#     """
+#     Busca mapeo entre store_ref de Instaleap y IDs de ARMI.
+#     IMPORTANTE: Debes implementar esta función según tu base de datos.
+#     """
+#     try:
+#         # EJEMPLO - Debes adaptar esto a tu BD real
+        
+#         # Opción 1: Buscar en tabla de mapeo
+#         resultados = ejecutar_sp_resultados(
+#             "sp_buscar_mapa_tienda_instaleap",
+#             store_ref,
+#             client_id
+#         )
+        
+#         # Opción 2: Si no tienes SP, buscar directamente
+#         # from ..db.conexion import get_db_connection
+#         # with get_db_connection() as conn:
+#         #     cursor = conn.cursor()
+#         #     cursor.execute("""
+#         #         SELECT business_id, branch_office_id 
+#         #         FROM third_party_store_mapping 
+#         #         WHERE external_store_ref = %s AND client_id = %s
+#         #     """, (store_ref, client_id))
+#         #     row = cursor.fetchone()
+#         #     if row:
+#         #         return (row[0], row[1])
+        
+#         if resultados and len(resultados) > 0:
+#             fila = resultados[0]
+#             return (
+#                 fila.get("business_id") or fila.get("BUSINESS_ID"),
+#                 fila.get("branch_office_id") or fila.get("BRANCH_OFFICE_ID")
+#             )
+        
+#         logger.warning(f"No se encontró mapeo para store_ref: {store_ref}, client_id: {client_id}")
+#         return (None, None)
+        
+#     except Exception as e:
+#         logger.error(f"Error buscando mapeo de tienda: {str(e)}")
+#         return (None, None)
+
+
+# def guardar_relacion_instaleap_armi(**kwargs):
+#     """
+#     Guarda relación entre orden de Instaleap y ARMI.
+#     """
+#     try:
+#         # EJEMPLO - Debes adaptar esto a tu BD real
+#         args = (
+#             kwargs.get("task_id"),
+#             kwargs.get("job_number"),
+#             kwargs.get("client_id"),
+#             kwargs.get("order_id_armi"),
+#             kwargs.get("business_id"),
+#             kwargs.get("branch_office_id"),
+#             json.dumps(kwargs.get("payload_original"), ensure_ascii=False),
+#             json.dumps(kwargs.get("payload_armi"), ensure_ascii=False),
+#             datetime.now().isoformat()
+#         )
+        
+#         # Ejecutar SP o insert directo
+#         ejecutar_sp_resultados("sp_guardar_relacion_instaleap_armi", *args)
+        
+#         logger.info(f"Relación guardada: task_id={kwargs.get('task_id')}")
+        
+#     except Exception as e:
+#         logger.error(f"Error guardando relación: {str(e)}")
+
+# guardar instaleap-armi en base de datos
+def guardar_envio_instaleap_armi(**kwargs) -> tuple[bool, str]:    
+    #Guarda el envío de Instaleap y ARMI en la base de datos.        
+    try:        
+        json_instaleap = kwargs.get("payload_instaleap")
+        json_armi = kwargs.get("payload_armi")
+        
+        if not json_instaleap or not json_armi:
+            return (False, "Los payloads de Instaleap y ARMI son requeridos")
+        
+        # ============================================
+        # 1. PREPARAR PRODUCTOS JSON
+        # ============================================
+        productos = json_armi.get("products", [])
+        if not productos:
+            return (False, "La lista de productos no puede estar vacía")
+        
+        # Preparar productos en formato JSON string
+        productos_json_str = json.dumps(productos, ensure_ascii=False)
+        
+        # ============================================
+        # 2. VALIDACIONES Y TRANSFORMACIONES
+        # ============================================
+        client_info = json_armi.get("client_info", {})
+        
+        # business_id - debe ser > 0
+        business_id = json_armi.get("business_id")        
+        if business_id is None or not business_id :
+            logger.error(f"No se pudo procesar el ID del negocio: {business_id}")
+            return (False, f"No se pudo procesar el ID del negocio: {business_id}")
+       
+        # vehicle_type - debe ser 1, 2 o 3
+        vehicle_type = json_armi.get("vehicle_type", 0)
+        if vehicle_type not in [1, 2, 3]:
+            vehicle_type = 2  # Valor por defecto: moto
+        
+        # payment_method - debe ser 1, 2 o 3
+        payment_method = json_armi.get("payment_method", 0)
+        if payment_method not in [1, 2, 3]:
+            payment_method = 1  # Valor por defecto: efectivo
+        
+        # ============================================
+        # 3. PREPARAR ARGUMENTOS PARA EL SP
+        # ============================================
+        # NOTA: El SP tiene 24 parámetros: 22 IN + 2 OUT
+        # El orden es importante:
+        # 1-22: Parámetros IN
+        # 23-24: Parámetros OUT (estos se llenarán después)
+
+        args = [
+            # Parámetros IN (1-22)
+            business_id,  # p_business_id BIGINT
+            float(json_armi.get("total_value", 0.0)),  # p_total_value DOUBLE
+            float(json_armi.get("user_tip", 0.0)),  # p_user_tip DOUBLE
+            float(json_armi.get("incentive_value", 0.0)),  # p_incentive_value DOUBLE
+            float(json_armi.get("delivery_value", 0.0)),  # p_delivery_value DOUBLE
+            vehicle_type,  # p_vehicle_type INT
+            payment_method,  # p_payment_method INT
+            float(json_armi.get("weight", 0.0)),  # p_weight DOUBLE
+            str(json_armi.get("city", "")),  # p_city VARCHAR(100)
+            str(json_armi.get("instructions", "")),  # p_instructions TEXT
+            str(json_armi.get("orderInvoice", "")),  # p_orderInvoice VARCHAR(100)
+            str(json_armi.get("token", "")),  # p_token VARCHAR(255)
+            str(client_info.get("first_name", "")),  # p_first_name VARCHAR(100)
+            str(client_info.get("last_name", "")),  # p_last_name VARCHAR(100)
+            str(client_info.get("phone", "")),  # p_phone VARCHAR(50)
+            str(client_info.get("email", "")),  # p_email VARCHAR(150)
+            str(client_info.get("address", "")),  # p_address TEXT
+            float(client_info.get("lat", 0.0)),  # p_lat DOUBLE
+            float(client_info.get("lng", 0.0)),  # p_lng DOUBLE
+            str(client_info.get("dni", "")),  # p_dni VARCHAR(50)
+            str(kwargs.get("nota_interna", "")),  # p_nota_interna TEXT
+            json.dumps(json_instaleap, ensure_ascii=False),  # p_instaleap_payload JSON
+            json.dumps(json_armi, ensure_ascii=False),  # p_armi_payload JSON
+            productos_json_str,  # p_productos_json JSON (¡NUEVO PARÁMETRO!)
+            
+            # Parámetros OUT (estos se llenarán)
+            0,    # p_exito BOOLEAN (OUT) - valor inicial
+            ''    # p_mensaje VARCHAR(500) (OUT) - valor inicial
+        ]        
+        # ============================================
+        # 4. EJECUTAR PROCEDIMIENTO ALMACENADO
+        # ============================================
+        # NOTA: Asegúrate de que ejecutar_sp_resultados maneje correctamente
+        # los parámetros OUT. Debe retornar una tupla o diccionario con los resultados.
+        print (f"Args para sp_guardar_envio_ARMI: {args}")
+        respuesta_bd = ejecutar_sp_resultados(
+            "sp_guardar_envio_ARMI",  # Nombre correcto del SP
+            *args
+        )
+        
+        print(f"Respuesta sp_guardar_envio_ARMI: {respuesta_bd}")
+        
+        # ============================================
+        # 5. PROCESAR RESULTADOS
+        # ============================================
+        # Dependiendo de cómo implementes ejecutar_sp_resultados,
+        # aquí hay algunas opciones:
+        
+        # Opción A: Si ejecutar_sp_resultados retorna los valores OUT directamente
+        if isinstance(respuesta_bd, tuple) and len(respuesta_bd) >= 2:
+            p_exito, p_mensaje = respuesta_bd[0], respuesta_bd[1]
+            exito = bool(p_exito)
+            mensaje = str(p_mensaje)
+        
+        # Opción B: Si los valores OUT están en args después de ejecutar
+        elif len(args) >= 24:
+            # Los últimos 2 elementos de args fueron actualizados
+            exito = bool(args[-2])
+            mensaje = str(args[-1])
+        
+        # Opción C: Si ejecutar_sp_resultados retorna un diccionario
+        elif isinstance(respuesta_bd, dict):
+            exito = respuesta_bd.get('exito', False)
+            mensaje = respuesta_bd.get('mensaje', '')
+        
+        else:
+            # No se pudo determinar el resultado
+            logger.error(f"No se pudo procesar respuesta del SP: {respuesta_bd}")
+            return (False, "Error procesando respuesta de la base de datos")
+        
+        if exito:
+            logger.info(f"Envío guardado exitosamente: task_id={kwargs.get('task_id')}, mensaje={mensaje}")
+            return (True, mensaje)
+        else:
+            logger.error(f"Error guardando envío: {mensaje}")
+            return (False, mensaje)
+            
+    except Exception as e:
+        error_msg = f"Error guardando envío: {str(e)}"
+        logger.error(error_msg)
+        return (False, error_msg)
+
 
 # --- Clientes ---
 @bp_privadas.post("/informeCliente")
@@ -1338,9 +1811,18 @@ def cancelar_orden_armi():
 def estado_orden_armi(order_id: int):
     cliente = _cliente_Armi()
     data = cliente.estado_orden(order_id)
+    catalogo_por_nombre = {item["NAME"]: item["DESCRIPTION"] for item in catalogo_dict.values()}
+    nombre_estado = data.get("orderStatus") 
+    if nombre_estado and nombre_estado in catalogo_por_nombre:
+        data["orderStatusDescription"] = catalogo_por_nombre[nombre_estado]
+    # Si también quieres el ID
+        data["orderStatusId"] = next(item["ID"] for item in catalogo_dict.values() if item["NAME"] == nombre_estado)
+    else:
+        data["orderStatusDescription"] = "Estado desconocido"
+    
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
-    return jsonify({"ok": True, "data": data})
+    return jsonify( data)
 
 @bp_privadas.get("/armi/monitor/city/<string:city>")
 @requerir_api_key(Delivery_Empresa="ARMI")
@@ -1364,60 +1846,108 @@ def costo_envio_armi():
 # ------ INSTALEAP INTEGRATION ----------------
 
 @bp_privadas.post("/armi/monitor/instaleap/create")
-@requerir_api_key(Delivery_Empresa="ARMI")
+@requerir_api_key(Delivery_Empresa="ARMI_INSTALEAP")
 def crear_orden_instaleap():
     """
     Endpoint para recibir órdenes desde Instaleap
-    Según documentación: POST {url_base_integrador_instaleap}/monitor/instaleap/create
     """
     payload = request.get_json(silent=True) or {}
     
-    # DEBUG: Log del payload recibido
-    logger.info(f"Instaleap create - Payload recibido: {json.dumps(payload, indent=2)}")
+    logger.info(f"Instaleap create - Payload recibido. Task ID: {payload.get('task_id')}")
     
-    # Validar campos mínimos según documentación
+    # Validar campos mínimos
     campos_requeridos = ["task_id", "job_number", "client_id", "created_at"]
     for campo in campos_requeridos:
         if campo not in payload:
             return jsonify({
                 "ok": False,
                 "error": f"Campo requerido faltante: {campo}",
-                "campos_recibidos": list(payload.keys())
+                "task_id": payload.get("task_id")
             }), 400
     
     cliente = _cliente_Armi()
     
     try:
-        # Llamar a ARMI
-        # falta transformar el payload de instaleap al formato que espera ARMI **********************************************
-        data = cliente.crear_orden_instaleap(payload)
+        # ===== 1. TRANSFORMAR PAYLOAD =====
+        payload_armi = transformar_payload_instaleap_a_armi(payload)
+        
+        
+        # ===== 2. BUSCAR MAPEO DE TIENDA =====
+        # store_ref = payload.get("origin", {}).get("store_reference", "")
+        # client_id = payload.get("client_id", "")
+        branch_office_id = payload.get("origin", {}).get("store_reference", "")
+        business_id = payload.get("client_id", "")
+        
+        # business_id, branch_office_id = buscar_mapa_tienda_instaleap(store_ref, client_id)
+        
+        # if not business_id:
+        #     return jsonify({
+        #         "ok": False,
+        #         "error": f"Tienda no configurada: {store_ref}",
+        #         "task_id": payload.get("task_id")
+        #     }), 400
+        
+        # ===== 3. COMPLETAR IDs EN PAYLOAD =====
+        payload_armi["business_id"] = business_id
+        for producto in payload_armi.get("products", []):
+            producto["store_id"] = branch_office_id
+        
+        logger.debug(f"Payload ARMI completo: {json.dumps(payload_armi, indent=2)}")
+        
+        # ===== 4. ENVIAR A ARMI =====        
+        data = cliente.crear_orden(payload_armi)
         
         if data.get("error"):
-            logger.error(f"Error ARMI al crear orden Instaleap: {data.get('error')}")
+            logger.error(f"Error ARMI: {data.get('error')}")
             return jsonify({
                 "ok": False,
-                "error": data.get("error"),
-                "task_id": payload.get("task_id"),
-                "job_number": payload.get("job_number")
+                "error": f"Error en ARMI: {data.get('error')}",
+                "task_id": payload.get("task_id")
             }), 500
-            
-        logger.info(f"Orden Instaleap creada exitosamente: {payload.get('job_number')}")
+        
+        # ===== 5. GUARDAR en bd =====
+        order_id_armi = data.get("orderId") or data.get("data", {}).get("orderId") or data.get("data", {}).get("id")
+        
+        # guardar_relacion_instaleap_armi(
+        #     task_id=payload.get("task_id"),
+        #     job_number=payload.get("job_number"),
+        #     client_id=branch_office_id,
+        #     order_id_armi=order_id_armi,
+        #     business_id=business_id,
+        #     branch_office_id=branch_office_id,
+        #     payload_original=payload,
+        #     payload_armi=payload_armi
+        # )
+        
+        ressultadobd=guardar_envio_instaleap_armi(payload_instaleap=payload , payload_armi=payload_armi)
+        print(f"Resultado guardado en bd: {ressultadobd}")
+        # ===== 6. RESPONDER =====
         return jsonify({
             "ok": True,
-            "data": data,
-            "message": "Orden recibida y procesada exitosamente",
-            "task_id": payload.get("task_id")
+            "data": {
+                "instaleap": {
+                    "task_id": payload.get("task_id"),
+                    "job_number": payload.get("job_number"),
+                    "client_id": branch_office_id
+                },
+                "armi": {
+                    "order_id": order_id_armi,
+                    "business_id": business_id,
+                    "branch_office_id": branch_office_id
+                },
+                "status": "CREATED",
+                "timestamp": datetime.now().isoformat()
+            },
+            "message": "Orden procesada exitosamente"
         })
         
     except Exception as e:
-        logger.exception(f"Error crítico procesando orden Instaleap: {str(e)}")
+        logger.exception(f"Error procesando orden Instaleap: {str(e)}")
         return jsonify({
             "ok": False,
-            "error": f"Error procesando orden: {str(e)}",
-            "task_id": payload.get("task_id"),
-            "job_number": payload.get("job_number")
+            "error": f"Error interno: {str(e)}",
+            "task_id": payload.get("task_id")
         }), 500
-
 
 @bp_privadas.post("/armi/monitor/instaleap/update")
 @requerir_api_key(Delivery_Empresa="ARMI")
@@ -1570,7 +2100,7 @@ def confirmar_cash_recibido_instaleap():
 
 # ---- Callback de Notificación de estados ----
 #propio
-@bp_privadas.post("/armi/callback/update/status")
+@bp_callbacks.post("/status")
 def callback_estado_armi():
     """
     Callback que ARMI llama para notificar cambios de estado
@@ -1602,6 +2132,15 @@ def callback_estado_armi():
         
         logger.info(f"Procesando cambio de estado ARMI - Order: {order_id}, Status: {status_code}")
         
+        
+        if status_code in catalogo_dict:
+            estado = catalogo_dict[status_code]            
+            estado_name = estado['NAME']
+            estado_description = estado['DESCRIPTION']
+        else:            
+            estado_name = f"DESCONOCIDO_{status_code}"
+            estado_description = "Estado no reconocido en el catálogo"
+        
         # TODO: Implementar lógica de procesamiento aquí
         # Por ejemplo:
         # - Buscar orden en tu DB por orderId
@@ -1613,10 +2152,12 @@ def callback_estado_armi():
         return jsonify({
             "ok": True,
             "message": "Estado procesado exitosamente",
-            "orderId": order_id,
-            "statusReceived": status_code,
-            "processedAt": datetime.now().isoformat()
-        })
+            #"orderId": order_id,
+            "status_id": status_code,
+            "status_name": estado_name,
+            "status_description": estado_description,
+            "status_fecha": created_at
+            })
         
     except Exception as e:
         logger.exception(f"Error procesando callback ARMI: {str(e)}")
@@ -1627,111 +2168,3 @@ def callback_estado_armi():
         }), 500
 
 
-def traducir_estado_armi_a_instaleap(estado_armi_id: int) -> str:
-    """
-    Traduce el estado de ARMI al estado correspondiente de Instaleap
-    Basado en la documentación del PDF
-    """
-    # Mapeo basado en la documentación ARMI-Instaleap
-    mapeo_estados = {
-        0: "RECIBIDA",  # Recibida
-        1: "EMITIDA",   # Emitida
-        2: "ENVIADA",   # Enviada
-        3: "ASIGNADA",  # Asignada
-        4: "PICKING",   # Picking → Instaleap: Arrived to store
-        37: "PICKING_TERMINADO",  # Picking terminado → Instaleap: Going to destination
-        33: "EN_PUNTO_ENTREGA",   # En punto de entrega → Instaleap: Arrived to destination
-        7: "FINALIZADA",  # Finalizada → Instaleap: Delivered
-        14: "CANCELADA",  # Cancelada → Instaleap: Cancelled
-        6: "ENTREGADA",   # Entregada
-    }
-    
-    estado_nombre = mapeo_estados.get(estado_armi_id, f"DESCONOCIDO_{estado_armi_id}")
-    
-    # Traducción específica para Instaleap
-    if estado_armi_id == 4:  # Picking
-        return "Arrived to store"
-    elif estado_armi_id == 37:  # Picking terminado
-        return "Going to destination"
-    elif estado_armi_id == 33:  # En punto de entrega
-        return "Arrived to destination"
-    elif estado_armi_id == 7:  # Finalizada
-        return "Delivered"
-    elif estado_armi_id == 14:  # Cancelada
-        return "Cancelled"
-    else:
-        return estado_nombre
-    
-@bp_privadas.get("/armi/estados/catalogo")
-@requerir_api_key(Delivery_Empresa="ARMI")
-def catalogo_estados_armi():
-    """
-    Devuelve el catálogo completo de estados de ARMI
-    Útil para debug y para configurar integraciones
-    """
-    # Esto es según el PDF, páginas 33-40
-    catalogo = [
-        {"ID": 0, "NAME": "RECIBIDA", "DESCRIPTION": "ORDEN PARA LA LOGICA DE LAS COLAS DE ORACLE"},
-        {"ID": 1, "NAME": "EMITIDA", "DESCRIPTION": "PEDIDO EMITIDO EN EL SISTEMA"},
-        {"ID": 2, "NAME": "ENVIADA", "DESCRIPTION": "PEDIDO ENVIADO AL PROVEEDOR LOGISTICO"},
-        {"ID": 3, "NAME": "ASIGNADA", "DESCRIPTION": "PEDIDO ES ASIGNADO A UN DOMICILIARIO"},
-        {"ID": 4, "NAME": "PICKING", "DESCRIPTION": "DOMICILIARIO ESTA PREPARANDO EL PEDIDO"},
-        {"ID": 5, "NAME": "FACTURADA", "DESCRIPTION": "PEDIDO HA SIDO FACTURADO EN CAJA DE UNA TIENDA"},
-        {"ID": 6, "NAME": "ENTREGADA", "DESCRIPTION": "PEDIDO ENTREGADO AL CLIENTE"},
-        {"ID": 7, "NAME": "FINALIZADA", "DESCRIPTION": "PEDIDO FINALIZADO"},
-        {"ID": 8, "NAME": "OCULTA", "DESCRIPTION": "ESTATUS PARA OCULTAR UNA ORDEN EN EL MONITOR"},
-        {"ID": 9, "NAME": "PREPROCESADO", "DESCRIPTION": "PEDIDO FUE ENVIADO DESDE EL CALLCENTER DIRECTAMENTE A LOS MENSAJEROS"},
-        {"ID": 10, "NAME": "MODIFICADA", "DESCRIPTION": "ORDEN MODIFICADA POR EL CLIENTE"},
-        {"ID": 11, "NAME": "ENVIADA CON ERROR", "DESCRIPTION": "PEDIDO ENVIADO A LOS MENSAJEROS PERO CON ERROR AL ENVIAR A LAS TIENDAS"},
-        {"ID": 12, "NAME": "PAGADA", "DESCRIPTION": "ORDEN PAGADA POR EL CLIENTE"},
-        {"ID": 13, "NAME": "EN COLA POR PAGAR", "DESCRIPTION": "ORDEN ENVIADA A LA COLA DE PAGOS PENDIENTES POR PAGAR"},
-        {"ID": 14, "NAME": "CANCELADA", "DESCRIPTION": "ORDEN CANCELADA"},
-        {"ID": 15, "NAME": "ASIGNADO ENVIO NACIONAL", "DESCRIPTION": "ORDEN ENVIO NACIONAL"},
-        {"ID": 16, "NAME": "FINALIZADO ENVIO NACIONAL", "DESCRIPTION": "ORDEN FINALIZADO ENVIO NACIONAL"},
-        {"ID": 17, "NAME": "PEDIDO TIEMPO EXCEDIDO", "DESCRIPTION": "SE EXCEDIO EL TIEMPO LIMITE ESTABLECIDO EN EL PROCESO DE RUTA OPTIMA"},
-        {"ID": 18, "NAME": "TOKEN VERIFICADO", "DESCRIPTION": "TOKEN VERIFICADO POR PARTE DEL PICKER"},
-        {"ID": 19, "NAME": "ENTREGADA TIENDA", "DESCRIPTION": "INDICA QUE LA ORDEN YA SE ENCUENTRA EN LA TIENDA XSTORE"},
-        {"ID": 20, "NAME": "ACEPTADA TIENDA", "DESCRIPTION": "ORDEN ACEPTADA POR TIENDA XSTORE"},
-        {"ID": 21, "NAME": "RECHAZADA TIENDA", "DESCRIPTION": "ORDEN RECHAZADA POR TIENDA XSTORE"},
-        {"ID": 22, "NAME": "RESERVADA TIENDA", "DESCRIPTION": "ORDEN CREADA DESDE TIENDA XSTORE"},
-        {"ID": 23, "NAME": "REASIGNADA MANUAL", "DESCRIPTION": "ORDEN REASIGNADA POR EL CALL CENTER MANUALMENTE"},
-        {"ID": 24, "NAME": "PEDIDO ALISTADO", "DESCRIPTION": "PEDIDO ALISTADO EN EL CENDIS"},
-        {"ID": 25, "NAME": "PEDIDO ENVIADO", "DESCRIPTION": "PEDIDO ENVIADO AL CLIENTE DESDE EL CENDIS"},
-        {"ID": 26, "NAME": "PENDIENTE DEVOLUCION TIENDA", "DESCRIPTION": "ORDEN QUE SE DEBE ENVIAR NUEVAMENTE A XSTORE PARA REALIZAR LOS AJUSTES NECESARIOS"},
-        {"ID": 27, "NAME": "SIN PAGAR", "DESCRIPTION": "PEDIDO NACIONAL O MARKETPLACE CREADO PENDIENTE DE PAGO EFECTIVO O DATAFONO"},
-        {"ID": 28, "NAME": "PEDIDO INCOMPLETO", "DESCRIPTION": "PEDIDO QUE NO SE HA PODIDO COMPLETAR POR FALTA DE ARTICULOS"},
-        {"ID": 29, "NAME": "ENVIAR INCOMPLETO", "DESCRIPTION": "PEDIDO ENVIADO SIN COMPLETAR POR FALTA DE ARTICULOS"},
-        {"ID": 30, "NAME": "CLIENTE ESPERA", "DESCRIPTION": "PREVIO ACUERDO CON EL CLIENTE A QUE SE COMPLETEN EL PEDIDO CON LOS ARTICULOS FALTANTES"},
-        {"ID": 31, "NAME": "PAGO_PENDIENTE", "DESCRIPTION": "ORDEN QUE NO PUDO SER COBRADA AL MOMENTO DE LA CREACIÓN"},
-        {"ID": 32, "NAME": "EN CAMINO", "DESCRIPTION": "ORDEN EN CAMINO A DOMICILIO"},
-        {"ID": 33, "NAME": "EN PUNTO DE ENTREGA", "DESCRIPTION": "MENSAJERO EN DOMICILIO PARA ENTREGA"},
-        {"ID": 34, "NAME": "RECOGIENDO EN PUNTOS DE TRANSFERENCIA", "DESCRIPTION": "MENSAJERO ESTA RECOGIENDO EN TIENDAS DE TRANSFERENCIA"},
-        {"ID": 35, "NAME": "PICKING TRANSFERENCIA", "DESCRIPTION": "DOMICILIARIO RECOGIENDO PRODUCTOS EN TIENDA DE TRANSFERENCIA"},
-        {"ID": 36, "NAME": "PICKING EN TRANSFERENCIA TERMINADO", "DESCRIPTION": "MENSAJERO FINALIZA EL PICKING EN TIENDA DE TRANSFERENCIA"},
-        {"ID": 37, "NAME": "PICKING TERMINADO", "DESCRIPTION": "MENSAJERO FINALIZA EL PICKING EN TIENDA"},
-        {"ID": 38, "NAME": "ESCANEANDO DATAFONO", "DESCRIPTION": "MENSAJERO ESCANEA CODIGO DE BARRAS DEL DATAFONO"},
-        {"ID": 39, "NAME": "CAPTURA BOUCHER", "DESCRIPTION": "MENSAJERO CAPTURA FOTO DEL BOUCHER DE PAGO"},
-        {"ID": 40, "NAME": "COBRANDO EN LINEA", "DESCRIPTION": "MENSAJERO ESTA COBRANDO EN LINEA"},
-        {"ID": 41, "NAME": "CAMBIO METODO PAGO DATAFONO A EFECTIVO", "DESCRIPTION": "METODO DE PAGO CAMBIADO DE DATAFONO A EFECTIVO"},
-        {"ID": 42, "NAME": "CAMBIO METODO PAGO EN LINEA A EFECTIVO", "DESCRIPTION": "METODO DE PAGO CAMBIADO DE EN LINEA A EFECTIVO"},
-        {"ID": 43, "NAME": "CAMBIO METODO PAGO EN LINEA A DATAFONO", "DESCRIPTION": "METODO DE PAGO CAMBIADO DE EN LINEA A DATAFONO"},
-        {"ID": 44, "NAME": "PAGADO EN LINEA", "DESCRIPTION": "PEDIDO PAGADO EN LINEA"},
-        {"ID": 45, "NAME": "PAGADO EN EFECTIVO", "DESCRIPTION": "PEDIDO PAGADO EN EFECTIVO"},
-        {"ID": 46, "NAME": "PAGADO CON DATAFONO", "DESCRIPTION": "PEDIDO PAGADO CON DATAFONO"},
-        {"ID": 47, "NAME": "VALIDACION EFECTIVO RECIBIDO", "DESCRIPTION": "TOMA DE FOTO DEL DINERO RECIBIDO EN EFECTIVO"},
-        {"ID": 48, "NAME": "DEVOLUCIÓN", "DESCRIPTION": "ORDEN CANCELADA DESPUÉS DE HABER SIDO FACTURADA"},
-        {"ID": 49, "NAME": "DEVOLUCIÓN EXITOSA", "DESCRIPTION": "DEVOLUCIÓN DE LOS PRODUCTOS A LA TIENDA"},
-    ]
-    
-    return jsonify({
-        "ok": True,
-        "data": catalogo,
-        "count": len(catalogo),
-        "mapeo_instaleap": {
-            "PICKING (4)": "Arrived to store",
-            "PICKING TERMINADO (37)": "Going to destination",
-            "EN PUNTO DE ENTREGA (33)": "Arrived to destination",
-            "FINALIZADA (7)": "Delivered",
-            "CANCELADA (14)": "Cancelled"
-        }
-    })

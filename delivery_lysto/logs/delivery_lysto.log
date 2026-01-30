@@ -1,200 +1,200 @@
-2026-01-07 10:29:19,612 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:29:19,997 INFO werkzeug - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:8000
- * Running on http://192.168.10.246:8000
-2026-01-07 10:29:19,998 INFO werkzeug - [33mPress CTRL+C to quit[0m
-2026-01-07 10:29:20,013 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:29:20,232 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 10:29:20,234 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:29:20,262 WARNING werkzeug -  * Debugger is active!
-2026-01-07 10:29:20,263 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 10:36:28,632 INFO werkzeug - 127.0.0.1 - - [07/Jan/2026 10:36:28] "[31m[1mGET /privadas/armi/monitor/city/{{city}} HTTP/1.1[0m" 401 -
-2026-01-07 10:37:30,747 INFO httpx - HTTP Request: GET https://develop1-dot-armi-business-monitor-dev-dot-armirene-369418.uc.r.appspot.com/monitor/city/bogota "HTTP/1.1 200 OK"
-2026-01-07 10:37:30,751 INFO delivery_lysto.servicios.cliente_armi - ARMI GET https://develop1-dot-armi-business-monitor-dev-dot-armirene-369418.uc.r.appspot.com/monitor/city/bogota OK: 200
-2026-01-07 10:37:30,754 INFO werkzeug - 127.0.0.1 - - [07/Jan/2026 10:37:30] "GET /privadas/armi/monitor/city/bogota HTTP/1.1" 200 -
-2026-01-07 10:37:52,014 INFO httpx - HTTP Request: POST https://develop1-dot-armi-business-monitor-dev-dot-armirene-369418.uc.r.appspot.com/monitor/order/delivery-cost "HTTP/1.1 500 Internal Server Error"
-2026-01-07 10:37:52,022 ERROR delivery_lysto.servicios.cliente_armi - ARMI error HTTP 500: {"status":"INTERNAL_SERVER_ERROR","message":"Error in method get delivery cost.","data":null}
-2026-01-07 10:38:02,260 INFO httpx - HTTP Request: POST https://develop1-dot-armi-business-monitor-dev-dot-armirene-369418.uc.r.appspot.com/monitor/order/delivery-cost "HTTP/1.1 500 Internal Server Error"
-2026-01-07 10:38:02,264 ERROR delivery_lysto.servicios.cliente_armi - ARMI error HTTP 500: {"status":"INTERNAL_SERVER_ERROR","message":"Error in method get delivery cost.","data":null}
-2026-01-07 10:38:07,776 INFO httpx - HTTP Request: POST https://develop1-dot-armi-business-monitor-dev-dot-armirene-369418.uc.r.appspot.com/monitor/order/delivery-cost "HTTP/1.1 200 OK"
-2026-01-07 10:38:07,784 INFO delivery_lysto.servicios.cliente_armi - ARMI POST https://develop1-dot-armi-business-monitor-dev-dot-armirene-369418.uc.r.appspot.com/monitor/order/delivery-cost OK: 200
-2026-01-07 10:38:07,791 INFO werkzeug - 127.0.0.1 - - [07/Jan/2026 10:38:07] "POST /privadas/armi/monitor/order/delivery-cost HTTP/1.1" 200 -
-2026-01-07 10:51:37,446 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:51:37,450 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:51:37,453 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:51:38,048 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:51:38,296 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 10:51:38,299 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:51:38,335 WARNING werkzeug -  * Debugger is active!
-2026-01-07 10:51:38,336 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 10:51:40,171 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:51:40,205 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:51:41,042 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:51:43,777 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:51:46,373 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:51:49,411 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:51:51,070 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:51:56,698 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:51:57,180 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:52:04,907 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:52:05,098 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 10:52:05,100 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:52:05,128 WARNING werkzeug -  * Debugger is active!
-2026-01-07 10:52:05,129 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 10:52:06,279 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:06,282 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:06,720 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:52:06,939 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 10:52:06,941 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:52:06,975 WARNING werkzeug -  * Debugger is active!
-2026-01-07 10:52:06,976 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 10:52:12,369 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:12,401 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:13,461 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:52:13,662 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 10:52:13,664 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:52:13,693 WARNING werkzeug -  * Debugger is active!
-2026-01-07 10:52:13,693 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 10:52:22,920 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:22,924 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:22,929 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:23,191 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:52:23,423 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 10:52:23,426 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:52:23,461 WARNING werkzeug -  * Debugger is active!
-2026-01-07 10:52:23,463 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 10:52:28,302 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:28,340 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:29,129 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:52:29,364 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 10:52:29,366 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:52:29,400 WARNING werkzeug -  * Debugger is active!
-2026-01-07 10:52:29,400 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 10:52:40,930 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:40,934 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:40,940 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:41,086 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:52:41,309 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 10:52:41,312 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:52:41,347 WARNING werkzeug -  * Debugger is active!
-2026-01-07 10:52:41,348 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 10:52:45,094 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:45,100 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:45,882 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:52:46,116 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 10:52:46,118 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:52:46,152 WARNING werkzeug -  * Debugger is active!
-2026-01-07 10:52:46,153 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 10:52:58,097 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:58,135 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-01-07 10:52:58,890 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 10:52:59,086 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 10:52:59,088 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 10:52:59,117 WARNING werkzeug -  * Debugger is active!
-2026-01-07 10:52:59,118 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:04:55,804 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:04:55,807 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:04:55,834 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:04:56,469 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:04:56,695 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:04:56,699 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:04:56,730 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:04:56,732 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:05:01,554 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:01,584 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:02,293 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:05:02,594 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:05:02,600 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:05:02,680 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:05:02,681 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:05:03,241 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:03,261 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:04,213 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:05:04,442 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:05:04,445 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:05:04,480 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:05:04,482 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:05:08,361 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:08,362 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:08,391 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:09,361 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:05:09,649 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:05:09,653 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:05:09,690 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:05:09,691 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:05:10,178 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:10,185 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:11,231 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:05:11,467 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:05:11,471 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:05:11,516 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:05:11,521 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:05:12,337 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:12,338 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:12,365 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:05:13,078 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:05:13,270 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:05:13,272 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:05:13,299 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:05:13,300 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:06:05,086 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:05,119 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:05,307 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:06:05,593 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:06:05,595 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:06:05,626 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:06:05,626 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:06:07,252 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:07,255 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:07,257 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:08,257 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:06:08,649 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:06:08,652 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:06:08,686 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:06:08,687 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:06:09,112 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:09,139 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:10,185 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:06:10,394 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:06:10,396 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:06:10,444 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:06:10,445 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:06:11,426 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:11,429 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:11,435 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:11,978 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:06:12,212 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:06:12,214 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:06:12,247 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:06:12,247 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:06:17,353 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:17,355 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:17,392 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:06:17,806 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:06:18,038 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:06:18,040 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:06:18,074 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:06:18,074 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:34:05,777 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:34:05,787 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:34:06,447 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:34:06,675 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:34:06,677 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:34:06,711 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:34:06,712 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:34:08,815 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:34:08,817 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:34:08,821 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:34:09,407 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:34:09,834 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:34:09,839 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:34:09,876 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:34:09,877 INFO werkzeug -  * Debugger PIN: 996-394-210
-2026-01-07 15:34:11,255 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:34:11,261 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
-2026-01-07 15:34:11,608 INFO werkzeug -  * Restarting with watchdog (inotify)
-2026-01-07 15:34:11,839 INFO root - Aplicación iniciada en modo DEBUG
-2026-01-07 15:34:11,841 ERROR delivery_lysto.db.conexion - Error al conectar a la base de datos: (1049, "Unknown database 'Lysto'")
-2026-01-07 15:34:11,873 WARNING werkzeug -  * Debugger is active!
-2026-01-07 15:34:11,873 INFO werkzeug -  * Debugger PIN: 996-394-210
+2026-01-21 15:55:43,955 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 15:55:43,989 WARNING werkzeug -  * Debugger is active!
+2026-01-21 15:55:43,989 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:07:45,155 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:07:45,347 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:07:45,596 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:07:45,629 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:07:45,661 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:07:45,662 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:08:03,810 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:08:03,892 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:08:04,206 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:08:04,249 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:08:04,284 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:08:04,285 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:08:11,360 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:08:11,757 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:08:12,944 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:08:12,985 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:08:13,028 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:08:13,029 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:11:34,492 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:11:34,581 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:11:34,907 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:11:34,942 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:11:34,973 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:11:34,974 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:15:35,635 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_armi.py', reloading
+2026-01-21 16:15:35,724 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:15:36,001 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:15:36,038 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:15:36,074 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:15:36,075 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:15:43,144 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_armi.py', reloading
+2026-01-21 16:15:43,201 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:15:43,441 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:15:43,482 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:15:43,533 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:15:43,534 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:15:50,598 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_armi.py', reloading
+2026-01-21 16:15:50,675 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:15:50,969 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:15:51,008 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:15:51,042 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:15:51,043 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:15:58,127 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_armi.py', reloading
+2026-01-21 16:15:58,250 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:15:58,536 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:15:58,576 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:15:58,613 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:15:58,613 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:16:01,653 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_armi.py', reloading
+2026-01-21 16:16:01,729 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:16:02,002 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:16:02,056 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:16:02,101 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:16:02,102 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:16:03,121 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_armi.py', reloading
+2026-01-21 16:16:03,213 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:16:03,467 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:16:03,508 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:16:03,544 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:16:03,545 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:16:48,002 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:16:48,086 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:16:49,421 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:16:49,697 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:16:49,736 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:16:49,772 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:16:49,773 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:16:52,819 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:16:52,881 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:16:56,201 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:17:21,706 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:17:38,221 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:17:40,537 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:17:42,878 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:17:45,243 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:17:46,900 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:17:48,372 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:17:55,769 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:17:59,137 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:18:06,538 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:18:06,787 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:18:06,829 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:18:06,863 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:18:06,864 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:21:24,311 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:21:24,372 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:21:24,622 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:21:24,677 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:21:24,714 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:21:24,716 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:21:33,817 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:21:33,882 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:21:34,139 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:21:34,180 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:21:34,215 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:21:34,217 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:21:38,260 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:21:38,327 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:21:38,576 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:21:38,612 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:21:38,645 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:21:38,646 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:22:05,862 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:22:05,947 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:22:08,405 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:22:08,729 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:22:08,776 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:22:08,818 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:22:08,819 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:22:09,838 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:22:09,897 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:22:10,150 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:22:10,189 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:22:10,223 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:22:10,224 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:22:13,255 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:22:13,343 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:22:13,596 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:22:13,627 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:22:13,656 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:22:13,657 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:22:16,702 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:22:16,761 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:22:17,008 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:22:17,045 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:22:17,079 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:22:17,080 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:22:23,140 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:22:23,184 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:22:23,425 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:22:23,462 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:22:23,496 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:22:23,496 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:22:26,527 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:22:26,581 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:22:26,862 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:22:26,911 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:22:26,953 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:22:26,954 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:23:34,528 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:23:34,600 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:23:39,990 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:23:40,247 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:23:40,287 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:23:40,322 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:23:40,323 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:30:36,417 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:30:36,505 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:30:36,789 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:30:36,828 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:30:36,862 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:30:36,863 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:30:41,933 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:30:41,998 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:30:42,261 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:30:42,295 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:30:42,329 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:30:42,330 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:31:40,824 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:31:40,955 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:31:42,389 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:31:48,798 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:31:53,152 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:31:56,513 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:31:56,782 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:31:56,819 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:31:56,859 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:31:56,860 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:32:10,977 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:32:11,065 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:32:11,337 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:32:11,378 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:32:11,424 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:32:11,426 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:32:18,521 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-01-21 16:32:18,732 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:32:19,007 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:32:19,043 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:32:19,077 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:32:19,078 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:32:55,309 INFO httpx - HTTP Request: GET https://develop1-dot-armi-business-monitor-dev-dot-armirene-369418.uc.r.appspot.com/monitor/order/status/1453 "HTTP/1.1 200 OK"
+2026-01-21 16:32:55,312 INFO delivery_lysto.servicios.cliente_armi - ARMI GET https://develop1-dot-armi-business-monitor-dev-dot-armirene-369418.uc.r.appspot.com/monitor/order/status/1453 OK: 200
+2026-01-21 16:32:55,314 INFO werkzeug - 127.0.0.1 - - [21/Jan/2026 16:32:55] "GET /privadas/armi/monitor/order/status/1453 HTTP/1.1" 200 -
+2026-01-21 16:39:19,368 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_armi.py', reloading
+2026-01-21 16:39:19,485 INFO werkzeug -  * Restarting with stat
+2026-01-21 16:39:19,788 INFO root - Aplicación iniciada en modo DEBUG
+2026-01-21 16:39:19,828 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-01-21 16:39:19,862 WARNING werkzeug -  * Debugger is active!
+2026-01-21 16:39:19,863 INFO werkzeug -  * Debugger PIN: 656-411-073
+2026-01-21 16:39:56,032 INFO delivery_lysto.rutas.privadas - Callback ARMI estado recibido: {
+  "orderId": 1,
+  "status": 1,
+  "orderInvoice": "1",
+  "createdAt": "2024-10-10 00:00:00"
+}
+2026-01-21 16:39:56,033 INFO delivery_lysto.rutas.privadas - Procesando cambio de estado ARMI - Order: 1, Status: 1
+2026-01-21 16:39:56,034 INFO werkzeug - 127.0.0.1 - - [21/Jan/2026 16:39:56] "POST /update/status HTTP/1.1" 200 -
