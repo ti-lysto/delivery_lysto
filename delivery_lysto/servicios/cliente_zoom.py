@@ -60,6 +60,21 @@ class ClienteZoom:
     def validacion_campo_requerido(self, **kwargs) -> bool:
         return all(v is not None for v in kwargs.values())
 
+    @staticmethod
+    def _serializar_log(valor: Any) -> str:
+        try:
+            return json.dumps(valor, ensure_ascii=False, default=str)
+        except Exception:
+            return str(valor)
+
+    @staticmethod
+    def _cabeceras_log(cabeceras: Dict[str, str]) -> Dict[str, str]:
+        cabeceras_log = dict(cabeceras)
+        auth = cabeceras_log.get("Authorization")
+        if auth:
+            cabeceras_log["Authorization"] = f"{auth[:12]}...{auth[-6:]}"
+        return cabeceras_log
+
     def _solicitar(
         self,
         ruta: str,
@@ -81,10 +96,31 @@ class ClienteZoom:
         for intento in range(1, self.reintentos + 2):
             try:
                 headers = self._headers_privados(cuerpo, usatoken=usatoken, token=token) if privado else self._headers_publicos()                
+                logger.info(
+                    "[ZOOM][REQUEST] intento=%s metodo=%s url=%s ruta=%s privado=%s timeout=%s params=%s body=%s headers=%s",
+                    intento,
+                    metodo.upper(),
+                    url,
+                    ruta,
+                    privado,
+                    self.timeout,
+                    self._serializar_log(parametros),
+                    self._serializar_log(cuerpo),
+                    self._serializar_log(self._cabeceras_log(headers)),
+                )
                 
                 with httpx.Client(timeout=self.timeout, follow_redirects=True) as cliente:                    
                     resp = cliente.request(metodo.upper(), url, params=parametros, json=cuerpo, headers=headers)
-                logger.info(f"ZOOM {metodo.upper()} {url} -> {resp.status_code} (final URL: {str(resp.request.url)})")
+                logger.info(
+                    "[ZOOM][RESPONSE] intento=%s metodo=%s url=%s status=%s final_url=%s headers=%s body=%s",
+                    intento,
+                    metodo.upper(),
+                    url,
+                    resp.status_code,
+                    str(resp.request.url),
+                    self._serializar_log(dict(resp.headers)),
+                    resp.text,
+                )
                 # Intentar parsear JSON
                 try:
                     data = resp.json()
@@ -692,6 +728,11 @@ class ClienteZoom:
         # 4 por DHL/CASILLERO INTERNACIONAL (getZoomTrackWs)
         # 5 por ESPECIALISTA PARA WESTERN UNION (consultaTrackingWs tipo=2)
         tipo_consulta = payload.get("tipo_consulta")
+        logger.info(
+            "[ZOOM][CONSULTA_TRACKING] tipo_consulta=%s payload=%s",
+            tipo_consulta,
+            self._serializar_log(payload),
+        )
         match tipo_consulta:
             case 1:
                 # estructurar payload para ultimo tracking
@@ -703,14 +744,16 @@ class ClienteZoom:
                         codigo_valor = payload.get("referencia")
                     case _:
                         return {"error": "Tipo de búsqueda no válido"}
-                json_payload = {
+                params = {
                     # 1 para busqueda por número de guia , 2 para búsqueda por referencia
                     "tipo_busqueda": tipo_busqueda,
                     #Número de Guia o referencia del envío según lo especificado en tipo_busqueda.
                     "codigo": codigo_valor,
                     "codigo_cliente": payload.get("codigo_cliente")
                 }
-                respuesta = self._solicitar(Configuracion.RUTA_ZOOM_LASTTRACKING, "GET", cuerpo=json_payload, privado=False)
+                
+                respuesta = self._solicitar(Configuracion.RUTA_ZOOM_LASTTRACKING, "GET", parametros=params, privado=False)
+                
                 # se estructura la respuesta para que coincida con el formato de las otras consultas# 
                 if str(respuesta.get("codrespuesta"))=="COD_000":# and respuesta.get("mensaje")[:7]!="error:":
                     json_respuesta = {
@@ -749,14 +792,14 @@ class ClienteZoom:
                     case _:
                         return {"error": "Tipo de búsqueda no válido"}
                     
-                json_payload = {
+                params = {
                     "tipo_busqueda": tipo_busqueda,
                     "codigo": codigo_valor,
                     "codigo_cliente": payload.get("codigo_cliente")
                 }
 
                 respuesta = self._solicitar(Configuracion.RUTA_ZOOM_INFOTRACKING, "GET", 
-                                        cuerpo=json_payload, privado=False)
+                                        parametros=params, privado=False)
                 json_respuesta = {"historial": [],"error": None  }
                 if str(respuesta.get("codrespuesta")) == "COD_000":
                     

@@ -28,7 +28,7 @@ class Configuracion:
     ZOOM_BASE_URL_qa2 = "https://sandbox.zoom.red/baaszoom/public/guiaelectronica".rstrip("/")
     
     ZOOM_DB_HOST = os.getenv("ZOOM_DB_HOST")
-    ZOOM_DB_PORT = int(os.getenv("ZOOM_DB_PORT"))
+    ZOOM_DB_PORT = int(os.getenv("ZOOM_DB_PORT",0))
     ZOOM_DB_NAME = os.getenv("ZOOM_DB_NAME")
     ZOOM_DB_USER = os.getenv("ZOOM_DB_USER")
     ZOOM_DB_PASSWORD = os.getenv("ZOOM_DB_PASSWORD")
@@ -43,8 +43,8 @@ class Configuracion:
     ARMI_INSTALEAP_API_KEY = os.getenv("ARMI_INSTALEAP_API_KEY")
 
     # Timeout y reintentos
-    ZOOM_TIMEOUT = float(os.getenv("ZOOM_TIMEOUT"))
-    ZOOM_REINTENTOS = int(os.getenv("ZOOM_REINTENTOS"))
+    ZOOM_TIMEOUT = float(os.getenv("ZOOM_TIMEOUT",0))
+    ZOOM_REINTENTOS = int(os.getenv("ZOOM_REINTENTOS",0))
 
     # Rutas  ARMI PRODUCCION
     #ARMI_BASE_URL= os.getenv("ARMI_BASE_URL")

@@ -836,7 +836,27 @@ def guardar_envio_instaleap_armi(**kwargs) -> tuple[bool, str]:
 def crear_informecliente():
     payload = request.get_json(silent=True) or {}
     cliente = _cliente_Zoom()
-    data = cliente.informe_cliente(payload)
+    codcliente = payload.get("codcliente")
+    clave = payload.get("clave")
+    fechaDesde = payload.get("fechaDesde")
+    fechaHasta = payload.get("fechaHasta")
+
+    if codcliente is None or not clave or not fechaDesde or not fechaHasta:
+        return jsonify({
+            "ok": False,
+            "error": "Campos requeridos: codcliente, clave, fechaDesde, fechaHasta"
+        }), 400
+
+    codcliente_int = _to_int(codcliente)
+    if codcliente_int is None:
+        return jsonify({"ok": False, "error": "codcliente debe ser numérico"}), 400
+
+    data = cliente.informe_cliente(
+        codcliente=codcliente_int,
+        clave=str(clave),
+        fechaDesde=str(fechaDesde),
+        fechaHasta=str(fechaHasta),
+    )
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify({"ok": True, "data": data}), 201
@@ -864,7 +884,16 @@ def servicios_clientes():
 def create_shipment():
     payload = request.get_json(silent=True) or {}
     cliente = _cliente_Zoom()
-    data = cliente.create_shipment(payload)
+    token = payload.get("token")
+    if not token:
+        token_resp = cliente.crear_token({
+            "login": payload.get("login"),
+            "clave": payload.get("clave"),
+        })
+        token = (token_resp.get("entidadRespuesta") or {}).get("token")
+    if not token:
+        return jsonify({"ok": False, "error": "No se pudo obtener token"}), 400
+    data = cliente.create_shipment(payload, token)
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
     
@@ -902,6 +931,8 @@ def crear_envio_zoom_orquestado():
     }
     
     cliente_zoom = _cliente_Zoom()
+    guia_zoom = None
+    etiqueta = {}
     
     try:
         resultado["ok"] = True
@@ -928,7 +959,10 @@ def crear_envio_zoom_orquestado():
         # Guardar token/certificado solo en variables locales (no mutar payload)
         token = token_data.get("token")
         certificado = token_data.get("certificado")
-        
+        if not token:
+            resultado["errores"].append("No se obtuvo token para crear envío")
+            resultado["ok"] = False
+            return jsonify(resultado), 400
         resultado["datos_intermedios"]["autenticacion"] = {
             "token_obtenido": bool(token),
             "certificado_obtenido": bool(certificado)
@@ -994,7 +1028,7 @@ def crear_envio_zoom_orquestado():
         # # # ===== PASO 6: REGISTRAR/ACTUALIZAR DESTINATARIO =====
         # # if payload.get("destinatario", {}).get("configuracion", {}).get("guardar_destinatario", True):
         destinatario = guardar_destinatario_zoom(cliente_zoom, payload)
-        if destinatario.get("codrespuesta") == "COD_001":
+        if destinatario is not None and destinatario.get("codrespuesta") == "COD_001":
             # resultado["datos_intermedios"]["destinatario_id"] = destinatario_id
             if debug: logger.info(f"Destinatario guardado con exito: {destinatario}")
             resultado["pasos_completados"].append("registro_destinatario")
@@ -1119,10 +1153,10 @@ def crear_envio_zoom_orquestado():
 
 
 # ===== FUNCIONES AUXILIARES =====
-def crear_pdf_etiqueta_zoom(cliente: ClienteZoom, etiqueta: dict, guia_zoom: str) -> dict:
+def crear_pdf_etiqueta_zoom(cliente: ClienteZoom, etiqueta: str, guia_zoom: str) -> dict:
     """Genera PDF de una etiqueta térmica existente"""
     try:
-        
+        nombre_archivo = ""
         if Configuracion.ZOOM_IMPRESION_ETIQUETA:              
             # Decodificar y guardar
             with open("etiqueta.pdf", "wb") as f:
@@ -1437,7 +1471,7 @@ def guardar_remitente_zoom(cliente: ClienteZoom, payload: dict) -> Optional[str]
         return None
 
 
-def guardar_destinatario_zoom(cliente: ClienteZoom, payload: dict) -> Optional[str]:
+def guardar_destinatario_zoom(cliente: ClienteZoom, payload: dict) -> Optional[dict]:
     """Guarda/actualiza destinatario en Zoom"""
     
     try:
@@ -1621,6 +1655,8 @@ def reimprimir_etiqueta():
     payload = request.get_json(silent=True) or {}
     cliente = _cliente_Zoom()
     guia = payload.get("guia_zoom")
+    if not guia:
+        return jsonify({"ok": False, "error": "guia_zoom es requerido"}), 400
     data = reimprimir_guia(cliente, guia)
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
