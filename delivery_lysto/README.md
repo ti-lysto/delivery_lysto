@@ -48,35 +48,29 @@ flask run --host 0.0.0.0 --port 8000 --debug
 ## Endpoints de prueba
 - `GET /health`
 - `GET /info`
-- `GET /api/catalog/estados`
-- `GET /api/catalog/municipios?estado=<id>&ciudad=<id>`
-- `GET /api/catalog/parroquias?codmunicipio=<id>&codciudad=<id>`
-- `GET /api/catalog/ciudades?estado=<id>`
-- `GET /api/catalog/oficinas?ciudad=<id>`
+- `GET /api/zoom/estados`
+- `GET /api/zoom/municipios?estado=<id>&ciudad=<id>`
+- `GET /api/zoom/parroquias?codmunicipio=<id>&codciudad=<id>`
+- `GET /api/zoom/ciudades?estado=<id>`
+- `GET /api/zoom/oficinas?ciudad=<id>`
 - `GET /api/precios?origen=...&destino=...&peso=...`
 - `GET /api/tracking/<guia>`
 
-### Proxy genérico (para el resto de endpoints del documento)
 
-Permite probar cualquier ruta publicada por ZOOM mientras se implementan endpoints dedicados:
+## Estructura de endpoints (sin proxy)
 
-```bash
-curl "http://localhost:8000/api/proxy/getEstados"            # GET sin auth
-curl "http://localhost:8000/api/proxy/tracking/ABC123"       # GET tracking
-curl -X POST "http://localhost:8000/api/proxy/crearCliente" \
-	-H "Content-Type: application/json" \
-	-H "X-API-Key: $ZOOM_API_KEY" \
-	-d '{"nombre":"Ejemplo"}'
-```
+Todos los endpoints de ZOOM (públicos y privados) están bajo el prefijo `/api/zoom`.
 
-Reglas del proxy:
-- Usa `X-API-Key` para marcar llamadas privadas (añade Authorization).
-- Reenvía método, query params y JSON body tal cual.
+Ejemplos:
 
-Privados (requieren header `X-API-Key`):
-- `POST /api/envios` (JSON con datos de envío)
-- `POST /api/envios/<guia>/imprimir`
-- `POST /api/clientes`
+- `GET /api/zoom/getInfoTracking?...`
+- `GET /api/zoom/getTipoTarifa`
+- `POST /api/zoom/crearCliente`
+- `POST /api/zoom/crearEnvio`
+
+Para ARMI, se recomienda usar `/api/armi` como prefijo en el futuro.
+
+Ya no existe el endpoint `/api/proxy`. Todas las integraciones deben usar los endpoints propios definidos bajo `/api/zoom`.
 
 ## Despliegue (Azure App Service)
 

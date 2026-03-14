@@ -85,10 +85,17 @@ class ClienteZoom:
         url_alternativa: Optional[bool] = False,
         usatoken: Optional[bool] = False,
         token: Optional[str] = None,
-        
+        base_url: Optional[str] = None,
     ) -> Any:
-        url = f"{Configuracion.ZOOM_BASE_URL_qa2}/{ruta.lstrip('/')}" if url_alternativa else f"{self.base_url}/{ruta.lstrip('/')}" if privado else f"{Configuracion.ZOOM_BASE_URL}/{ruta.lstrip('/')}"
-        
+        if base_url is not None:
+            url = f"{base_url}/{ruta.lstrip('/')}"
+        elif url_alternativa:
+            url = f"{Configuracion.ZOOM_BASE_URL_qa2}/{ruta.lstrip('/')}"
+        elif privado:
+            url = f"{self.base_url}/{ruta.lstrip('/')}"
+        else:
+            url = f"{Configuracion.ZOOM_BASE_URL}/{ruta.lstrip('/')}"
+
         if not (url.startswith("http://") or url.startswith("https://")):
             raise ErrorZoom("ZOOM_BASE_URL inválida: falta esquema http/https")
         backoff = 0.5
@@ -261,7 +268,7 @@ class ClienteZoom:
             self,
             codigo:str,
             tipo_busqueda: int,
-            web:Optional[bool] = None            
+            web:Optional[int] #= None            
             ):
         if not self.validacion_campo_requerido(codigo=codigo, tipo_busqueda=tipo_busqueda):
             raise ValueError("codigo y tipo_busqueda son campos requeridos")
@@ -416,7 +423,15 @@ class ClienteZoom:
         return self._solicitar(Configuracion.RUTA_ZOOM_GETOFICINAESTADOWS, "GET", parametros=params if params else None)
 
     def obtener_tipopreciows(self):
-        return self._solicitar(Configuracion.RUTA_ZOOM_TIPOPRECIOWS, "GET")
+        return self._solicitar(
+            Configuracion.RUTA_ZOOM_TIPOPRECIOWS,
+            "GET",
+            None,
+            None,
+            False,
+            False,
+            base_url=Configuracion.ZOOM_BASE_URL_qa3
+        )
 
 #------- consultarpreciows
     # consulta de precios COD (1) y Nacional (2)
@@ -435,7 +450,9 @@ class ClienteZoom:
         #tipo_envio: int = 1,
     ):
         """Consulta precio COD (tipo_precio=1)."""
-        if not self.validacion_campo_requerido(
+        print("[DEBUG] consultar_precio_cod_nacional params:")
+        print(f"tipo_precio={tipo_precio}, tipo_tarifa={tipo_tarifa}, modalidad_tarifa={modalidad_tarifa}, ciudad_remitente={ciudad_remitente}, ciudad_destinatario={ciudad_destinatario}, oficina_retirar={oficina_retirar}, cantidad_piezas={cantidad_piezas}, peso={peso}, valor_declarado={valor_declarado}")
+        valid = self.validacion_campo_requerido(
             tipo_precio=tipo_precio,
             tipo_tarifa=tipo_tarifa,
             modalidad_tarifa=modalidad_tarifa,
@@ -443,7 +460,10 @@ class ClienteZoom:
             ciudad_destinatario=ciudad_destinatario,
             cantidad_piezas=cantidad_piezas,
             peso=peso
-        ):raise ValueError("Todos los campos son requeridos para consultar precio COD/Nacional")
+        )
+        print(f"[DEBUG] validacion_campo_requerido: {valid}")
+        if not valid:
+            raise ValueError("Todos los campos son requeridos para consultar precio COD/Nacional")
         params = {
             "tipo_precio": tipo_precio,
             "tipo_tarifa": tipo_tarifa,
@@ -457,7 +477,7 @@ class ClienteZoom:
             "valor_declarado": valor_declarado
             #"tipo_envio": tipo_envio,
         }
-        return self._solicitar(Configuracion.RUTA_ZOOM_CONSULTAPRECIOWS, "GET", parametros=params)
+        return self._solicitar(Configuracion.RUTA_ZOOM_CONSULTAPRECIOWS, "GET", parametros=params, base_url=Configuracion.ZOOM_BASE_URL_qa3)
     
     #Consulta precio Internacional (tipo_precio=3) 
     def consultar_precio_internacional(

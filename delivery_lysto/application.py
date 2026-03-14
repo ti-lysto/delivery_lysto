@@ -12,7 +12,6 @@ from .core.registro import configurar_logging
 from .core.errores import registrar_manejadores_errores
 from .rutas.publicas import bp_publicas
 from .rutas.privadas import bp_privadas
-from .rutas.proxy import bp_proxy
 from .rutas.privadas import bp_callbacks
 from .db.conexion import probar_conexion
 import logging as logger
@@ -46,10 +45,10 @@ def crear_aplicacion() -> Flask:
     probar_conexion()
 
     # Registro de blueprints (rutas)
-    app.register_blueprint(bp_publicas, url_prefix="/api")
-    app.register_blueprint(bp_privadas, url_prefix="/privadas")
+    # Registrar todas las rutas de ZOOM (públicas y privadas) bajo /api/zoom
+    app.register_blueprint(bp_publicas, url_prefix="/api/zoom")
+    app.register_blueprint(bp_privadas, url_prefix="/api/zoom")
     app.register_blueprint(bp_callbacks, url_prefix="/update")
-    app.register_blueprint(bp_proxy, url_prefix="/api")
 
     @app.get("/health")
     def health():
