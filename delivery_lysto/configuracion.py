@@ -26,7 +26,7 @@ class Configuracion:
     ZOOM_BASE_URL = os.getenv("ZOOM_BASE_URL")
     ZOOM_BASE_URL_qa = "https://miws-qa.zoom.red/api".rstrip("/")
     ZOOM_BASE_URL_qa2 = "https://sandbox.zoom.red/baaszoom/public/guiaelectronica".rstrip("/")
-    ZOOM_BASE_URL_qa3="https://qa.zoom.red".rstrip("/")
+    ZOOM_BASE_URL_qa3= "https://qa.zoom.red".rstrip("/")
     
     ZOOM_DB_HOST = os.getenv("ZOOM_DB_HOST")
     ZOOM_DB_PORT = int(os.getenv("ZOOM_DB_PORT",0))
@@ -83,7 +83,8 @@ class Configuracion:
     RUTA_ZOOM_ESTADOS = "getEstados"
     RUTA_ZOOM_GETOFICINAESTADOWS = "getOficinaEstadoWs"
     RUTA_ZOOM_TIPOPRECIOWS = "getTipoPrecioWs"
-    RUTA_ZOOM_CONSULTAPRECIOWS = "consultarPreciosWs"
+    RUTA_ZOOM_CONSULTAPRECIOWS = "ConsultaPreciosWs"
+    RUTA_ZOOM_CONSULTARPRECIOWS = "consultarPreciosWs"
     RUTA_ZOOM_CONSULTATRACKINGWS="consultaTrackingWs"
     RUTA_ZOOM_ZONASNOSERVIDASWS="zonasNoServidasWs"
     RUTA_ZOOM_TIPODOCUMENTO="getTipoDocumento"

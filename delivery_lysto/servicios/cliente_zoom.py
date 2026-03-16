@@ -407,13 +407,16 @@ class ClienteZoom:
         params["codciudad_destino"] = codciudad_destino
         params["peso"] = peso
         params["valor_declarado"] = valor_declarado
-        params["proteccion"] = proteccion
         params["codigo_cliente"] = codigo_cliente
+        params["proteccion"] = int(proteccion)
         params["codservicio"] = codservicio
         params["modalidad"] = modalidad
         params["codoficina"] = codoficina
-        params["retirar_oficina"] = retirar_oficina
-        return self._solicitar(Configuracion.RUTA_ZOOM_CONSULTAPRECIOWS, "GET", parametros=params if params else None)
+        params["retirar_oficina"] = int(retirar_oficina)
+        data = self._solicitar(Configuracion.RUTA_ZOOM_CONSULTAPRECIOWS, "GET", parametros=params if params else None,base_url="https://sandbox.zoom.red/baaszoom/public/canguroazul")
+        print (data)
+        return data
+    
 
     def obtener_consulta_oficinaestadows(self,codestado:int):
         if not self.validacion_campo_requerido(codestado=codestado):
@@ -445,13 +448,12 @@ class ClienteZoom:
         oficina_retirar: int,
         cantidad_piezas: int,
         peso: float,
-        #valor_mercancia: float = 0,
-        valor_declarado: float = 0
-        #tipo_envio: int = 1,
+        valor_mercancia: float = 0,
+        valor_declarado: float = 0,
+        tipo_envio: int = 1,
     ):
         """Consulta precio COD (tipo_precio=1)."""
-        print("[DEBUG] consultar_precio_cod_nacional params:")
-        print(f"tipo_precio={tipo_precio}, tipo_tarifa={tipo_tarifa}, modalidad_tarifa={modalidad_tarifa}, ciudad_remitente={ciudad_remitente}, ciudad_destinatario={ciudad_destinatario}, oficina_retirar={oficina_retirar}, cantidad_piezas={cantidad_piezas}, peso={peso}, valor_declarado={valor_declarado}")
+        
         valid = self.validacion_campo_requerido(
             tipo_precio=tipo_precio,
             tipo_tarifa=tipo_tarifa,
@@ -461,7 +463,7 @@ class ClienteZoom:
             cantidad_piezas=cantidad_piezas,
             peso=peso
         )
-        print(f"[DEBUG] validacion_campo_requerido: {valid}")
+        
         if not valid:
             raise ValueError("Todos los campos son requeridos para consultar precio COD/Nacional")
         params = {
@@ -473,11 +475,13 @@ class ClienteZoom:
             "oficina_retirar": oficina_retirar,
             "cantidad_piezas": cantidad_piezas,
             "peso": peso,
-            #"valor_mercancia": valor_mercancia,
-            "valor_declarado": valor_declarado
-            #"tipo_envio": tipo_envio,
+            "valor_mercancia": valor_mercancia,
+            "valor_declarado": valor_declarado,
+            "tipo_envio": tipo_envio,
         }
-        return self._solicitar(Configuracion.RUTA_ZOOM_CONSULTAPRECIOWS, "GET", parametros=params, base_url=Configuracion.ZOOM_BASE_URL_qa3)
+        # quiero toda la info que se va a enviar a _solicitar para debug
+        #print (params,Configuracion.RUTA_ZOOM_CONSULTAPRECIOWS, "GET", Configuracion.ZOOM_BASE_URL_qa3)
+        return self._solicitar(Configuracion.RUTA_ZOOM_CONSULTARPRECIOWS, "GET", parametros=params, base_url=Configuracion.ZOOM_BASE_URL_qa3)
     
     #Consulta precio Internacional (tipo_precio=3) 
     def consultar_precio_internacional(
@@ -687,13 +691,13 @@ class ClienteZoom:
             raise ValueError("codciudad es un campo requerido")
         params = {}
         params["codciudad"] = codciudad
-        return self._solicitar(Configuracion.RUTA_ZOOM_ZONASNOSERVIDASWS, "GET", parametros=params if params else None) 
+        return self._solicitar(Configuracion.RUTA_ZOOM_ZONASNOSERVIDASWS, "GET", parametros=params if params else None, base_url=Configuracion.ZOOM_BASE_URL_qa3) 
 
     def obtener_tipo_documento(self):
-        return self._solicitar(Configuracion.RUTA_ZOOM_TIPODOCUMENTO, "GET")
+        return self._solicitar(Configuracion.RUTA_ZOOM_TIPODOCUMENTO, "GET",base_url="https://qa.zoom.red/generic")
         
     def obtener_listado_generico_ciudades(self):
-        return self._solicitar(Configuracion.RUTA_ZOOM_LISTADOGENERICOCIUDADES, "GET")
+        return self._solicitar(Configuracion.RUTA_ZOOM_LISTADOGENERICOCIUDADES, "GET",base_url=Configuracion.ZOOM_BASE_URL_qa3)
 
     def informe_cliente(
         self,
@@ -714,14 +718,14 @@ class ClienteZoom:
             "fechaDesde": fechaDesde,
             "fechaHasta": fechaHasta
         }
-        return self._solicitar(Configuracion.RUTA_ZOOM_INFORMECLIENTE, "POST", cuerpo=datos, privado=True)
+        return self._solicitar(Configuracion.RUTA_ZOOM_INFORMECLIENTE, "POST", cuerpo=datos, privado=True,usatoken=True,base_url="https://qa.zoom.red/api/guiaelectronica")
 
     def obtener_ciudadesws(self, tipoEntrega:int):
         if not self.validacion_campo_requerido(tipoEntrega=tipoEntrega):
             raise ValueError("tipoEntrega es un campo requerido")
         params = {}
         params["tipoEntrega"] = tipoEntrega
-        return self._solicitar(Configuracion.RUTA_ZOOM_CIUDADESWS, "GET", parametros=params if params else None)
+        return self._solicitar(Configuracion.RUTA_ZOOM_CIUDADESWS, "GET", parametros=params if params else None,base_url="https://test-wsgeneric.zoom.red")
 
     def reimprimir_guia(self, payload: dict) -> dict:
         """Reimprime etiqueta desde Zoom a partir de la guía."""
@@ -875,7 +879,7 @@ class ClienteZoom:
         return self._solicitar(Configuracion.RUTA_ZOOM_GUARDARDESTINATARIOSWS, "POST", cuerpo=datos, privado=True, url_alternativa=True)
 
     def crear_token(self, datos: dict):
-        return self._solicitar(Configuracion.RUTA_ZOOM_CREARTOKEN, "POST", cuerpo=datos, privado=True)
+        return self._solicitar(Configuracion.RUTA_ZOOM_CREARTOKEN, "POST", cuerpo=datos, privado=True, base_url=Configuracion.ZOOM_BASE_URL_qa)
 
     def create_shipment_internacional(self, datos: dict):
         return self._solicitar(Configuracion.RUTA_ZOOM_CREATE_SHIPMENT_INTERNACIONAL, "POST", cuerpo=datos, privado=True)

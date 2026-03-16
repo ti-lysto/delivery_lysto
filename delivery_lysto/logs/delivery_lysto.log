@@ -1,200 +1,200 @@
-2026-03-13 16:12:57,821 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:12:57,822 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:12:57,955 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:12:57,958 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:12:57,959 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:12:58,009 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:12:58,010 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:22:07,309 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:22:08,126 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:22:09,254 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:22:09,265 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:22:09,596 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:22:09,603 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:22:09,604 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:22:09,649 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:22:09,651 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:24:23,192 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:24:25,202 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:24:26,383 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:24:26,384 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:24:27,125 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:24:27,189 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:24:27,190 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:24:27,645 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:24:27,672 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:25:57,127 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:25:58,129 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:25:59,074 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:25:59,082 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:25:59,263 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:25:59,265 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:25:59,265 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:25:59,317 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:25:59,318 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:27:29,549 INFO werkzeug - 127.0.0.1 - - [13/Mar/2026 16:27:29] "[31m[1mGET /api/zoom/consultarPreciosWs?tipo_precio=1&tipo_tarifa=1&modalidad_tarifa=1&ciudad_remitente=19&ciudad_destinatario=4&oficina_retirar=136&cantidad_piezas=1&peso=1&valor_mercancia=0&valor_declarado=5000&tipo_envio=1 HTTP/1.1[0m" 400 -
-2026-03-13 16:55:11,009 INFO werkzeug - 127.0.0.1 - - [13/Mar/2026 16:55:11] "[31m[1mGET /api/zoom/consultarPreciosWs?tipo_precio=1&tipo_tarifa=1&modalidad_tarifa=1&ciudad_remitente=19&ciudad_destinatario=4&oficina_retirar=136&cantidad_piezas=1&peso=1&valor_mercancia=0&valor_declarado=5000&tipo_envio=1 HTTP/1.1[0m" 400 -
-2026-03-13 16:55:32,789 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:55:33,022 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:55:34,331 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:55:34,332 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:55:34,478 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:55:34,482 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:55:34,483 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:55:34,591 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:55:34,592 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:55:38,682 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:55:38,903 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:55:39,506 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:55:39,507 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:55:39,706 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:55:39,718 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:55:39,720 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:55:39,968 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:55:39,968 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:55:43,766 INFO werkzeug - 127.0.0.1 - - [13/Mar/2026 16:55:43] "[31m[1mGET /api/zoom/consultarPreciosWs?tipo_precio=1&tipo_tarifa=1&modalidad_tarifa=1&ciudad_remitente=19&ciudad_destinatario=4&oficina_retirar=136&cantidad_piezas=1&peso=1&valor_mercancia=0&valor_declarado=5000&tipo_envio=1 HTTP/1.1[0m" 400 -
-2026-03-13 16:56:13,206 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:56:13,306 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:56:13,693 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:56:13,694 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:56:13,820 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:56:13,821 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:56:13,822 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:56:13,857 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:56:13,858 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:56:19,957 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:56:20,117 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:56:20,456 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:56:20,457 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:56:20,574 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:56:20,583 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:56:20,584 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:56:20,675 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:56:20,676 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:56:30,599 INFO werkzeug - 127.0.0.1 - - [13/Mar/2026 16:56:30] "[31m[1mGET /api/zoom/consultarPreciosWs?tipo_precio=1&tipo_tarifa=1&modalidad_tarifa=1&ciudad_remitente=19&ciudad_destinatario=4&oficina_retirar=136&cantidad_piezas=1&peso=1&valor_mercancia=0&valor_declarado=5000&tipo_envio=1 HTTP/1.1[0m" 400 -
-2026-03-13 16:57:06,014 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:57:06,088 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:57:06,566 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:57:06,567 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:57:06,619 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:57:06,620 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:57:06,620 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:57:06,662 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:57:06,663 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:57:09,779 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:57:10,020 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:57:10,291 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:57:10,292 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:57:10,330 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:57:10,333 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:57:10,334 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:57:10,385 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:57:10,386 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:57:40,853 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:57:40,962 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:57:41,777 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:57:41,778 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:57:41,866 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:57:41,873 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:57:41,874 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:57:41,927 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:57:41,928 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:57:42,956 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:57:43,042 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:57:45,371 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:57:56,821 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:58:03,228 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:58:13,711 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:58:19,246 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:58:19,927 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:58:19,928 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:58:20,007 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:58:20,014 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:58:20,015 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:58:20,087 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:58:20,091 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:58:21,108 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 16:58:21,176 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:58:26,531 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:58:26,839 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:58:26,840 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:58:26,893 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:58:26,893 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:58:26,894 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:58:26,936 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:58:26,937 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:58:31,476 INFO werkzeug - 127.0.0.1 - - [13/Mar/2026 16:58:31] "[31m[1mGET /api/zoom/consultarPreciosWs?tipo_precio=1&tipo_tarifa=1&modalidad_tarifa=1&ciudad_remitente=19&ciudad_destinatario=4&oficina_retirar=136&cantidad_piezas=1&peso=1&valor_mercancia=0&valor_declarado=5000&tipo_envio=1 HTTP/1.1[0m" 400 -
-2026-03-13 16:59:21,358 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/configuracion.py', reloading
-2026-03-13 16:59:21,482 INFO werkzeug -  * Restarting with stat
-2026-03-13 16:59:21,959 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 16:59:21,960 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:59:22,036 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 16:59:22,037 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 16:59:22,039 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 16:59:22,081 WARNING werkzeug -  * Debugger is active!
-2026-03-13 16:59:22,082 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 16:59:24,468 INFO werkzeug - 127.0.0.1 - - [13/Mar/2026 16:59:24] "[31m[1mGET /api/zoom/consultarPreciosWs?tipo_precio=1&tipo_tarifa=1&modalidad_tarifa=1&ciudad_remitente=19&ciudad_destinatario=4&oficina_retirar=136&cantidad_piezas=1&peso=1&valor_mercancia=0&valor_declarado=5000&tipo_envio=1 HTTP/1.1[0m" 400 -
-2026-03-13 17:00:05,345 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 17:00:05,464 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:00:05,772 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 17:00:05,773 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:00:05,829 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:00:05,832 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 17:00:05,835 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 17:00:05,927 WARNING werkzeug -  * Debugger is active!
-2026-03-13 17:00:05,928 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 17:00:32,191 INFO werkzeug - 127.0.0.1 - - [13/Mar/2026 17:00:32] "[31m[1mGET /api/zoom/consultarPreciosWs?tipo_precio=1&tipo_tarifa=1&modalidad_tarifa=1&ciudad_remitente=19&ciudad_destinatario=4&oficina_retirar=136&cantidad_piezas=1&peso=1&valor_mercancia=0&valor_declarado=5000&tipo_envio=1 HTTP/1.1[0m" 400 -
-2026-03-13 17:06:28,755 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 17:06:30,465 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:06:44,503 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:06:45,079 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 17:06:45,079 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:06:45,284 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:06:45,289 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 17:06:45,290 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 17:06:45,380 WARNING werkzeug -  * Debugger is active!
-2026-03-13 17:06:45,381 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 17:06:53,516 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 17:06:53,598 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:07:01,160 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:07:01,634 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 17:07:01,635 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:07:01,708 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:07:01,710 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 17:07:01,710 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 17:07:01,767 WARNING werkzeug -  * Debugger is active!
-2026-03-13 17:07:01,770 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 17:12:59,266 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
-2026-03-13 17:13:00,211 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:13:01,050 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 17:13:01,050 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:13:01,239 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:13:01,244 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 17:13:01,248 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 17:13:01,353 WARNING werkzeug -  * Debugger is active!
-2026-03-13 17:13:01,359 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 17:23:36,534 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
-2026-03-13 17:23:37,013 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:23:38,485 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 17:23:38,485 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:23:38,666 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:23:38,670 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 17:23:38,670 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 17:23:38,792 WARNING werkzeug -  * Debugger is active!
-2026-03-13 17:23:38,796 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 17:23:53,153 INFO werkzeug - 127.0.0.1 - - [13/Mar/2026 17:23:53] "[31m[1mGET /api/zoom/consultarPreciosWs?tipo_precio=1&tipo_tarifa=1&modalidad_tarifa=1&ciudad_remitente=19&ciudad_destinatario=4&oficina_retirar=136&cantidad_piezas=1&peso=1&valor_mercancia=0&valor_declarado=5000&tipo_envio=1 HTTP/1.1[0m" 400 -
-2026-03-13 17:26:58,313 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/publicas.py', reloading
-2026-03-13 17:26:58,698 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:27:09,454 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:27:28,248 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:27:32,543 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:27:38,605 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:28:28,904 INFO werkzeug -  * Restarting with stat
-2026-03-13 17:28:29,450 INFO root - Aplicación iniciada en modo DEBUG
-2026-03-13 17:28:29,450 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:28:29,781 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
-2026-03-13 17:28:29,794 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
-2026-03-13 17:28:29,795 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
-2026-03-13 17:28:29,997 WARNING werkzeug -  * Debugger is active!
-2026-03-13 17:28:30,000 INFO werkzeug -  * Debugger PIN: 101-850-529
-2026-03-13 17:30:22,477 INFO werkzeug - 127.0.0.1 - - [13/Mar/2026 17:30:22] "[31m[1mGET /api/zoom/consultarPreciosWs?tipo_precio=1&tipo_tarifa=1&modalidad_tarifa=1&ciudad_remitente=19&ciudad_destinatario=4&oficina_retirar=136&cantidad_piezas=1&peso=1&valor_mercancia=0&valor_declarado=5000&tipo_envio=1 HTTP/1.1[0m" 400 -
+2026-03-16 14:25:50,040 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 14:25:50,147 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:26:00,641 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:26:02,956 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:26:04,472 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:26:04,846 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 14:26:04,847 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:26:04,910 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:26:04,912 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 14:26:04,916 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 14:26:04,985 WARNING werkzeug -  * Debugger is active!
+2026-03-16 14:26:04,987 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 14:26:08,067 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 14:26:08,149 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:26:13,752 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:26:17,208 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:26:26,562 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:26:26,795 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 14:26:26,796 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:26:26,851 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:26:26,854 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 14:26:26,854 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 14:26:26,895 WARNING werkzeug -  * Debugger is active!
+2026-03-16 14:26:26,897 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 14:26:43,145 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 14:26:43,346 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:26:43,696 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 14:26:43,697 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:26:43,737 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:26:43,739 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 14:26:43,740 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 14:26:43,779 WARNING werkzeug -  * Debugger is active!
+2026-03-16 14:26:43,780 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 14:26:54,891 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 14:26:54,975 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:26:55,226 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 14:26:55,227 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:26:55,260 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:26:55,262 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 14:26:55,263 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 14:26:55,301 WARNING werkzeug -  * Debugger is active!
+2026-03-16 14:26:55,302 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 14:27:09,451 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 14:27:09,518 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:27:09,767 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 14:27:09,768 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:27:09,876 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:27:09,880 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 14:27:09,881 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 14:27:09,948 WARNING werkzeug -  * Debugger is active!
+2026-03-16 14:27:09,950 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 14:27:32,138 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 14:27:32,848 INFO werkzeug -  * Restarting with stat
+2026-03-16 14:27:33,240 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 14:27:33,241 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:27:33,287 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 14:27:33,299 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 14:27:33,299 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 14:27:33,346 WARNING werkzeug -  * Debugger is active!
+2026-03-16 14:27:33,347 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:11:55,634 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:11:55] "[31m[1mPOST /api/zoom/crearToken?login=100010009&clave=456789 HTTP/1.1[0m" 401 -
+2026-03-16 15:14:20,515 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 15:14:21,291 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:14:26,795 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:14:27,873 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:14:27,873 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:14:28,112 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:14:28,115 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:14:28,116 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:14:28,177 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:14:28,179 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:14:30,229 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 15:14:30,308 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:14:30,783 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:14:30,784 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:14:30,841 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:14:30,846 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:14:30,849 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:14:30,942 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:14:30,943 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:14:59,467 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:14:59] "[31m[1mPOST /api/zoom/crearToken HTTP/1.1[0m" 401 -
+2026-03-16 15:18:08,583 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-03-16 15:18:08,676 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:18:09,649 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:18:09,651 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:18:09,986 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:18:09,987 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:18:09,991 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:18:10,038 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:18:10,057 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:18:11,103 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-03-16 15:18:11,200 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:18:11,498 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:18:11,499 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:18:11,535 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:18:11,537 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:18:11,538 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:18:11,578 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:18:11,580 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:18:15,545 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:18:15] "[31m[1mPOST /api/zoom/crearToken HTTP/1.1[0m" 401 -
+2026-03-16 15:18:29,343 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:18:29] "[31m[1mPOST /api/zoom/crearToken HTTP/1.1[0m" 401 -
+2026-03-16 15:23:09,956 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 15:23:10,095 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:23:10,481 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:23:10,481 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:23:10,569 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:23:10,571 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:23:10,575 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:23:10,642 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:23:10,655 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:23:11,905 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:23:11] "[31m[1mPOST /api/zoom/crearToken HTTP/1.1[0m" 401 -
+2026-03-16 15:23:21,909 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 15:23:22,009 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:23:22,618 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:23:22,619 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:23:22,688 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:23:22,690 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:23:22,691 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:23:22,795 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:23:22,803 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:23:23,979 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:23:23] "[31m[1mPOST /api/zoom/crearToken HTTP/1.1[0m" 401 -
+2026-03-16 15:24:15,362 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 15:24:16,298 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:24:18,130 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:24:18,132 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:24:18,187 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:24:18,188 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:24:18,190 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:24:18,235 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:24:18,236 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:27:13,872 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 15:27:14,524 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:27:15,917 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:27:15,919 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:27:16,193 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:27:16,205 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:27:16,206 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:27:16,413 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:27:16,414 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:27:18,515 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/servicios/cliente_zoom.py', reloading
+2026-03-16 15:27:18,752 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:27:19,381 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:27:19,382 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:27:19,439 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:27:19,441 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:27:19,443 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:27:19,513 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:27:19,516 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:27:20,126 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:27:20] "[31m[1mPOST /api/zoom/crearToken HTTP/1.1[0m" 401 -
+2026-03-16 15:30:06,014 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-03-16 15:30:06,141 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:30:07,243 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:30:07,246 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:30:07,547 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:30:07,549 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:30:07,553 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:30:07,609 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:30:07,610 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:30:08,633 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-03-16 15:30:08,994 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:30:10,075 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:30:10,075 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:30:10,214 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:30:10,222 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:30:10,227 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:30:10,342 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:30:10,348 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:30:13,578 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:30:13] "[31m[1mPOST /api/zoom/crearToken HTTP/1.1[0m" 401 -
+2026-03-16 15:32:40,141 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:32:40] "[31m[1mPOST /api/zoom/crearToken HTTP/1.1[0m" 401 -
+2026-03-16 15:33:24,545 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:33:24] "[31m[1mPOST /api/zoom/crearToken HTTP/1.1[0m" 401 -
+2026-03-16 15:34:16,303 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-03-16 15:34:16,434 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:34:23,539 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:34:25,744 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:34:26,062 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:34:26,063 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:34:26,100 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:34:26,101 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:34:26,102 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:34:26,135 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:34:26,136 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:37:14,442 INFO werkzeug -  * Detected change in '/home/alirubio/Documentos/programacion/python/delivery_lysto_api/delivery_lysto/rutas/privadas.py', reloading
+2026-03-16 15:37:14,526 INFO werkzeug -  * Restarting with stat
+2026-03-16 15:37:15,025 INFO root - Aplicación iniciada en modo DEBUG
+2026-03-16 15:37:15,025 INFO delivery_lysto.db.conexion - [DB][CONNECT][REQUEST] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:37:15,339 INFO delivery_lysto.db.conexion - [DB][CONNECT][SUCCESS] host=localhost port=3306 db=Lysto user=root
+2026-03-16 15:37:15,363 INFO delivery_lysto.db.conexion - [DB][HEALTH][SUCCESS] host=localhost port=3306 db=Lysto user=root test_query=(1,)
+2026-03-16 15:37:15,364 INFO delivery_lysto.db.conexion - Conexión exitosa a 'Lysto' en localhost:3306
+2026-03-16 15:37:15,992 WARNING werkzeug -  * Debugger is active!
+2026-03-16 15:37:16,014 INFO werkzeug -  * Debugger PIN: 101-850-529
+2026-03-16 15:37:17,735 INFO delivery_lysto.servicios.cliente_zoom - [ZOOM][REQUEST] intento=1 metodo=POST url=https://miws-qa.zoom.red/api/crearToken ruta=crearToken privado=True timeout=30.0 params=null body={"login": "1", "clave": "456789"} headers={"Content-Type": "application/json", "Authorization": "Bearer api_k...y_zoom"}
+2026-03-16 15:37:18,535 INFO httpx - HTTP Request: POST https://miws-qa.zoom.red/api/crearToken "HTTP/1.1 200 OK"
+2026-03-16 15:37:18,536 INFO delivery_lysto.servicios.cliente_zoom - [ZOOM][RESPONSE] intento=1 metodo=POST url=https://miws-qa.zoom.red/api/crearToken status=200 final_url=https://miws-qa.zoom.red/api/crearToken headers={"date": "Mon, 16 Mar 2026 19:37:18 GMT", "server": "Apache/2.4.56 (Debian)", "vary": "Authorization", "cache-control": "no-cache, private", "x-ratelimit-limit": "60", "x-ratelimit-remaining": "59", "access-control-allow-origin": "*", "keep-alive": "timeout=5, max=100", "connection": "Keep-Alive", "transfer-encoding": "chunked", "content-type": "application/json"} body=
+{"codrespuesta":"COD_000","mensaje":"CONSULTA REALIZADA EXITOSAMENTE","entidadRespuesta":{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMmQ3MDk2N2ViYTlhZDEwZDVmN2VmMGY0Mzg1ODI3MmY4OWI4OTljOGI5NjVhNmMwYmRlZmI1YjNkMWFmZTY3ZDdhNzc1M2FhMDBiYmE4ZGYiLCJpYXQiOjE3NzM2ODk4MzguMjcwNzYyLCJuYmYiOjE3NzM2ODk4MzguMjcwNzY4LCJleHAiOjE4MDUyMjU4MzguMTg4MzgyLCJzdWIiOiIiLCJzY29wZXMiOltdfQ.dm8vAmChNlwq6P2tTagM1jVrVcjNIbSprTD8JYKZuiO8is2P620DOpHkQIw4Ao1DvMVB93apov7D_hlr87CP55Ka7YaY222SAxK8fHYLxUSw6cH5cv9pEjP2FzPJOUgJ3J4nyds65j-nN89gBvCZRMePpwM5flbnbddlhWg3XI3nfJ4weL8u5jmYxCDg8NQri5fOUiPesYU4c051vohQdYWsoChCa1AblWXOjBmW82U22hpbf2go46ueoW57ZpdO-W0IKO1KkejRP6LspjYLFLx8TOkfLT7tUe9ve-2zRX2awizrgBylmcqS8rXMXjS3RwYryqY8Fr_gLKMGQNIgfxIiLrE1VvV757T39kFEGYqkh3e4Tex3H2kAoaLo9bu76lKrqQaVVcy_bkTlKYAL7V1DATQk3p3vGITFaHvdu5jnrFGAKeY3WeVyyZkSaQ48bhrp8lGMUO3NkDOhb6iTf7LNe8h4Kqoq7Z3c_dBwYGAZlhSyEBrUPyon1xVaEkBw09T1x2zvRyc7jun72ihh4hIqhE1t-5G5LICI4MQF9zhMWvfG2S3yVuwLiJJwqT11cmLYy60P4exT-Z916RhyzZA1E9CHs-awbbNgpP3jnvIerOnU1xx823YLP55HZDlKHuED1H-tnARz3E5hYNt8jIOh3IZyMsN8REwsIDz9DfU","tipo":"Authorization Bearer","expira":"2026-03-17 15:37:18"}}
+2026-03-16 15:37:18,537 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:37:18] "POST /api/zoom/crearToken HTTP/1.1" 200 -
+2026-03-16 15:37:42,408 INFO delivery_lysto.servicios.cliente_zoom - [ZOOM][REQUEST] intento=1 metodo=POST url=https://miws-qa.zoom.red/api/crearToken ruta=crearToken privado=True timeout=30.0 params=null body={"login": "1", "clave": "456789"} headers={"Content-Type": "application/json", "Authorization": "Bearer api_k...y_zoom"}
+2026-03-16 15:37:43,080 INFO httpx - HTTP Request: POST https://miws-qa.zoom.red/api/crearToken "HTTP/1.1 200 OK"
+2026-03-16 15:37:43,082 INFO delivery_lysto.servicios.cliente_zoom - [ZOOM][RESPONSE] intento=1 metodo=POST url=https://miws-qa.zoom.red/api/crearToken status=200 final_url=https://miws-qa.zoom.red/api/crearToken headers={"date": "Mon, 16 Mar 2026 19:37:42 GMT", "server": "Apache/2.4.56 (Debian)", "vary": "Authorization", "cache-control": "no-cache, private", "x-ratelimit-limit": "60", "x-ratelimit-remaining": "58", "access-control-allow-origin": "*", "keep-alive": "timeout=5, max=100", "connection": "Keep-Alive", "transfer-encoding": "chunked", "content-type": "application/json"} body=
+{"codrespuesta":"COD_000","mensaje":"CONSULTA REALIZADA EXITOSAMENTE","entidadRespuesta":{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMmMwMDc3ZTk5OGYzZGQxY2E1ZWY4MGMzMjI4OTQyMDRhNTdiNTEyYTY1OTlkYmQzMGY5ZTUwMTM2MmI2NjFlZGYxN2NhY2NkY2I2YjQ4ZGEiLCJpYXQiOjE3NzM2ODk4NjIuOTAwNjkyLCJuYmYiOjE3NzM2ODk4NjIuOTAwNjk1LCJleHAiOjE4MDUyMjU4NjIuODE2MzY0LCJzdWIiOiIiLCJzY29wZXMiOltdfQ.giprKRA4qbYN93B96hvaVnzj6MO7rGafM1w8-HQj_TzpNV_jYvP2ZgUKZu-8Ynox9GmtXhJY14niOF53qrcANUsONY8fF7LCng991k3foSXawXs4bEZD8Dr5eCT9qjk0ChnIf0iPcb8GpGSuc5OcPgB-IE3QZRjvKuDMDn9ee2-4w66mQK5aJlRp9r5O9LNZQkiFuucDSSshvVjVF2LW4GdsbexEuj4TN9Es3OrojruiQWYYkROH1JNo-7fPSoyV6YM2kGPGNsqnsJUYbbrtVAY9GUvRCumzeubBXXsxvlLX7cu0YZmTPLofw4oW6Rle-GpixpspMQTwoQEoZwS1b9lPsbQ2m_CuoF4zPtC1ED-esFr2_SorArWEHfrE9SVCefSfPRxgomWfMQ16GtgfmrZuYvVSlRj8DYVIT2FuEm8VkadT58q8ML1Go3xYbBSaPKFTXj-L8Ce4RL0dJzOOkb9AI4ofURiBOfarW7RdksNCGLomrieUmFR4kD0IV-D6KZUY5dvxmWzngsV4Q-gVpYlsPHfLcA7ju9_87axCQlFOLwKN0bPkcXj_gVoRpeH2iXgkDafYPlN7radO_FC55h7qqtn4uZdb7nyOYADq1Uc40imfPjGwx7diwdlMCJJI8-tDTUjlsdFimZqE2dJF8iKLxuNfiRiTIwR1sAouTQI","tipo":"Authorization Bearer","expira":"2026-03-17 15:37:42"}}
+2026-03-16 15:37:43,083 INFO werkzeug - 127.0.0.1 - - [16/Mar/2026 15:37:43] "POST /api/zoom/crearToken HTTP/1.1" 200 -

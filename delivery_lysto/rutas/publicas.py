@@ -413,109 +413,124 @@ def consultar_precios_ws():
         if tipo_precio_raw is None:
             return jsonify({"ok": False, "error": "tipo_precio es requerido y debe ser entero"}), 400
         tipo_precio = int(tipo_precio_raw)
-        print(f"tipo_precio recibido: {tipo_precio} ({type(tipo_precio)})")
+        
     except (TypeError, ValueError):
         return jsonify({"ok": False, "error": "tipo_precio es requerido y debe ser entero"}), 400
     cliente = _cliente()
-    #try:
-        
-    match tipo_precio:
-        case 1,2:
-            # COD=1 y Nacional=2
-            tipo_tarifa = _req_int("tipo_tarifa")
-            modalidad_tarifa = _req_int("modalidad_tarifa")
-            ciudad_remitente = _req_int("ciudad_remitente")
-            ciudad_destinatario = _req_int("ciudad_destinatario")
-            oficina_retirar = _req_int("oficina_retirar")
-            cantidad_piezas = _req_int("cantidad_piezas")
-            peso = _req_float("peso")
-            valor_declarado = request.args.get("valor_declarado", type=float, default=0)
-            data = cliente.consultar_precio_cod_nacional(
-                tipo_precio, tipo_tarifa, modalidad_tarifa, ciudad_remitente, ciudad_destinatario,
-                oficina_retirar, cantidad_piezas, peso, valor_declarado
-            )
-        
-        case 3:
-            # Internacional
-            pesob = _req_float("pesob")
-            fecha_envio = _req_str("fecha_envio")
-            siglas_pd = _req_str("siglas_pd")
-            ciudad_d = _req_str("ciudad_d")
-            zipcode_d = request.args.get("zipcode_d")
-            suburb_d = request.args.get("suburb_d")
-            siglas_po = _req_str("siglas_po")
-            ciudad_o = _req_str("ciudad_o")
-            zipcode_o = request.args.get("zipcode_o")
-            suburb_o = request.args.get("suburb_o")
-            valor_declarado = _req_float("valor_declarado")
-            merdoc = _req_str("merdoc")
-            codciudadori = _req_int("codciudadori")
-            alto = _req_float("alto")
-            ancho = _req_float("ancho")
-            largo = _req_float("largo")
+    try:
 
-            data = cliente.consultar_precio_internacional(
-                pesob, fecha_envio, siglas_pd, ciudad_d, siglas_po, ciudad_o,
-                valor_declarado, merdoc, codciudadori, alto, ancho, largo,
-                zipcode_d, suburb_d, zipcode_o, suburb_o
-            )
+        tipo_precio_raw = request.args.get("tipo_precio")
+        if tipo_precio_raw is None:
+            return jsonify({"ok": False, "error": "tipo_precio es requerido y debe ser entero"}), 400
+        try:
+            tipo_precio = int(tipo_precio_raw)
+            
+        except (TypeError, ValueError):
+            return jsonify({"ok": False, "error": "tipo_precio es requerido y debe ser entero"}), 400
+
+        cliente = _cliente()
+        data = {}
         
-        case 4:
-            # Casillero Internacional Áereo
-            codpais_remitente = _req_int("codpais_remitente")
-            codpais_destinatario = _req_int("codpais_destinatario")
-            oficina_retirar = _req_int("oficina_retirar")
-            peso = _req_float("peso")
-            valor_mercancia = request.args.get("valor_mercancia", type=float, default=0)
-            codtipoenv = request.args.get("codtipoenv", type=int, default=1)
-            codservicio = request.args.get("codservicio", type=int, default=0)
-            ciudad_destinatario = request.args.get("ciudad_destinatario", type=int)
-            data = cliente.consultar_precio_casillero_aereo(
-                codpais_remitente, codpais_destinatario, oficina_retirar, peso,
-                valor_mercancia, codtipoenv, codservicio, ciudad_destinatario
-            )
-        case 5:
-            # Casillero Internacional Marítimo
-            codpais_remitente = _req_int("codpais_remitente")
-            codpais_destinatario = _req_int("codpais_destinatario")
-            oficina_retirar = _req_int("oficina_retirar")
-            peso = _req_float("peso")
-            valor_mercancia = request.args.get("valor_mercancia", type=float, default=0)
-            codtipoenv = request.args.get("codtipoenv", type=int, default=1)
-            codservicio = request.args.get("codservicio", type=int, default=0)
-            ciudad_destinatario = request.args.get("ciudad_destinatario", type=int)
-            alto = _req_float("alto")
-            ancho = _req_float("ancho")
-            largo = _req_float("largo")
-            data = cliente.consultar_precio_casillero_maritimo(
-                codpais_remitente, codpais_destinatario, oficina_retirar, peso,
-                valor_mercancia, codtipoenv, codservicio, ciudad_destinatario,
-                alto, ancho, largo
-            )
-        
-        case 6:
-            # Venta de Divisas Envío Internacional WU
-            monto = _req_float("monto")
-            data = cliente.consultar_precio_venta_divisas_internacional(monto)
-        
-        case 7:
-            # Compra de Divisas en Efectivo
-            monto = _req_float("monto")
-            data = cliente.consultar_precio_compra_divisas_efectivo(monto)
-        
-        case 8:
-            # Venta en Divisas en Efectivo
-            monto = _req_float("monto")
-            data = cliente.consultar_precio_venta_divisas_efectivo(monto)
-        
-        case _:
-            return jsonify({"ok": False, "error": "tipo_precio no soportado"}), 400
-    # except ValueError as e:
-    #     return jsonify({"ok": False, "error": str(e)}), 400
-    # 
-    # if data.get("error"):
-    #     return jsonify({"ok": False, "error": data.get("error")}), 400
-    # return jsonify({"ok": True, "data": data})
+        match tipo_precio:
+            case 1 | 2:
+                # COD=1 y Nacional=2
+                
+                tipo_tarifa = _req_int("tipo_tarifa")
+                modalidad_tarifa = _req_int("modalidad_tarifa")
+                ciudad_remitente = _req_int("ciudad_remitente")
+                ciudad_destinatario = _req_int("ciudad_destinatario")
+                oficina_retirar = _req_int("oficina_retirar")
+                cantidad_piezas = _req_int("cantidad_piezas")
+                peso = _req_float("peso")
+                valor_mercancia = request.args.get("valor_mercancia", type=float, default=0)
+                valor_declarado = request.args.get("valor_declarado", type=float, default=0)
+                tipo_envio = request.args.get("tipo_envio", type=int, default=0)
+                data = cliente.consultar_precio_cod_nacional(
+                    tipo_precio, tipo_tarifa, modalidad_tarifa, ciudad_remitente, ciudad_destinatario,
+                    oficina_retirar, cantidad_piezas, peso, valor_mercancia=valor_mercancia, valor_declarado=valor_declarado, tipo_envio=tipo_envio
+                )
+                
+            case 3:
+                # Internacional
+                pesob = _req_float("pesob")
+                fecha_envio = _req_str("fecha_envio")
+                siglas_pd = _req_str("siglas_pd")
+                ciudad_d = _req_str("ciudad_d")
+                zipcode_d = request.args.get("zipcode_d")
+                suburb_d = request.args.get("suburb_d")
+                siglas_po = _req_str("siglas_po")
+                ciudad_o = _req_str("ciudad_o")
+                zipcode_o = request.args.get("zipcode_o")
+                suburb_o = request.args.get("suburb_o")
+                valor_declarado = _req_float("valor_declarado")
+                merdoc = _req_str("merdoc")
+                codciudadori = _req_int("codciudadori")
+                alto = _req_float("alto")
+                ancho = _req_float("ancho")
+                largo = _req_float("largo")
+
+                data = cliente.consultar_precio_internacional(
+                    pesob, fecha_envio, siglas_pd, ciudad_d, siglas_po, ciudad_o,
+                    valor_declarado, merdoc, codciudadori, alto, ancho, largo,
+                    zipcode_d, suburb_d, zipcode_o, suburb_o
+                )
+            
+            case 4:
+                # Casillero Internacional Áereo
+                codpais_remitente = _req_int("codpais_remitente")
+                codpais_destinatario = _req_int("codpais_destinatario")
+                oficina_retirar = _req_int("oficina_retirar")
+                peso = _req_float("peso")
+                valor_mercancia = request.args.get("valor_mercancia", type=float, default=0)
+                codtipoenv = request.args.get("codtipoenv", type=int, default=1)
+                codservicio = request.args.get("codservicio", type=int, default=0)
+                ciudad_destinatario = request.args.get("ciudad_destinatario", type=int)
+                data = cliente.consultar_precio_casillero_aereo(
+                    codpais_remitente, codpais_destinatario, oficina_retirar, peso,
+                    valor_mercancia, codtipoenv, codservicio, ciudad_destinatario
+                )
+            case 5:
+                # Casillero Internacional Marítimo
+                codpais_remitente = _req_int("codpais_remitente")
+                codpais_destinatario = _req_int("codpais_destinatario")
+                oficina_retirar = _req_int("oficina_retirar")
+                peso = _req_float("peso")
+                valor_mercancia = request.args.get("valor_mercancia", type=float, default=0)
+                codtipoenv = request.args.get("codtipoenv", type=int, default=1)
+                codservicio = request.args.get("codservicio", type=int, default=0)
+                ciudad_destinatario = request.args.get("ciudad_destinatario", type=int)
+                alto = _req_float("alto")
+                ancho = _req_float("ancho")
+                largo = _req_float("largo")
+                data = cliente.consultar_precio_casillero_maritimo(
+                    codpais_remitente, codpais_destinatario, oficina_retirar, peso,
+                    valor_mercancia, codtipoenv, codservicio, ciudad_destinatario,
+                    alto, ancho, largo
+                )
+            
+            case 6:
+                # Venta de Divisas Envío Internacional WU
+                monto = _req_float("monto")
+                data = cliente.consultar_precio_venta_divisas_internacional(monto)
+            
+            case 7:
+                # Compra de Divisas en Efectivo
+                monto = _req_float("monto")
+                data = cliente.consultar_precio_compra_divisas_efectivo(monto)
+            
+            case 8:
+                # Venta en Divisas en Efectivo
+                monto = _req_float("monto")
+                data = cliente.consultar_precio_venta_divisas_efectivo(monto)
+            
+            case _:
+                return jsonify({"ok": False, "error": "tipo_precio no soportado"}), 400
+    except ValueError as e:
+        return jsonify({"ok": False, "error": str(e)}), 400
+    
+    if data.get("error"):
+        return jsonify({"ok": False, "error": data.get("error")}), 400
+    return jsonify({"ok": True, "data": data})
 #-----------------consultarPreciosWs
 @bp_publicas.get("/consultaTrackingWs")
 def consulta_trackingws():

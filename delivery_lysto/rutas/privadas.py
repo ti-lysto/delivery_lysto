@@ -1691,9 +1691,12 @@ def guardar_destinatarios_ws():
     return jsonify({"ok": True, "data": data})
 
 @bp_privadas.post("/crearToken")
-@requerir_api_key(Delivery_Empresa="ZOOM")
+#@requerir_api_key(Delivery_Empresa="ZOOM")
 def crear_token():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = request.form.to_dict(flat=True)
+    print (f"Payload recibido para crear token: {payload}")
     cliente = _cliente_Zoom()
     data = cliente.crear_token(payload)
     return jsonify({"ok": True, "data": data})
