@@ -224,10 +224,11 @@ def _persistir_envio_zoom(payload: dict, extras: dict, id_cliente_db: int):
         # Datos básicos
         metadata = payload.get("metadata", {})
         autenticacion = payload.get("autenticacion_zoom", {})
-        configuracion = payload.get("configuracion_envio", {})
+        #configuracion = payload.get("configuracion_envio", {})
         servicio = payload.get("servicio", {})
         ubicacion_origen = payload.get("ubicacion_origen", {})
         ubicacion_destino = payload.get("ubicacion_destino", {})
+        tarifa_calculada= extras.get("tarifa_calculada", {})
         remitente = payload.get("remitente", {})
         destinatario = payload.get("destinatario", {})
         paquete = payload.get("paquete", {})
@@ -278,6 +279,19 @@ def _persistir_envio_zoom(payload: dict, extras: dict, id_cliente_db: int):
             _to_int(servicio.get("tipo_tarifa")),
             _to_int(servicio.get("modalidad_tarifa")),
             _to_int(servicio.get("modalidad_cod")),
+            
+            #Tarifa calculada
+            tarifa_calculada.get("total", "0"),
+            # _to_float(tarifa_calculada.get("entidadRespuesta", {}).get("subtotal", "0").replace(",", "."), 0.0),
+            # _to_float(tarifa_calculada.get("entidadRespuesta", {}).get("iva", "0").replace(",", "."), 0.0),
+            # _to_float(tarifa_calculada.get("entidadRespuesta", {}).get("seguro", "0").replace(",", "."), 0.0),
+            # _to_float(tarifa_calculada.get("entidadRespuesta", {}).get("flete", "0").replace(",", "."), 0.0),
+            # _to_float(tarifa_calculada.get("entidadRespuesta", {}).get("franqueo_postal", "0").replace(",", "."), 0.0),
+            # _to_float(tarifa_calculada.get("entidadRespuesta", {}).get("combustible", "0").replace(",", "."), 0.0),
+            # _to_float(tarifa_calculada.get("entidadRespuesta", {}).get("comision", "0").replace(",", "."), 0.0),
+            # _to_float(tarifa_calculada.get("entidadRespuesta", {}).get("detalle", {}).get("basico", "0").replace(",", "."), 0.0),
+            # _to_float(tarifa_calculada.get("entidadRespuesta", {}).get("detalle", {}).get("sobrepeso", "0").replace(",", "."), 0.0),
+
             
             # Paquete
             _to_int(paquete.get("numero_piezas")),
@@ -987,7 +1001,7 @@ def crear_envio_zoom_orquestado():
         if payload.get("configuracion_envio", {}).get("validar_servicios", True):
             try:
                 servicios = cliente_zoom.servicios_clientes({
-                    "login": payload["autenticacion_zoom"]["login"]
+                    "login": Configuracion.ZOOM_LOGIN
                 })                
                 # Verificar que el servicio solicitado esté disponible
                 codservicio = payload["servicio"]["codservicio"]
@@ -1127,7 +1141,8 @@ def crear_envio_zoom_orquestado():
                 "guia_zoom": guia_zoom,
                 "token": token,
                 "certificado": certificado,
-                "etiqueta_pdf": (etiqueta or {}).get("entidadRespuesta", {}).get("guiaPDF")
+                "etiqueta_pdf": (etiqueta or {}).get("entidadRespuesta", {}).get("guiaPDF"),
+                "tarifa_calculada": tarifa_calculada.get("entidadRespuesta")
             }
             payload["datos_devueltos"] = extras  # Solo para referencia en BD            
             db_cliente = _guardar_cliente_zoom(payload)
@@ -1198,7 +1213,6 @@ def validar_payload_estructura(payload: dict) -> tuple[bool, str]:
     """Valida la estructura básica del payload"""
     
     campos_requeridos = [
-        "autenticacion_zoom",
         "configuracion_envio",
         "servicio",
         "ubicacion_origen",
@@ -1213,13 +1227,6 @@ def validar_payload_estructura(payload: dict) -> tuple[bool, str]:
             logger.error(f"Campo requerido faltante: {campo}")            
             return False, f"Campo requerido faltante: {campo}"
         elif debug: logger.info(f"Payload recibido: {payload}")
-    
-    # Validar autenticación
-    auth = payload["autenticacion_zoom"]
-    if "login" not in auth or "clave" not in auth:
-        logger.error("Faltan credenciales de autenticación")
-        return False, "Faltan credenciales de autenticación"
-    elif debug: logger.info(f"Payload recibido: {payload}")
     
     # Validar configuración
     config = payload["configuracion_envio"]
@@ -1279,21 +1286,20 @@ def validar_payload_estructura(payload: dict) -> tuple[bool, str]:
 
 
 def obtener_autenticacion_zoom(cliente: ClienteZoom, payload: dict) -> dict:
-    """Obtiene token y certificado de Zoom"""
+    """Obtiene token y certificado de Zoom usando credenciales del config"""
     
-    auth = payload["autenticacion_zoom"]
-    login = auth["login"]
-    clave = auth["clave"]
+    login = Configuracion.ZOOM_LOGIN
+    clave = Configuracion.ZOOM_PASSWORD
+    frase_secreta = Configuracion.ZOOM_FRASE_SECRETA
     
     resultado = {}
     
     try:
         # 1. Obtener token
-        #print (f"Login: {login}, Clave: {clave}")
         if not login or not clave:
-            logger.error("Faltan credenciales de login o clave")
-            return {"error": "Faltan credenciales de login o clave"}                    
-        elif debug: logger.info(f"Payload recibido: {payload}")
+            logger.error("Faltan credenciales de login o clave en configuración")
+            return {"error": "Faltan credenciales de login o clave en configuración"}                    
+        elif debug: logger.info(f"Usando credenciales del config: login={login}")
         token_resp = cliente.crear_token({
             "login": login,
             "clave": clave
@@ -1303,18 +1309,15 @@ def obtener_autenticacion_zoom(cliente: ClienteZoom, payload: dict) -> dict:
         token = None
         
         if entidad_token:
-            # if isinstance(entidad_token, list) and len(entidad_token) > 0:
-            #     token = entidad_token[0].get("token")
-            # elif isinstance(entidad_token, dict):
             token = entidad_token.get("token")
         
         if token:
             resultado["token"] = token
             if debug: 
-                logger.info(f"Token obtenido exitosamente para login: {login}, clave: {clave}")
+                logger.info(f"Token obtenido exitosamente para login: {login}")
         else:
             resultado["error"] = token_resp
-            logger.error(f"Error obteniendo token: {token_resp}, no se procede. login: {login}, clave: {clave}")
+            logger.error(f"Error obteniendo token: {token_resp}, no se procede. login: {login}")
             return resultado
     
         # 2. Obtener certificado
@@ -1323,11 +1326,11 @@ def obtener_autenticacion_zoom(cliente: ClienteZoom, payload: dict) -> dict:
                 "login": login,
                 "password": clave,
                 "token": token,
-                "frase_privada": auth.get("frase_secreta", "")
+                "frase_privada": frase_secreta
             })
             
             if debug: 
-                logger.info(f"Certificado obtenido para los datos de login: {login} y clave: {clave}")
+                logger.info(f"Certificado obtenido para login: {login}")
             
             entidad_cert = cert_resp.get("entidadRespuesta")
             certificado = None
@@ -1345,13 +1348,13 @@ def obtener_autenticacion_zoom(cliente: ClienteZoom, payload: dict) -> dict:
             if certificado:
                 resultado["certificado"] = certificado
                 if debug: 
-                    logger.info(f"Certificado obtenido exitosamente para login: {login}, clave: {clave}")
+                    logger.info(f"Certificado obtenido exitosamente para login: {login}")
             else:
                 resultado["error"] = cert_resp
-                logger.error(f"Error obteniendo certificado: {cert_resp}, login: {login}, clave: {clave}")
+                logger.error(f"Error obteniendo certificado: {cert_resp}, login: {login}")
                 return resultado
             
-            logger.info(f"Certificado obtenido para los datos de login: {login} y clave: {clave}")
+            logger.info(f"Certificado obtenido para login: {login}")
         
         return resultado
         
@@ -1450,29 +1453,32 @@ def guardar_remitente_zoom(cliente: ClienteZoom, payload: dict) -> Optional[str]
     """Guarda/actualiza remitente en Zoom"""
     
     try:
+        telefono_movil = payload["remitente"]["datos_personales"].get("telefono_movil")
+        telefono_fijo = payload["remitente"]["datos_personales"].get("telefono_fijo")
+        tipo_doc = payload["remitente"]["datos_personales"].get("tipo_documento") or ""
+        num_doc = payload["remitente"]["datos_personales"].get("numero_documento") or ""
+        
         remitente_data = {
-            "codigo_oficina": payload["ubicacion_origen"]["oficina"]["codoficina"],
-            "nombre_remitente": payload["remitente"]["datos_personales"]["nombre_completo"],
-            "cirif": f"{payload['remitente']['datos_personales']['tipo_documento']}{payload['remitente']['datos_personales']['numero_documento']}",
+            "codigo_oficina": payload.get("ubicacion_origen", {}).get("oficina", {}).get("codoficina", ""),
+            "nombre_remitente": payload["remitente"]["datos_personales"].get("nombre_completo", ""),
+            "cirif": f"{tipo_doc}{num_doc}",
             "contacto_remitente": payload["remitente"]["datos_personales"].get("contacto", 
-                payload["remitente"]["datos_personales"]["nombre_completo"]),
-            "direccion_remitente": payload["remitente"]["direccion"]["direccion_completa"],
-            "ciudad_remitente": payload["ubicacion_origen"]["ciudad"]["codciudad"],
-            "telefono_remitente": payload["remitente"]["datos_personales"]["telefono_movil"] or 
-                                  payload["remitente"]["datos_personales"]["telefono_fijo"],
+                payload["remitente"]["datos_personales"].get("nombre_completo", "")),
+            "direccion_remitente": payload["remitente"]["direccion"].get("direccion_completa", ""),
+            "ciudad_remitente": payload.get("ubicacion_origen", {}).get("ciudad", {}).get("codciudad", ""),
+            "telefono_remitente": telefono_movil or telefono_fijo or "",
             "observacion": payload.get("informacion_adicional", {}).get("observaciones", ""),
-            "codigo_usuario": payload["autenticacion_zoom"].get("cliente_id"),
-            "parroquia_remitente": payload["ubicacion_origen"]["parroquia"]["codparroquia"],
-            "municipio_remitente": payload["ubicacion_origen"]["municipio"]["codmunicipio"],
-            "codpostal_remitente": payload["ubicacion_origen"]["ciudad"].get("codpostal"),
-            "ciudad_ipostel": payload["remitente"]["configuracion"].get("ciudad_ipostel"),
-            "inmueble_remitente": payload["remitente"]["direccion"]["inmueble"],
-            "celular_remitente": payload["remitente"]["datos_personales"]["telefono_movil"],
-            #"codremitente": payload["remitente"].get("remitente_id")
+            "codigo_usuario": int(Configuracion.ZOOM_CODIGO_CLIENTE or 0),
+            "parroquia_remitente": payload.get("ubicacion_origen", {}).get("parroquia", {}).get("codparroquia", ""),
+            "municipio_remitente": payload.get("ubicacion_origen", {}).get("municipio", {}).get("codmunicipio", ""),
+            "codpostal_remitente": payload.get("ubicacion_origen", {}).get("ciudad", {}).get("codpostal", ""),
+            "ciudad_ipostel": payload.get("remitente", {}).get("configuracion", {}).get("ciudad_ipostel", ""),
+            "inmueble_remitente": payload["remitente"]["direccion"].get("inmueble", ""),
+            "celular_remitente": telefono_movil or ""
         }
-        #print (f"Datos para guardar remitente: {remitente_data}")
+        print(f"Datos para guardar remitente: {remitente_data}")
         respuesta = cliente.guardar_remitente_ws(remitente_data)
-        #print (f"Respuesta al guardar remitente: {respuesta}")
+        print(f"Respuesta al guardar remitente: {respuesta}")
         if respuesta.get("codrespuesta")!="COD_001":
             logger.error(f"Error en respuesta al guardar remitente: {respuesta}")
             return None
@@ -1488,32 +1494,37 @@ def guardar_destinatario_zoom(cliente: ClienteZoom, payload: dict) -> Optional[d
     """Guarda/actualiza destinatario en Zoom"""
     
     try:
+        telefono_movil = payload["destinatario"]["datos_personales"].get("telefono_movil")
+        telefono_fijo = payload["destinatario"]["datos_personales"].get("telefono_fijo")
+        tipo_doc = payload["destinatario"]["datos_personales"].get("tipo_documento") or ""
+        num_doc = payload["destinatario"]["datos_personales"].get("numero_documento") or ""
+    
         destinatario_data = {
-            "codigo_usuario": payload["autenticacion_zoom"].get("cliente_id", ""),
-            "nombre_destinatario": payload["destinatario"]["datos_personales"]["nombre_completo"],
-            "direccion_destino": payload["destinatario"]["direccion"]["direccion_completa"],
+            "codigo_usuario": int(Configuracion.ZOOM_CODIGO_CLIENTE or 0),
+            "nombre_destinatario": payload["destinatario"]["datos_personales"].get("nombre_completo", ""),
+            "direccion_destino": payload["destinatario"]["direccion"].get("direccion_completa", ""),
             "contacto_destinatario": payload["destinatario"]["datos_personales"].get("contacto", 
-                payload["destinatario"]["datos_personales"]["nombre_completo"]),
-            "cirif_destinatario": f"{payload['destinatario']['datos_personales']['tipo_documento']}{payload['destinatario']['datos_personales']['numero_documento']}",
-            "telefono_destinatario": payload["destinatario"]["datos_personales"]["telefono_movil"] or 
-                                     payload["destinatario"]["datos_personales"]["telefono_fijo"],
-            "fax_destinatario": payload["destinatario"]["datos_personales"].get("telefono_movil"),
+                payload["destinatario"]["datos_personales"].get("nombre_completo", "")),
+            "cirif_destinatario": f"{tipo_doc}{num_doc}",
+            "telefono_destinatario": telefono_movil or telefono_fijo or "",
+            "fax_destinatario": telefono_movil or "",
             "email_destinatario": payload["destinatario"]["datos_personales"].get("email", ""),
-            "codciudad_destino": payload["ubicacion_destino"]["ciudad"]["codciudad"],
-            "codpais_destino": payload["ubicacion_destino"]["pais"]["codpais"],
-            "ciudad_destinoint": payload["ubicacion_destino"]["ciudad"]["nombre"],
-            "referencia": payload["paquete"]["referencias"].get("referencia_cliente", ""),
-            "municipio_destino": payload["ubicacion_destino"]["municipio"]["codmunicipio"],
-            "parroquia_destino": payload["ubicacion_destino"]["parroquia"]["codparroquia"],
-            "codpostal_destino": payload["ubicacion_destino"]["ciudad"].get("codpostal"),
-            "ciudad_ipostel": payload["destinatario"]["configuracion"].get("ciudad_ipostel"),
-            "estado_destino": payload["ubicacion_destino"]["estado"]["nombre"],
-            "immueble_destinatario": payload["destinatario"]["direccion"]["inmueble"],
-            "celular_destinatario": payload["destinatario"]["datos_personales"]["telefono_movil"]
+            "codciudad_destino": payload.get("ubicacion_destino", {}).get("ciudad", {}).get("codciudad", ""),
+            "codpais_destino": payload.get("ubicacion_destino", {}).get("pais", {}).get("codpais", ""),
+            "ciudad_destinoint": payload.get("ubicacion_destino", {}).get("ciudad", {}).get("nombre", ""),
+            "referencia": payload.get("paquete", {}).get("referencias", {}).get("referencia_cliente", ""),
+            "municipio_destino": payload.get("ubicacion_destino", {}).get("municipio", {}).get("codmunicipio", ""),
+            "parroquia_destino": payload.get("ubicacion_destino", {}).get("parroquia", {}).get("codparroquia", ""),
+            "codpostal_destino": payload.get("ubicacion_destino", {}).get("ciudad", {}).get("codpostal", ""),
+            "ciudad_ipostel": payload.get("destinatario", {}).get("configuracion", {}).get("ciudad_ipostel", ""),
+            "estado_destino": payload.get("ubicacion_destino", {}).get("estado", {}).get("nombre", ""),
+            "immueble_destinatario": payload["destinatario"]["direccion"].get("inmueble", ""),
+            "celular_destinatario": telefono_movil or ""
         }
         
+        print(f"Datos para guardar destinatario: {destinatario_data}")
         respuesta = cliente.guardar_destinatarios_ws(destinatario_data)
-        #print (respuesta)
+        print(f"Respuesta al guardar destinatario: {respuesta}")
         if respuesta.get("codrespuesta")!="COD_001":
             logger.error(f"Error en respuesta al guardar destinatario: {respuesta}")
             return None
@@ -1542,9 +1553,12 @@ def crear_envio_segun_tipo(cliente: ClienteZoom, payload: dict, tipo_envio: str,
 def crear_envio_nacional(cliente: ClienteZoom, payload: dict, token: str) -> dict:
     """Crea envío nacional"""
     
+    telefono_movil_rem = payload["remitente"]["datos_personales"].get("telefono_movil")
+    telefono_movil_des = payload["destinatario"]["datos_personales"].get("telefono_movil")
+    
     envio_data = {
-        "login": payload["autenticacion_zoom"]["login"],
-        "clave": payload["autenticacion_zoom"]["clave"],
+        "login": Configuracion.ZOOM_LOGIN,
+        "clave": Configuracion.ZOOM_PASSWORD,
         "codservicio": payload["servicio"]["codservicio"],
         "remitente": payload["remitente"]["datos_personales"]["nombre_completo"],
         "contacto_remitente": payload["remitente"]["datos_personales"].get("contacto", 
@@ -1556,9 +1570,9 @@ def crear_envio_nacional(cliente: ClienteZoom, payload: dict, token: str) -> dic
         "codparroquiarem": payload["ubicacion_origen"]["parroquia"]["codparroquia"],
         "zona_postal_remitente": payload["remitente"]["direccion"]["zona_postal"],
         "telefono_remitente": payload["remitente"]["datos_personales"]["telefono_fijo"] 
-                            or payload["remitente"]["datos_personales"].get("telefono_movil"),
-        "codcelurem": payload["remitente"]["datos_personales"].get("telefono_movil")[0:4],
-        "celularrem": payload["remitente"]["datos_personales"].get("telefono_movil")[-7:],
+                            or telefono_movil_rem or "",
+        "codcelurem": telefono_movil_rem[0:4] if telefono_movil_rem and isinstance(telefono_movil_rem, str) and len(telefono_movil_rem) >= 4 else "",
+        "celularrem": telefono_movil_rem[-7:] if telefono_movil_rem and isinstance(telefono_movil_rem, str) and len(telefono_movil_rem) >= 7 else "",
         "direccion_remitente": payload["remitente"]["direccion"]["direccion_completa"],
         "inmueble_remitente": payload["remitente"]["direccion"]["inmueble"],
         "retira_oficina": 1 if payload.get("destinatario", {}).get("configuracion", {}).get("retira_oficina") else 0,
@@ -1574,9 +1588,9 @@ def crear_envio_nacional(cliente: ClienteZoom, payload: dict, token: str) -> dic
             payload["destinatario"]["datos_personales"]["nombre_completo"]),
         "tiporifcidest": payload["destinatario"]["datos_personales"]["tipo_documento"],
         "cirif_destinatario": payload["destinatario"]["datos_personales"]["numero_documento"],
-        "codceludest": payload["destinatario"]["datos_personales"].get("telefono_movil")[0:4],
-        "celular": payload["destinatario"]["datos_personales"].get("telefono_movil")[-7:],
-        "telefono_destino": payload["destinatario"]["datos_personales"]["telefono_fijo"],
+        "codceludest": telefono_movil_des[0:4] if telefono_movil_des and isinstance(telefono_movil_des, str) and len(telefono_movil_des) >= 4 else "",
+        "celular": telefono_movil_des[-7:] if telefono_movil_des and isinstance(telefono_movil_des, str) and len(telefono_movil_des) >= 7 else "",
+        "telefono_destino": payload["destinatario"]["datos_personales"]["telefono_fijo"] or "",
         "direccion_destino": payload["destinatario"]["direccion"]["direccion_completa"],
         "inmueble_destino": payload["destinatario"]["direccion"]["inmueble"],
         "descripcion_contenido": payload["paquete"]["descripcion"],
@@ -1619,8 +1633,8 @@ def crear_envio_internacional(cliente: ClienteZoom, payload: dict, tipo_envio: s
         codservicio = 99  # Genérico
     
     envio_data = {
-        "login": payload["autenticacion_zoom"]["login"],
-        "clave": payload["autenticacion_zoom"]["clave"],
+        "login": Configuracion.ZOOM_LOGIN,
+        "clave": Configuracion.ZOOM_PASSWORD,
         "certificado": payload.get("_certificado", ""),
         "codservicio": codservicio,
         "remitente": payload["remitente"]["datos_personales"]["nombre_completo"],
