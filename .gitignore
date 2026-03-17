@@ -1,2 +1,10 @@
 etiquetas/etiqueta_1000867927.pdf
 etiquetas/etiqueta_1000867939.pdf
+*.pdf
+etiquetas/
+logs/
+*.log
+*.env
+*.pyc
+__pycache__/
+venv/
