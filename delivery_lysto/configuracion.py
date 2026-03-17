@@ -36,6 +36,9 @@ class Configuracion:
     ZOOM_IMPRESION_ETIQUETA = True
     ZOOM_GUARDA_PDF_ETIQUETA = True
     ZOOM_DIR_ETIQUETAS ="/home/alirubio/Documentos/programacion/python/delivery_lysto_api/etiquetas" #"/home/alirubio/Documentos/Desarrollo/Python/delivery_lysto_api/etiquetas"
+    ZOOM_LOGIN = os.getenv("ZOOM_LOGIN")
+    ZOOM_PASSWORD = os.getenv("ZOOM_PASSWORD")
+    ZOOM_CODIGO_CLIENTE = os.getenv("ZOOM_CODIGO_CLIENTE")
       
     # Credenciales (para endpoints privados)
     ZOOM_API_KEY = os.getenv("ZOOM_API_KEY")

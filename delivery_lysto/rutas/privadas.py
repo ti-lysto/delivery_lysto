@@ -6,7 +6,7 @@ import json
 import logging
 import base64, os
 from datetime import datetime
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, cast
 
 from flask import Blueprint, request, jsonify, current_app
 from ..core.autenticacion import requerir_api_key
@@ -832,15 +832,17 @@ def guardar_envio_instaleap_armi(**kwargs) -> tuple[bool, str]:
 
 # --- Clientes ---
 @bp_privadas.post("/informeCliente")
-@requerir_api_key(Delivery_Empresa="ZOOM")
+#@requerir_api_key(Delivery_Empresa="ZOOM")
 def crear_informecliente():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form)
     cliente = _cliente_Zoom()
     codcliente = payload.get("codcliente")
     clave = payload.get("clave")
     fechaDesde = payload.get("fechaDesde")
     fechaHasta = payload.get("fechaHasta")
-
+    print (f"Payload recibido en informeCliente: {payload}")
     if codcliente is None or not clave or not fechaDesde or not fechaHasta:
         return jsonify({
             "ok": False,
@@ -866,23 +868,34 @@ def crear_informecliente():
 @bp_privadas.post("/zoomCert")
 @requerir_api_key(Delivery_Empresa="ZOOM")
 def zoom_cert():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Zoom()
     data = cliente.zoom_cert(payload)
     return jsonify({"ok": True, "data": data})
 
 @bp_privadas.post("/serviciosClientes")
-@requerir_api_key(Delivery_Empresa="ZOOM")
+#@requerir_api_key(Delivery_Empresa="ZOOM")
 def servicios_clientes():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form)
+    # Agregar login desde query params si no está en el payload
+    if "login" not in payload:
+        login = request.args.get("login")
+        if login:
+            payload["login"] = login
     cliente = _cliente_Zoom()
     data = cliente.servicios_clientes(payload)
     return jsonify({"ok": True, "data": data})
 
 @bp_privadas.post("/createShipment")
-@requerir_api_key(Delivery_Empresa="ZOOM")
+#@requerir_api_key(Delivery_Empresa="ZOOM")
 def create_shipment():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form)
     cliente = _cliente_Zoom()
     token = payload.get("token")
     if not token:
@@ -912,7 +925,7 @@ def create_shipment():
     
     return jsonify({"ok": True, "data": data}), 201
 #--------------------------------------------------------endpoint orquestador propio-----------------------------------------------
-@bp_privadas.post("/delivery/zoom/envio")
+@bp_privadas.post("/envio")
 @requerir_api_key(Delivery_Empresa="ZOOM")
 def crear_envio_zoom_orquestado():    
     payload = request.get_json(silent=True) or {}
@@ -1649,10 +1662,12 @@ def crear_envio_internacional(cliente: ClienteZoom, payload: dict, tipo_envio: s
 
 #-------------------------------------------------fin endpoint orquestador propio------------------------------------------------------
 # ===== Reimpresion de etiquetas =====
-@bp_privadas.post("/delivery/zoom/ReimprimirEtiqueta")
+@bp_privadas.post("/ReimprimirEtiqueta")
 @requerir_api_key(Delivery_Empresa="ZOOM")
 def reimprimir_etiqueta():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Zoom()
     guia = payload.get("guia_zoom")
     if not guia:
@@ -1662,10 +1677,12 @@ def reimprimir_etiqueta():
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify({"ok": True, "data": data})
 
-@bp_privadas.post("/delivery/zoom/ConsultaTracking")
+@bp_privadas.post("/ConsultaTracking")
 @requerir_api_key(Delivery_Empresa="ZOOM")
 def consulta_tracking():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Zoom()
     #guia = payload.get("guia_zoom")
     data = cliente.consulta_tracking(payload)
@@ -1675,17 +1692,21 @@ def consulta_tracking():
 # ------------------------ ZOOM ---------------------------------------
 
 @bp_privadas.post("/GuardarRemitenteWs")
-@requerir_api_key(Delivery_Empresa="ZOOM")
+#@requerir_api_key(Delivery_Empresa="ZOOM")
 def guardar_remitente_ws():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Zoom()
     data = cliente.guardar_remitente_ws(payload)
     return jsonify({"ok": True, "data": data})
 
 @bp_privadas.post("/GuardarDestinatariosWs")
-@requerir_api_key(Delivery_Empresa="ZOOM")
+#@requerir_api_key(Delivery_Empresa="ZOOM")
 def guardar_destinatarios_ws():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Zoom()
     data = cliente.guardar_destinatarios_ws(payload)
     return jsonify({"ok": True, "data": data})
@@ -1695,45 +1716,74 @@ def guardar_destinatarios_ws():
 def crear_token():
     payload = request.get_json(silent=True)
     if not payload:
-        payload = request.form.to_dict(flat=True)
-    print (f"Payload recibido para crear token: {payload}")
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Zoom()
     data = cliente.crear_token(payload)
     return jsonify({"ok": True, "data": data})
 
 @bp_privadas.post("/createShipmentInternacional")
-@requerir_api_key(Delivery_Empresa="ZOOM")
+#@requerir_api_key(Delivery_Empresa="ZOOM")
 def create_shipment_internacional():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Zoom()
     data = cliente.create_shipment_internacional(payload)
     return jsonify({"ok": True, "data": data})
 
 @bp_privadas.post("/etiquetaTermica")
-@requerir_api_key(Delivery_Empresa="ZOOM")
+#@requerir_api_key(Delivery_Empresa="ZOOM")
 def etiqueta_termica():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form)
+    payload = cast(Dict[str, Any], payload)
+    # Convertir codguia[] a codguia como lista si está presente
+    if 'codguia[]' in payload:
+        payload['codguia'] = [payload['codguia[]']]
+        del payload['codguia[]']
+    # Agregar codguia desde query params si no está en el payload
+    if "codguia" not in payload:
+        codguia_list = request.args.getlist('codguia')
+        if codguia_list:
+            payload["codguia"] = codguia_list
     cliente = _cliente_Zoom()
+    print (f"Payload para etiqueta térmica: {payload}")
     data = cliente.etiqueta_termica(payload)
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify({"ok": True, "data": data})
 
 @bp_privadas.post("/crearRecolectaWs")
-@requerir_api_key(Delivery_Empresa="ZOOM")
+#@requerir_api_key(Delivery_Empresa="ZOOM")
 def crear_recolecta_ws():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Zoom()
     data = cliente.crear_recolecta_ws(payload)
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
     return jsonify({"ok": True, "data": data})
 
-@bp_privadas.post("/crearClienteWs")
-@requerir_api_key(Delivery_Empresa="ZOOM")
+@bp_privadas.post("/CreacionClientesWs")
+#@requerir_api_key(Delivery_Empresa="ZOOM")
 def crear_cliente_ws():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
+    payload = cast(Dict[str, Any], payload)
+    # Convertir serviciosacontratar[] a serviciosacontratar como lista si está presente
+    if 'serviciosacontratar[]' in payload:
+        payload['serviciosacontratar'] = [payload['serviciosacontratar[]']]
+        del payload['serviciosacontratar[]']
+    # Agregar serviciosacontratar desde query params si no está en el payload
+    if "serviciosacontratar" not in payload:
+        serviciosacontratar_list = request.args.getlist('serviciosacontratar')
+        if serviciosacontratar_list:
+            payload["serviciosacontratar"] = serviciosacontratar_list
     cliente = _cliente_Zoom()
+    print (f"Payload para crear cliente: {payload}")
     data = cliente.crear_cliente_ws(payload)
     if data.get("error"):
         return jsonify({"ok": False, "error": data.get("error")}), 400
@@ -1745,7 +1795,9 @@ def crear_cliente_ws():
 @bp_privadas.post("/armi/monitor/business/create")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def crear_negocio_armi():    
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Armi()
     data = cliente.crear_negocio(payload)
     # if data.get("error"):
@@ -1783,7 +1835,9 @@ def listar_negocios_usuario_armi(user_id: int):
 @bp_privadas.post("/armi/monitor/business/update/<int:negocio_id>")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def actualizar_negocio_armi(negocio_id: int):
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Armi()
     data = cliente.actualizar_negocio(negocio_id, payload)
     if data.get("error"):
@@ -1813,7 +1867,9 @@ def listar_sucursales_armi(business_id: int):
 @bp_privadas.delete("/armi/monitor/branchOffice/delete")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def eliminar_sucursal_armi():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     branch_office_id = payload.get("branchOfficeId")
     business_id = payload.get("businessId")
     if not branch_office_id or not business_id:
@@ -1828,7 +1884,9 @@ def eliminar_sucursal_armi():
 @bp_privadas.post("/armi/monitor/order/create")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def crear_orden_armi():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Armi()
     data = cliente.crear_orden(payload)
     if data.get("error"):
@@ -1838,7 +1896,9 @@ def crear_orden_armi():
 @bp_privadas.post("/armi/monitor/order/cancel")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def cancelar_orden_armi():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Armi()
     data = cliente.cancelar_orden(payload)
     if data.get("error"):
@@ -1875,7 +1935,9 @@ def codigo_ciudad_armi(city: str):
 @bp_privadas.post("/armi/monitor/order/delivery-cost")
 @requerir_api_key(Delivery_Empresa="ARMI")
 def costo_envio_armi():
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     cliente = _cliente_Armi()
     data = cliente.costo_envio(payload)
     if data.get("error"):
@@ -1890,7 +1952,9 @@ def crear_orden_instaleap():
     """
     Endpoint para recibir órdenes desde Instaleap
     """
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     
     logger.info(f"Instaleap create - Payload recibido. Task ID: {payload.get('task_id')}")
     
@@ -1914,8 +1978,16 @@ def crear_orden_instaleap():
         # ===== 2. BUSCAR MAPEO DE TIENDA =====
         # store_ref = payload.get("origin", {}).get("store_reference", "")
         # client_id = payload.get("client_id", "")
-        branch_office_id = payload.get("origin", {}).get("store_reference", "")
+        origin = payload.get("origin", {})
+        if isinstance(origin, dict):
+            branch_office_id = origin.get("store_reference", "")
+        elif isinstance(origin, str):
+            branch_office_id = origin
+        else:
+            branch_office_id = ""
         business_id = payload.get("client_id", "")
+        
+        # business_id, branch_office_id = buscar_mapa_tienda_instaleap(store_ref, client_id)
         
         # business_id, branch_office_id = buscar_mapa_tienda_instaleap(store_ref, client_id)
         
@@ -1995,7 +2067,9 @@ def actualizar_orden_instaleap():
     Endpoint para actualizar órdenes desde Instaleap
     Según documentación: POST {url_base_integrador_instaleap}/monitor/instaleap/update
     """
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not payload:
+        payload = dict(request.form) or dict(request.args)
     
     # DEBUG: Log del payload recibido
     logger.info(f"Instaleap update - Payload recibido: {json.dumps(payload, indent=2)}")

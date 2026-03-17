@@ -704,7 +704,8 @@ class ClienteZoom:
         codcliente: int,
         clave: str,
         fechaDesde: str,
-        fechaHasta: str
+        fechaHasta: str,
+        token: Optional[str] = None
     ):
         if not self.validacion_campo_requerido(
             codcliente=codcliente,
@@ -712,13 +713,24 @@ class ClienteZoom:
             fechaDesde=fechaDesde,
             fechaHasta=fechaHasta
         ): raise ValueError("Todos los campos son requeridos para informe_cliente")
+        
+        # Si no hay token, obtener uno nuevo usando credenciales de configuración
+        if not token:
+            token_resp = self.crear_token({"login": Configuracion.ZOOM_LOGIN, "clave": Configuracion.ZOOM_PASSWORD})
+            if token_resp.get("error"):
+                return {"error": f"Error obteniendo token: {token_resp['error']}"}
+            entidad_token = token_resp.get("entidadRespuesta", {})
+            token = entidad_token.get("token") if isinstance(entidad_token, dict) else None
+            if not token:
+                return {"error": "No se pudo obtener token de autenticación"}
+        
         datos = {
             "codcliente": codcliente,
             "clave": clave,
             "fechaDesde": fechaDesde,
             "fechaHasta": fechaHasta
         }
-        return self._solicitar(Configuracion.RUTA_ZOOM_INFORMECLIENTE, "POST", cuerpo=datos, privado=True,usatoken=True,base_url="https://qa.zoom.red/api/guiaelectronica")
+        return self._solicitar(Configuracion.RUTA_ZOOM_INFORMECLIENTE, "POST", cuerpo=datos, privado=True, usatoken=True, token=token, base_url="https://qa.zoom.red/api/guiaelectronica")
 
     def obtener_ciudadesws(self, tipoEntrega:int):
         if not self.validacion_campo_requerido(tipoEntrega=tipoEntrega):
@@ -885,13 +897,13 @@ class ClienteZoom:
         return self._solicitar(Configuracion.RUTA_ZOOM_CREATE_SHIPMENT_INTERNACIONAL, "POST", cuerpo=datos, privado=True)
 
     def etiqueta_termica(self, datos: dict):
-        return self._solicitar(Configuracion.RUTA_ZOOM_ETIQUETA_TERMICA, "POST", cuerpo=datos, privado=True)
+        return self._solicitar(Configuracion.RUTA_ZOOM_ETIQUETA_TERMICA, "POST", cuerpo=datos, privado=True,base_url="https://test-wsgeneric.zoom.red/api")
     
     def crear_recolecta_ws(self, datos: dict):
         return self._solicitar(Configuracion.RUTA_ZOOM_CREARRECOLECTAWS, "POST", cuerpo=datos, privado=True)
     
     def crear_cliente_ws(self, datos: dict):
-        return self._solicitar(Configuracion.RUTA_ZOOM_CREACIONCLIENTES, "POST", cuerpo=datos, privado=True)
+        return self._solicitar(Configuracion.RUTA_ZOOM_CREACIONCLIENTES, "POST", cuerpo=datos, privado=True,base_url="https://qa.zoom.red/api/canguroazul")
 
 
 
